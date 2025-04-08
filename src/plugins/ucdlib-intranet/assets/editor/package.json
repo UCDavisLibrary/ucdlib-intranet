@@ -1,0 +1,22 @@
+{
+  "name": "ucdlib-intranet-editor",
+  "version": "1.0.0",
+  "description": "",
+  "main": "ucdlib-intranet-editor.js",
+  "scripts": {
+    "watch": "wp-scripts start ucdlib-intranet-editor.js --output-path=../assets/js/editor-dev",
+    "create-dev-bundle": "wp-scripts build ucdlib-intranet-editor.js --output-path=../assets/js/editor-dev",
+    "dist": "wp-scripts build ucdlib-intranet-editor.js --output-path=../assets/js/editor-dist"
+  },
+  "author": "",
+  "license": "ISC",
+  "private": true,
+  "dependencies": {
+    "@ucd-lib/brand-theme-editor": "file:../../../../../../ucdlib-theme-wp/src/editor",
+    "@ucd-lib/theme-elements": "^3.0.5",
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "@wordpress/scripts": "^23.7.2"
+  }
+}

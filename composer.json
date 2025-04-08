@@ -1,0 +1,26 @@
+{
+  "name": "ucdlib/ucdlib-intranet",
+  "description": "UC Davis Library Intranet",
+  "type":"wordpress-theme",
+  "license": "MIT",
+  "authors": [
+    {
+      "email": "spelkey@ucdavis.edu",
+      "name": "spelkey"
+    }
+  ],
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://wpackagist.org"
+    }
+  ],
+  "require": {
+    "timber/timber": "2.3.0"
+  },
+  "config": {
+    "allow-plugins": {
+      "composer/installers":true
+    }
+  }
+}
