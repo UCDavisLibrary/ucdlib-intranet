@@ -9,7 +9,7 @@ First, create a directory on your local machine and git clone the following repo
 - [ucdlib-theme-wp](https://github.com/UCDavisLibrary/ucdlib-theme-wp)
 - [gmail-wp-pipeline](https://github.com/UCDavisLibrary/gmail-wp-pipeline)
 
-Next run the following scripts:
+Next, run the following scripts:
 -  `./deploy/cmds/init-local-dev.sh`
 -  `./deploy/cmds/build-local-dev.sh`
 
