@@ -42,6 +42,22 @@ class UcdlibOidc {
       add_filter('openid-connect-generic-user-creation-test', [$this, 'authorizeUser'], 10, 2);
     }
 
+    // add filter to protect rest endpoints
+    // can remove if openid-connect-generic plugin is updated
+    // https://github.com/oidc-wp/openid-connect-generic/issues/504
+    add_filter( 'rest_authentication_errors', [$this, 'protectRest'], 99 );
+
+  }
+
+  public function protectRest($result){
+    if ( $result === null && ! is_user_logged_in() ){
+      return new WP_Error(
+        'rest_forbidden',
+        __( 'You are not allowed to access this endpoint.' ),
+        array( 'status' => rest_authorization_required_code() )
+      );
+    }
+    return $result;
   }
 
   /**

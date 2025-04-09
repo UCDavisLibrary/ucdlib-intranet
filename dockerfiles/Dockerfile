@@ -6,7 +6,6 @@ ARG OPENID_CONNECT_GENERIC_DIR="openid-connect-generic-3.10.0"
 ARG OPENID_CONNECT_GENERIC_ZIP_FILE="${OPENID_CONNECT_GENERIC_DIR}.zip"
 ARG DEFENDER_PRO_ZIP_FILE="defender-pro-4.10.zip"
 ARG FORMINATOR_PRO_ZIP_FILE="forminator-pro-1.35.1.zip"
-ARG HUMMINGBIRD_PRO_ZIP_FILE="hummingbird-pro-3.9.4.zip"
 ARG WPMU_DEV_DASHBOARD_ZIP_FILE="wpmu-dev-dashboard-4.11.26.zip"
 ARG UCDLIB_THEME_WP_NODE_IMAGE
 
@@ -21,7 +20,6 @@ ARG OPENID_CONNECT_GENERIC_ZIP_FILE
 ARG SMTP_MAILER_ZIP_FILE
 ARG DEFENDER_PRO_ZIP_FILE
 ARG FORMINATOR_PRO_ZIP_FILE
-ARG HUMMINGBIRD_PRO_ZIP_FILE
 ARG WPMU_DEV_DASHBOARD_ZIP_FILE
 
 RUN --mount=type=secret,id=google_key gcloud auth activate-service-account --key-file=/run/secrets/google_key
@@ -30,7 +28,6 @@ RUN gsutil cp gs://${GC_BUCKET_PLUGINS}/openid-connect-generic/${OPENID_CONNECT_
 && gsutil cp gs://${GC_BUCKET_PLUGINS}/redirection/${REDIRECTION_ZIP_FILE} . \
 && gsutil cp gs://${GC_BUCKET_PLUGINS}/defender-pro/${DEFENDER_PRO_ZIP_FILE} . \
 && gsutil cp gs://${GC_BUCKET_PLUGINS}/forminator-pro/${FORMINATOR_PRO_ZIP_FILE} . \
-&& gsutil cp gs://${GC_BUCKET_PLUGINS}/hummingbird-pro/${HUMMINGBIRD_PRO_ZIP_FILE} . \
 && gsutil cp gs://${GC_BUCKET_PLUGINS}/wpmudev-updates/${WPMU_DEV_DASHBOARD_ZIP_FILE} .
 
 # Main build
@@ -69,14 +66,6 @@ RUN apt-get update && apt-get install -y unzip git vim nodejs
 # WP config
 COPY wp-config-docker.php wp-config-docker.php
 
-# directories needed by hummingbird cache plugin
-RUN mkdir wp-content/wphb-cache; \
-    mkdir wp-content/wphb-logs; \
-	chown www-data wp-content/wphb-logs; \
-	chgrp www-data wp-content/wphb-logs; \
-	chown www-data wp-content/wphb-cache; \
-	chgrp www-data wp-content/wphb-cache
-
 # Apache config
 COPY .htaccess .htaccess
 
@@ -109,7 +98,6 @@ ARG REDIRECTION_ZIP_FILE
 ARG SMTP_MAILER_ZIP_FILE
 ARG DEFENDER_PRO_ZIP_FILE
 ARG FORMINATOR_PRO_ZIP_FILE
-ARG HUMMINGBIRD_PRO_ZIP_FILE
 ARG WPMU_DEV_DASHBOARD_ZIP_FILE
 WORKDIR $WP_PLUGIN_DIR
 RUN rm -rf */ && rm -f hello.php
@@ -118,14 +106,12 @@ COPY --from=gcloud /cache/${REDIRECTION_ZIP_FILE} .
 COPY --from=gcloud /cache/${SMTP_MAILER_ZIP_FILE} .
 COPY --from=gcloud /cache/${DEFENDER_PRO_ZIP_FILE} .
 COPY --from=gcloud /cache/${FORMINATOR_PRO_ZIP_FILE} .
-COPY --from=gcloud /cache/${HUMMINGBIRD_PRO_ZIP_FILE} .
 COPY --from=gcloud /cache/${WPMU_DEV_DASHBOARD_ZIP_FILE} .
 RUN unzip ${OPENID_CONNECT_GENERIC_ZIP_FILE} && rm ${OPENID_CONNECT_GENERIC_ZIP_FILE} \
 && unzip ${SMTP_MAILER_ZIP_FILE} && rm ${SMTP_MAILER_ZIP_FILE} \
 && unzip ${REDIRECTION_ZIP_FILE} && rm ${REDIRECTION_ZIP_FILE} \
 && unzip ${DEFENDER_PRO_ZIP_FILE} && rm ${DEFENDER_PRO_ZIP_FILE} \
 && unzip ${FORMINATOR_PRO_ZIP_FILE} && rm ${FORMINATOR_PRO_ZIP_FILE} \
-&& unzip ${HUMMINGBIRD_PRO_ZIP_FILE} && rm ${HUMMINGBIRD_PRO_ZIP_FILE} \
 && unzip ${WPMU_DEV_DASHBOARD_ZIP_FILE} && rm ${WPMU_DEV_DASHBOARD_ZIP_FILE} \
 && mv $OPENID_CONNECT_GENERIC_DIR openid-connect-generic
 
