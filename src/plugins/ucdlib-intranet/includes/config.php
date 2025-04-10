@@ -4,9 +4,11 @@ class UcdlibIntranetConfig {
 
   public $slug = 'ucdlib-intranet';
   public $plugin;
+  public $entryPoint;
 
   public function __construct( $plugin ){
     $this->plugin = $plugin;
+    $this->entryPoint = plugin_dir_path( __DIR__ ) . $this->slug .'.php';
     $this->setBuildEnvVars();
   }
 

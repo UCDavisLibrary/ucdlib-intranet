@@ -1,0 +1,11 @@
+{% if title and not post.hide_title %}
+  {% if brandColor %}
+    {% set colorClass = 'category-brand--'~brandColor %}
+  {% elseif post.brand_color %}
+    {% set colorClass = 'category-brand--'~post.brand_color %}
+  {% endif %}
+  <section class='page-title-favorite-container'>
+    <h1 class="page-title {{colorClass}}">{{title}}</h1>
+    <ucdlib-intranet-favorite-toggle></ucdlib-intranet-favorite-toggle>
+  </section>
+{% endif %}

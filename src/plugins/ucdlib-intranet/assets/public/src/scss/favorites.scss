@@ -1,0 +1,19 @@
+.page-title-favorite-container {
+  display: flex;
+  justify-content: space-between;
+  box-shadow: 0 2px 1px rgba(2, 40, 81, 0.15);
+  padding-right: 1rem;
+  gap: 1rem;
+
+  .page-title {
+    box-shadow: none;
+    margin-bottom: 0 !important;
+    flex-grow: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .page-title {
+    flex-grow: 0;
+  }
+}

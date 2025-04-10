@@ -5,6 +5,7 @@ require_once( __DIR__ . '/blocks.php' );
 require_once( __DIR__ . '/config.php' );
 require_once( __DIR__ . '/google.php' );
 require_once( __DIR__ . '/log.php' );
+require_once( __DIR__ . '/favorites/main.php' );
 require_once( __DIR__ . '/robots.php' );
 require_once( __DIR__ . '/timber.php' );
 require_once( __DIR__ . '/utils.php' );
@@ -17,6 +18,7 @@ class UcdlibIntranet {
   public $blocks;
   public $google;
   public $log;
+  public $favorites;
   public $robots;
   public $timber;
 
@@ -30,6 +32,7 @@ class UcdlibIntranet {
     $this->blocks = new UcdlibIntranetBlocks( $this );
     //$this->google = new UcdlibIntranetGoogle( $this );
     $this->log = new UcdlibIntranetLog( $this );
+    $this->favorites = new UcdlibIntranetFavorites( $this );
     $this->robots = new UcdlibIntranetRobots( $this );
     $this->timber = new UcdlibIntranetTimber( $this );
   }
