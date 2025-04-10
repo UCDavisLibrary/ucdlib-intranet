@@ -1,6 +1,7 @@
 x-variables:
   main-image: &main-image localhost/local-dev/ucdlib-intranet:local-dev
   utils-image: &utils-image localhost/local-dev/ucdlib-intranet-utils:local-dev
+  wp-gmail-image: &wp-gmail-image localhost/local-dev/gmail-wp-pipeline:local-dev
 services:
   wordpress:
     image: *main-image
@@ -90,6 +91,24 @@ services:
       - ../../secrets/gc-writer-key.json:/etc/service-account.json
     command: ./tail.sh
     # command: "./backup/entrypoint.sh"
+
+  wp-gmail:
+    image: *wp-gmail-image
+    env_file:
+      - .env
+    environment:
+      GMAILWP_CRON_SCHEDULE: '*/1 * * * *'
+      GMAILWP_CRON_IDLE_AT_STARTUP: 'true'
+      GMAILWP_LOGGER_STREAM: 'console'
+      GMAILWP_INSTANCE_NAME: 'local-dev'
+      GMAILWP_GC_KEY_FILENAME: '/secrets/gc-reader-key.json'
+      GMAILWP_WP_URL: 'http://wordpress:80'
+      GMAILWP_CUSTOM_SCRIPT: 'ucdlib-intranet'
+    volumes:
+      - ../../../../gmail-wp-pipeline/src:/app
+      - /app/node_modules
+      - ../../secrets:/secrets
+    command: ["tail", "-f", "/dev/null"]
 
   db:
     image: mysql:5.7
