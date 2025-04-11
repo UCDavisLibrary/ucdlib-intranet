@@ -16,7 +16,7 @@ export default class WpRest {
     }
   }
 
-  async get(path, params={}) {
+  async get(path='', params={}) {
     try {
       const data = await this._fetch(path, {params, method: 'GET'});
       return {
@@ -92,6 +92,8 @@ export default class WpRest {
 
     if( this.host.wpNonce ) {
       headers['X-WP-Nonce'] = this.host.wpNonce;
+    } else if ( this.host.hasAttribute('wp-nonce') ){
+      headers['X-WP-Nonce'] = this.host.getAttribute('wp-nonce');
     }
 
     let body = null;
@@ -121,7 +123,11 @@ export default class WpRest {
   }
 
   getApiUrl(path) {
-    return `${window.location.origin}/wp-json/${this.host.restNamespace}/${path}`;
+    let url = `${window.location.origin}/wp-json/${this.host.restNamespace}/${path}`;
+    if ( url.endsWith('/') ) {
+      url = url.slice(0, -1);
+    }
+    return url;
   }
 
   _getCacheKey(path, options={}) {

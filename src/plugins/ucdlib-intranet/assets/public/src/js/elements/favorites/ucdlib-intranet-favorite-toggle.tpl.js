@@ -15,6 +15,22 @@ export function styles() {
       background-color: transparent;
       border: none;
       cursor: pointer;
+      color: #999999;
+      transition: color 0.3s ease;
+    }
+    .container:hover, .container:focus {
+      color: #FFBF00;
+    }
+    .container.loading {
+      cursor: wait;
+      opacity: 0.5;
+    }
+    .container.error {
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+    .container.is-favorite {
+      color: #FFBF00;
     }
   `;
 
@@ -24,12 +40,13 @@ export function styles() {
 export function render() {
 return html`
   <button
-    class='container'
+    class='container ${this.loading ? 'loading' : ''} ${this.error ? 'error' : ''} ${this.isFavorite ? 'is-favorite' : ''}'
     @click=${this._onClick}
     type='button'
-    aria-pressed='false'
+    title=${this.isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+    aria-pressed='${this.isFavorite}'
     aria-label='Toggle page as favorite'>
-    ${_renderStar.call(this)}
+    ${_renderStar.call(this, this.isFavorite)}
   </button>
 
 `;}
