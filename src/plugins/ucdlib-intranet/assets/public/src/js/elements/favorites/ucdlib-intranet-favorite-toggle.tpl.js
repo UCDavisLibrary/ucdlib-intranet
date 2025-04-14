@@ -43,7 +43,7 @@ return html`
     class='container ${this.loading ? 'loading' : ''} ${this.error ? 'error' : ''} ${this.isFavorite ? 'is-favorite' : ''}'
     @click=${this._onClick}
     type='button'
-    title=${this.isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+    title=${this.isFavorite ? 'Remove from your favorites' : 'Add to your favorites'}
     aria-pressed='${this.isFavorite}'
     aria-label='Toggle page as favorite'>
     ${_renderStar.call(this, this.isFavorite)}

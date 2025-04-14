@@ -28,6 +28,7 @@ class UcdlibIntranetFavorites {
     register_activation_hook($this->plugin->config->entryPoint, [$this->dbUtils, 'makeTable'] );
     add_filter( 'ucd-theme/templates/page', [$this, 'overridePageTemplate'], 10, 2 );
     add_filter( 'ucd-theme/context/page', [$this, 'updateContext'], 10, 2 );
+    add_action('admin_menu', [$this, 'addMenuItem']);
   }
 
 
@@ -51,5 +52,34 @@ class UcdlibIntranetFavorites {
     ];
 
     return $context;
+  }
+
+  /**
+   * Add favorites menu item
+   */
+  public function addMenuItem(){
+    add_menu_page(
+      'Manage Favorites',
+      'Manage Favorites',
+      'read',
+      $this->plugin->config->slug . '-favorites',
+      [$this, 'renderAdminPage'],
+      'dashicons-star-filled',
+      20
+    );
+  }
+
+
+  /**
+   * Callback for favorites admin menu page
+   * Set context and pass to timber
+   */
+  public function renderAdminPage(){
+    $context = [
+      'userIsAdmin' => current_user_can( 'administrator' ),
+      'logoUrl' => $this->plugin->utils->logoUrl(),
+      'wpNonce' => wp_create_nonce( 'wp_rest' )
+    ];
+    $this->plugin->timber->renderAdminTemplate( 'favorites', $context );
   }
 }

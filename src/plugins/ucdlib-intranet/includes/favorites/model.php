@@ -48,6 +48,25 @@ class UcdlibIntranetFavoritesModel {
     return $wpdb->insert_id;
   }
 
+  public function move( $favoriteId, $action ){
+    global $wpdb;
+    $favorite = $this->get($favoriteId);
+    if ( !$favorite ){
+      return false;
+    }
+    $sortOrder = $favorite['sortOrder'];
+    if ( $action == 'move-up' ){
+      $sortOrder = $sortOrder - 1.1;
+    } else {
+      $sortOrder = $sortOrder + 1.1;
+    }
+    if ( $sortOrder <= 0 ){
+      return false;
+    }
+    $this->reorderUserFavorites($favorite['userId'], [$favoriteId => $sortOrder]);
+    return true;
+  }
+
   public function delete( $favoriteId ){
     global $wpdb;
     $favorite = $this->get($favoriteId);
@@ -69,6 +88,10 @@ class UcdlibIntranetFavoritesModel {
     $sql = "SELECT * FROM `{$this->tableName}` WHERE favorite_id = %d";
     $sql = $wpdb->prepare( $sql, $favoriteId );
     $result = $wpdb->get_row( $sql, ARRAY_A );
+    if ( !$result ){
+      return false;
+    }
+    $result = $this->favorites->dbUtils->payloadToJson($result);
     return $result;
   }
 
@@ -135,19 +158,42 @@ class UcdlibIntranetFavoritesModel {
 
   /**
    * @description ensures that the sort order is sequential starting at 1
+   * @param int $userId - user id
+   * @param array $customSortOrder - associative array of favorite_id => sort_order.
+   * will override the current sort order for that favorite item
    */
-  public function reorderUserFavorites( $userId ){
+  public function reorderUserFavorites( $userId, $customSortOrder=[] ){
+
     global $wpdb;
     $favorites = $this->_getUserFavorites($userId);
-    $sortOrder = 1;
+
+    $updatedSortOrder = [];
     foreach ( $favorites as $favorite ){
-      if ( $favorite['sort_order'] != $sortOrder ){
-        $wpdb->update(
-          $this->tableName,
-          ['sort_order' => $sortOrder],
-          ['favorite_id' => $favorite['favorite_id']]
-        );
+      $f = [
+        'favorite_id' => $favorite['favorite_id'],
+        'sort_order' => $favorite['sort_order']
+      ];
+      if ( array_key_exists($favorite['favorite_id'], $customSortOrder) ){
+        $f['sort_order'] = $customSortOrder[$favorite['favorite_id']];
       }
+
+
+      $updatedSortOrder[] = $f;
+    }
+    usort($updatedSortOrder, function($a, $b) {
+      if ($a['sort_order'] == $b['sort_order']) {
+          return 0;
+      }
+      return ($a['sort_order'] < $b['sort_order']) ? -1 : 1;
+    });
+
+    $sortOrder = 1;
+    foreach ( $updatedSortOrder as $favorite ){
+      $wpdb->update(
+        $this->tableName,
+        ['sort_order' => $sortOrder],
+        ['favorite_id' => $favorite['favorite_id']]
+      );
       $sortOrder++;
     }
   }

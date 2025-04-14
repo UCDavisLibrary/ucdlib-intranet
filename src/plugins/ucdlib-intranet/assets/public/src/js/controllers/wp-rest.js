@@ -64,6 +64,23 @@ export default class WpRest {
     }
   }
 
+  async delete(path, payload={}, params={}) {
+    try {
+      const data = await this._fetch(path, {method: 'DELETE', payload, params});
+      return {
+        status: 'success',
+        data: data.data,
+        cacheKey: data.cacheKey
+      }
+    }
+    catch (error) {
+      return {
+        status: 'error',
+        error
+      }
+    }
+  }
+
   _fetch(path, options={}) {
     let url = this.getApiUrl(path);
     if ( Object.keys(options.params || {}).length ) {
