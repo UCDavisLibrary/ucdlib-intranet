@@ -1,7 +1,8 @@
 export default class WpRest {
-  constructor(host){
+  constructor(host, restNamespace){
     (this.host = host).addController(this);
 
+    this.restNamespace = restNamespace;
     this.cache = {};
     this.requestsInProgress = {};
   }
@@ -140,7 +141,8 @@ export default class WpRest {
   }
 
   getApiUrl(path) {
-    let url = `${window.location.origin}/wp-json/${this.host.restNamespace}/${path}`;
+    const namespace = this.restNamespace || this.host.restNamespace;
+    let url = `${window.location.origin}/wp-json/${namespace}/${path}`;
     if ( url.endsWith('/') ) {
       url = url.slice(0, -1);
     }

@@ -133,7 +133,13 @@ class UcdlibIntranetFavoritesRest {
       ];
     }
 
-    // todo: modify
+    $r = $this->favorites->model->update($data);
+    if ( !$r ){
+      return new WP_Error( 'update-favorite', 'Failed to update favorite', ['status' => 400] );
+    }
+    return [
+      'favoriteId' => $data['favoriteId']
+    ];
   }
 
   public function delete ( $request ){

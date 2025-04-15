@@ -83,6 +83,14 @@ class UcdlibIntranetAssets {
     }, 1000);
     add_action('admin_enqueue_scripts', [$this, 'enqueuePublicScriptsInAdmin']);
     add_action('enqueue_block_editor_assets', [$this, 'enqueueEditorScripts'], 3);
+
+    add_action('admin_head', function () {
+      echo '<style>
+          .update-nag {
+              display: none !important;
+          }
+      </style>';
+  });
   }
 
   /**

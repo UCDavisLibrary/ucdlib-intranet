@@ -48,6 +48,29 @@ class UcdlibIntranetFavoritesModel {
     return $wpdb->insert_id;
   }
 
+  public function update( $payload ){
+    global $wpdb;
+    $favoriteId = $payload['favoriteId'];
+    if ( empty($favoriteId) ){
+      return false;
+    }
+    $favorite = $this->get($favoriteId);
+    if ( !$favorite ){
+      return false;
+    }
+    $payload = $this->favorites->dbUtils->payloadToDb($payload, true);
+    if ( empty($payload['post_id']) && empty($payload['external_url']) ){
+      return false;
+    }
+    $wpdb->update(
+      $this->tableName,
+      $payload,
+      ['favorite_id' => $favoriteId]
+    );
+    $this->reorderUserFavorites($favorite['userId']);
+    return true;
+  }
+
   public function move( $favoriteId, $action ){
     global $wpdb;
     $favorite = $this->get($favoriteId);
