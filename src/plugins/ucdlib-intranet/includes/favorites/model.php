@@ -118,6 +118,52 @@ class UcdlibIntranetFavoritesModel {
     return $result;
   }
 
+  /**
+   * @description Get the most favorited posts
+   * @param int $number - number of posts to return
+   */
+  public function getTopPosts($number=20, $disablePostQuery=false){
+    global $wpdb;
+    $sql = "SELECT post_id, COUNT(*) as count FROM `{$this->tableName}` WHERE post_id IS NOT NULL GROUP BY post_id ORDER BY count DESC LIMIT %d";
+    $sql = $wpdb->prepare( $sql, $number );
+    $results = $wpdb->get_results( $sql, ARRAY_A );
+    if ( !$results ){
+      return [];
+    }
+    $postIds = [];
+    $out = [];
+    foreach ( $results as $result ){
+      $postIds[] = $result['post_id'];
+      $out[] = [
+        'postId' => $result['post_id'],
+        'count' => $result['count']
+      ];
+    }
+
+    if ( !$disablePostQuery ){
+      $posts = Timber::get_posts([
+        'post__in' => $postIds,
+        'nopaging' => true,
+        'post_type' => 'any'
+      ]);
+      foreach ( $out as &$result ){
+        foreach ( $posts as $post ){
+          if ( $result['postId'] == $post->ID ){
+            $result['post'] = $this->extractPostContents($post);
+          }
+        }
+      }
+    }
+    return $out;
+  }
+
+  public function extractPostContents($post){
+    return [
+      'title' => html_entity_decode($post->title()),
+      'link' => $post->link()
+    ];
+  }
+
   public function getUserFavorites($userId, $kwargs=[]){
     $favorites = $this->_getUserFavorites($userId);
 
@@ -152,10 +198,7 @@ class UcdlibIntranetFavoritesModel {
         foreach ( $favorites as &$favorite ){
           foreach ( $posts as $post ){
             if ( $favorite['postId'] == $post->ID ){
-              $favorite['post'] = [
-                'title' => html_entity_decode($post->title()),
-                'link' => $post->link()
-              ];
+              $favorite['post'] = $this->extractPostContents($post);
             }
           }
         }

@@ -133,7 +133,7 @@ export function styles() {
     #form h2 {
       margin-bottom: 1rem;
     }
-    #form .buttons {
+    .buttons {
       margin-top: 2rem;
     }
     .post-info {
@@ -206,6 +206,7 @@ return html`
       ${_renderYourFavorites.call(this)}
       ${_renderDefaultFavorites.call(this)}
       ${_renderPopularFavorites.call(this)}
+      ${_renderDeleteConfirmation.call(this)}
       ${_renderForm.call(this)}
       <div id="error">
         <h2>Something went wrong</h2>
@@ -224,20 +225,59 @@ function _renderYourFavorites() {
       <div ?hidden=${!this.yourFavorites?.length}>
         ${_renderFavoriteList.call(this, this.yourFavorites, false, true)}
       </div>
-
+      <div class='buttons'>
+        <button class='btn btn--primary' type='button' @click=${() => this._onEdit()}>Add Favorite</button>
+      </div>
     </div>
   `;
 }
 
 function _renderDefaultFavorites() {
   return html`
-    <div id="default-favorites">Default favorites</div>
+    <div id="default-favorites">
+      <div ?hidden=${this.defaultFavorites?.length}>
+        <p>There are currently no default favorites. Please contact a site administrator</p>
+      </div>
+      <div ?hidden=${!this.defaultFavorites?.length}>
+        <p>This list will display on your homepage if you don't have of your own favorites.
+          <br>
+          You can click the star icon to add a page to your own favorites list.</p>
+        ${_renderFavoriteList.call(this, this.defaultFavorites, true, this.isAdmin)}
+      </div>
+      <div class='buttons' ?hidden=${!this.isAdmin}>
+        <button class='btn btn--primary' type='button' @click=${() => this._onEdit({defaultFavorites: true})}>Add Favorite</button>
+      </div>
+    </div>
   `;
 }
 function _renderPopularFavorites() {
   return html`
-    <div id="popular-favorites">Popular favorites</div>
+    <div id="popular-favorites">
+      <div ?hidden=${this.popularFavorites?.length}>
+        <p>There are currently no popular favorites.</p>
+      </div>
+    <div ?hidden=${!this.popularFavorites?.length}>
+      <p>The following are pages that are frequently favorited by your coworkers.
+      <br>
+      You can click the star icon to add a page to your own favorites list.</p>
+      ${_renderFavoriteList.call(this, this.popularFavorites, true, false)}
+    </div>
+    </div>
   `;
+}
+
+function _renderDeleteConfirmation() {
+  let title = this.payload?.label || this.payload?.post?.title || 'This favorite'
+  let list = this.payload?.userId ? 'your' : 'the default';
+  return html`
+    <div id="delete-confirmation">
+      <p>Are you sure you want to remove <strong>${title}</strong> from ${list} favorites list?</p>
+      <div class='buttons'>
+        <button class='btn btn--invert' type='button' @click=${() => this.page = this.lastPage}>Cancel</button>
+        <button class='btn btn--primary' type='button' @click=${this.delete}>Delete</button>
+      </div>
+    </div>
+    `;
 }
 
 function _renderForm() {
@@ -327,7 +367,10 @@ function _renderForm() {
 function _renderFavoriteList(favorites, addButton, canEdit) {
   return html`
     <div class='favorite-list'>
-      ${favorites.map((favorite, i) => html`
+      ${favorites.map((favorite, i) => {
+        let inOwnFavorites = addButton ? this.favoriteIsInList(favorite) : false;
+        inOwnFavorites = inOwnFavorites ? true : false;
+        return html`
         <div class='favorite-list__item'>
           <div class='favorite-list__item__content'>
             <div class='label'>${favorite.label || favorite.post?.title}</div>
@@ -337,7 +380,7 @@ function _renderFavoriteList(favorites, addButton, canEdit) {
             <button
               class='icon-button'
               ?hidden=${!canEdit}
-              @click=${() => this._onItemMove(favorite, 'up')}
+              @click=${() => this.moveItem(favorite, 'up')}
               ?disabled=${i === 0}
               title='Move up'
               aria-label='Move up'
@@ -347,7 +390,7 @@ function _renderFavoriteList(favorites, addButton, canEdit) {
             <button
               class='icon-button'
               ?hidden=${!canEdit}
-              @click=${() => this._onItemMove(favorite, 'down')}
+              @click=${() => this.moveItem(favorite, 'down')}
               ?disabled=${i === favorites.length - 1}
               title='Move down'
               aria-label='Move down'
@@ -357,7 +400,7 @@ function _renderFavoriteList(favorites, addButton, canEdit) {
             <button
               class='icon-button small'
               ?hidden=${!canEdit}
-              @click=${() => this._onDelete(favorite)}
+              @click=${() => this._onDeleteRequest(favorite)}
               title='Delete'
               aria-label='Delete'
               type='button'>
@@ -372,9 +415,19 @@ function _renderFavoriteList(favorites, addButton, canEdit) {
               type='button'>
               <ucdlib-icon icon='ucd-public:fa-pen'></ucdlib-icon>
             </button>
+            <button
+              ?hidden=${!addButton}
+              class='icon-button'
+              @click=${() => this._onTransferToggle(favorite)}
+              title=${inOwnFavorites ? 'Remove from your favorites' : 'Add to your favorites'}
+              aria-pressed='${inOwnFavorites}'
+              aria-label=${inOwnFavorites ? 'Remove from your favorites' : 'Add to your favorites'}
+              type='button'>
+              <ucdlib-icon icon='ucd-public:${inOwnFavorites ? 'fa-star' : 'star-outline' }'></ucdlib-icon>
+            </button>
           </div>
         </div>
-        `)}
+        `})}
     </div>
   `;
 }

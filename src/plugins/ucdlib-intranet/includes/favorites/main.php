@@ -76,7 +76,7 @@ class UcdlibIntranetFavorites {
    */
   public function renderAdminPage(){
     $context = [
-      'userIsAdmin' => current_user_can( 'administrator' ),
+      'isAdmin' => current_user_can( 'administrator' ),
       'logoUrl' => $this->plugin->utils->logoUrl(),
       'wpNonce' => wp_create_nonce( 'wp_rest' )
     ];

@@ -29,10 +29,21 @@ class UcdlibIntranetFavoritesRest {
         'default_favorites' => [
           'required' => false,
           'validate_callback' => function($param, $request, $key){
+            if ( $param === 'true' ){
+              return true;
+            }
             return is_bool($param);
           }
         ]
-        ],
+      ],
+      'permission_callback' => function() {
+        return is_user_logged_in();
+      }
+    ]);
+
+    register_rest_route( $pluginNs, $ns . '/popular', [
+      'methods' => 'GET',
+      'callback' => [$this, 'getPopular'],
       'permission_callback' => function() {
         return is_user_logged_in();
       }
@@ -83,12 +94,19 @@ class UcdlibIntranetFavoritesRest {
     ];
   }
 
+  public function getPopular( $request ){
+    $favorites = $this->favorites->model->getTopPosts();
+    return [
+      'favorites' => $favorites
+    ];
+  }
+
   public function create( $request ){
     $data = $request->get_json_params();
     if ( !$data ) {
       return new WP_Error( 'no-data', 'No data provided', ['status' => 400] );
     }
-    if ( !empty($data['default_favorites']) ){
+    if ( !empty($data['defaultFavorites']) ){
       if ( !current_user_can('administrator') ){
         return new WP_Error( 'not-admin', 'Only admins can create default favorites', ['status' => 403] );
       }
