@@ -1,5 +1,7 @@
 import { html, css } from 'lit';
 import '@ucd-lib/theme-elements/ucdlib/ucdlib-pages/ucdlib-pages.js'
+import '../components/ucdlib-brand-color-picker.js';
+import '../components/ucdlib-icon-picker.js';
 
 import normalize from "@ucd-lib/theme-sass/normalize.css.js";
 import baseHtml from "@ucd-lib/theme-sass/1_base_html/_index.css.js";
@@ -354,6 +356,17 @@ function _renderForm() {
             </button>
             `)}
         </div>
+      </div>
+      <div class='field-container'>
+        <label>Custom Icon</label>
+        <ucdlib-icon-picker></ucdlib-icon-picker>
+      </div>
+      <div class='field-container'>
+        <label>Custom Icon Color</label>
+        <ucdlib-brand-color-picker
+          .value=${this.payload.brandColor || ''}
+          @select=${e => this._onInput('brandColor', e.detail.color.id)}>
+        </ucdlib-brand-color-picker>
       </div>
       <div class='buttons'>
         <button class='btn btn--invert' type='button' @click=${() => this.page = this.lastPage}>Cancel</button>
