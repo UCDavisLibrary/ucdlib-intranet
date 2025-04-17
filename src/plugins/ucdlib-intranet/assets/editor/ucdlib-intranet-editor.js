@@ -4,10 +4,12 @@ import { registerBlockType } from '@wordpress/blocks';
 import customBlocks from "./lib/blocks";
 import { select } from "@wordpress/data";
 
+import favoriteSettings from "./lib/plugins/favorite-settings";
+
 customBlocks.forEach(block => {
   registerBlockType( block.name, block.settings );
 });
 
 if ( select('core/editor') ){
-  //registerPlugin( projectSettings.name, projectSettings.settings );
+  registerPlugin( favoriteSettings.name, favoriteSettings.settings );
 };

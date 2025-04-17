@@ -29,6 +29,7 @@ class UcdlibIntranetFavorites {
     add_filter( 'ucd-theme/templates/page', [$this, 'overridePageTemplate'], 10, 2 );
     add_filter( 'ucd-theme/context/page', [$this, 'updateContext'], 10, 2 );
     add_action('admin_menu', [$this, 'addMenuItem']);
+    add_action( 'init', [$this, 'registerPostMeta'], 11 );
   }
 
 
@@ -52,6 +53,24 @@ class UcdlibIntranetFavorites {
     ];
 
     return $context;
+  }
+
+  public function registerPostMeta(){
+
+    // todo: add department post type
+    $postTypes = ['page'];
+    foreach ( $postTypes as $postType ){
+      register_post_meta( $postType, 'favoriteDefaultIcon' , [
+        'show_in_rest' => true,
+        'single' => true,
+        'type' => 'string'
+      ]);
+      register_post_meta( $postType, 'favoriteDefaultIconColor' , [
+        'show_in_rest' => true,
+        'single' => true,
+        'type' => 'string'
+      ]);
+    }
   }
 
   /**
