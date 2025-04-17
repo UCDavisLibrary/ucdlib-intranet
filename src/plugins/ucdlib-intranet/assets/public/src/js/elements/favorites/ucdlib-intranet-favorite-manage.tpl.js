@@ -359,7 +359,10 @@ function _renderForm() {
       </div>
       <div class='field-container'>
         <label>Custom Icon</label>
-        <ucdlib-icon-picker></ucdlib-icon-picker>
+        <ucdlib-icon-picker
+          .value=${this.payload.icon?.split?.(':')?.[1] || ''}
+          @icon-selected=${e => this._onInput('icon', e.detail)}>
+        </ucdlib-icon-picker>
       </div>
       <div class='field-container'>
         <label>Custom Icon Color</label>

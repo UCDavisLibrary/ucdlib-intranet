@@ -14,7 +14,7 @@ class UcdlibIntranetFavoritesDb {
 
     $this->favorites = $favorites;
 
-    $this->tablePrefix = 'ucdlib-';
+    $this->tablePrefix = 'ucdlib_';
     $this->tableName = $wpdb->prefix . $this->tablePrefix . 'favorites';
     $this->columns = [
       [

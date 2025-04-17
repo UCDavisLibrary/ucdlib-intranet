@@ -1,6 +1,16 @@
 import { LitElement } from 'lit';
 import {render, styles} from "./ucdlib-icon-picker.tpl.js";
 
+/**
+ * @description Searcheable icon picker component.
+ * Assumes that the ucdlib-iconset is already loaded in the page.
+ * @property {string} value - The selected icon name
+ * @property {string} searchText - The text to search for
+ * @property {number} resultLimit - The maximum number of results to show
+ * @property {array} results - The array of results
+ * @property {boolean} showResults - Whether to show the results or not
+ *
+ */
 export default class UcdlibIconPicker extends LitElement {
 
   static get properties() {
@@ -8,7 +18,8 @@ export default class UcdlibIconPicker extends LitElement {
       value: {type: String},
       searchText: {type: String},
       resultLimit: {type: Number},
-      results: {state: true}
+      results: {type: Array},
+      showResults: {type: Boolean}
     }
   }
 
@@ -21,11 +32,16 @@ export default class UcdlibIconPicker extends LitElement {
     this.render = render.bind(this);
     this.value = '';
     this.searchText = '';
-    this.resultLimit = 15;
+    this.resultLimit = 12;
     this.results = [];
     this.iconset = 'ucd-public';
+    this.showResults = false;
   }
 
+  /**
+   * @description Callback for when the element is added to the DOM.
+   * @returns
+   */
   connectedCallback(){
     super.connectedCallback();
     this.iconsetEle = document.querySelector(`head ucdlib-iconset[name="${this.iconset}"]`);
@@ -35,16 +51,24 @@ export default class UcdlibIconPicker extends LitElement {
     }
   }
 
+  /**
+   * @description Callback for input events on the search box.
+   * @param {*} e - The event object
+   */
   _onSearch(e){
     this.searchText = e.target.value || '';
     if ( this.searchTimeout ) {
       clearTimeout(this.searchTimeout);
     }
     this.searchTimeout = setTimeout(() => {
+      this.showResults = !!this.searchText;
       this.search();
     }, 300);
   }
 
+  /**
+   * @description Searches the iconset for icons that match the search text.
+   */
   search(){
     const results = [];
     const searchText = this.searchText.toLowerCase();
@@ -61,9 +85,50 @@ export default class UcdlibIconPicker extends LitElement {
 
     }
     this.results = results;
-    console.log(this.results);
   }
 
+  /**
+   * @description Callback for when the search input loses focus.
+   */
+  _onSearchBlur(){
+    setTimeout(() => {
+      this.showResults = false;
+    }, 200);
+  }
+
+  /**
+   * @description Callback for when the clear button is clicked.
+   */
+  _onClearClick(){
+    this.value = '';
+    this._dispatchIconSelectedEvent();
+  }
+
+  /**
+   * @description Callback for when an icon is clicked in the search results.
+   * @param {String} icon - The icon name
+   */
+  _onResultClick(icon){
+    this.value = icon;
+    this._dispatchIconSelectedEvent();
+    this.showResults = false;
+    this.searchText = '';
+    this.results = [];
+  }
+
+  /**
+   * @description Dispatches the icon-selected event.
+   */
+  _dispatchIconSelectedEvent(){
+    this.dispatchEvent(new CustomEvent('icon-selected', {
+      detail: {
+        icon: this.value,
+        iconset: this.iconset
+      },
+      bubbles: true,
+      composed: true
+    }));
+  }
 
 }
 

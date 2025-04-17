@@ -325,6 +325,13 @@ export default class UcdlibIntranetFavoriteManage extends LitElement {
         this.payload.externalUrl = null;
       }
     }
+    if ( prop === 'icon' ){
+      if ( !value.icon ){
+        this.payload.icon = null;
+      } else {
+        this.payload.icon = `${value.iconset}:${value.icon}`;
+      }
+    }
     this.requestUpdate();
   }
 
