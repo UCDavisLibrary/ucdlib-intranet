@@ -17,3 +17,8 @@
     flex-grow: 0;
   }
 }
+@media (max-width: 991px) {
+  .block--favorites-list .l-2col > :where(* + *) {
+    margin-top: 0;
+  }
+}

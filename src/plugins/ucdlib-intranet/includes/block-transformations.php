@@ -10,4 +10,59 @@ class UcdlibIntranetBlockTransformations {
     $attrs['post'] = Timber::get_post();
     return $attrs;
   }
+
+  public static function getFavoritesList($attrs=[]){
+    $model = $GLOBALS['ucdlibIntranet']->favorites->model;
+    $favorites = $model->getUserFavorites(  get_current_user_id() );
+    if ( empty($favorites) ){
+      $favorites = $model->getUserFavorites( null );
+    }
+    $attrs['icons'] = [];
+    $favorites = array_map(function($favorite) use (&$attrs){
+      $out = [];
+
+      if ( !empty($favorite['post']['link']) ){
+        $out['href'] = $favorite['post']['link'];
+      } else {
+        $out['href'] = $favorite['externalUrl'];
+      }
+
+      if ( !empty($favorite['label']) ){
+        $out['text'] = $favorite['label'];
+      } else if ( !empty($favorite['post']['title']) ){
+        $out['text'] = $favorite['post']['title'];
+      } else if ( !empty($favorite['post']['link']) ){
+        $out['text'] = $favorite['post']['link'];
+      } else {
+        $out['text'] = $favorite['externalUrl'];
+      }
+
+      if ( !empty($favorite['icon']) ){
+        $out['icon'] = $favorite['icon'];
+      } else if ( !empty($favorite['post']['favoriteDefaultIcon']) ){
+        $out['icon'] = $favorite['post']['favoriteDefaultIcon'];
+      } else {
+        $out['icon'] = 'ucd-public:fa-star';
+      }
+
+      $attrs['icons'][] = $out['icon'];
+
+      if ( !empty($favorite['brandColor']) ){
+        $out['brandColor'] = $favorite['brandColor'];
+      } else if ( !empty($favorite['post']['favoriteDefaultIconColor']) ){
+        $out['brandColor'] = $favorite['post']['favoriteDefaultIconColor'];
+      } else if ( !empty($favorite['post']['pageBrandColor']) ){
+        $out['brandColor'] = $favorite['post']['pageBrandColor'];
+      } else {
+        $out['brandColor'] = 'secondary';
+      }
+
+      return $out;
+
+    }, $favorites);
+
+    $attrs['rows'] = array_chunk($favorites, 2);
+
+    return $attrs;
+  }
 }

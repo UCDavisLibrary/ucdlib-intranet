@@ -1,1 +1,5 @@
-export default [];
+import favoritesList from "./favorites-list";
+
+export default [
+  favoritesList
+];

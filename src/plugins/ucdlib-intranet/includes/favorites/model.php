@@ -160,7 +160,10 @@ class UcdlibIntranetFavoritesModel {
   public function extractPostContents($post){
     return [
       'title' => html_entity_decode($post->title()),
-      'link' => $post->link()
+      'link' => $post->link(),
+      'favoriteDefaultIcon' => $post->meta('favoriteDefaultIcon'),
+      'favoriteDefaultIconColor' => $post->meta('favoriteDefaultIconColor'),
+      'pageBrandColor' => $post->meta('ucd_brand_color')
     ];
   }
 

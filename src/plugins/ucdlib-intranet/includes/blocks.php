@@ -18,6 +18,10 @@ class UcdlibIntranetBlocks extends UCDThemeBlockRenderer {
   public static $transformationClass = 'UcdlibIntranetBlockTransformations';
 
   public static $registry = [
+    'ucdlib-intranet/favorites-list' => [
+      'twig' => '@ucdlib-intranet/blocks/favorites-list.twig',
+      'transform' => ['getFavoritesList']
+    ]
   ];
 
   /**
