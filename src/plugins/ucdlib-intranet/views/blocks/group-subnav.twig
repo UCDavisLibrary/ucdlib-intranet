@@ -1,0 +1,19 @@
+{% from getUcdMacro('menus') import subnav %}
+
+{% set post = siteContext.post %}
+{% if post and post.groupIsHierarchical %}
+
+  {% set kwargs = {
+    title: post.landingPage.title,
+    titleLink: post.landingPage.link,
+    items: post.landingPage.children,
+    oBox: false,
+    panel: false,
+    show_children: true
+    }
+  %}
+  <aside class="o-box panel">
+    {{ subnav( kwargs ) }}
+  </aside>
+
+{% endif %}

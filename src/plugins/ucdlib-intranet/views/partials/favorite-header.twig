@@ -8,7 +8,7 @@
     <h1 class="page-title {{colorClass}}">{{title}}</h1>
     <ucdlib-intranet-favorite-toggle
       post-id="{{post.id}}"
-      wp-nonce={{favorites.wpNonce}}>
+      wp-nonce={{favorites.wpNonce | default(wpNonce)}}>
     </ucdlib-intranet-favorite-toggle>
   </section>
 {% endif %}

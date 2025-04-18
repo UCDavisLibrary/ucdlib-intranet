@@ -14,8 +14,7 @@ const name = 'ucdlib-intranet-favorite-settings';
 
 const Edit = () => {
 
-  // todo: add department post type
-  if ( !['page'].includes(SelectUtils.editedPostAttribute('type')) ){
+  if ( !['page', 'ucdlib-group'].includes(SelectUtils.editedPostAttribute('type')) ){
     return html`<${Fragment} />`;
   }
 

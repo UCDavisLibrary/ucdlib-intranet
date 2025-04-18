@@ -1,0 +1,37 @@
+<?php
+
+require_once( __DIR__ . '/ctl.php' );
+
+class UcdlibIntranetGroups {
+
+  public $plugin;
+  public $slugs = [
+    'postType' => 'ucdlib-group',
+    'meta' => [
+      'type' => 'ucdlibGroupType',
+      'parent' => 'ucdlibGroupParent',
+      'endedYear' => 'ucdlibGroupEndedYear'
+    ]
+  ];
+
+  // Landing page ids for the group types
+  // probably shouldnt be hardcoded, forgiveness please
+  public $pageIds = [
+    'committee' => 25,
+    'department' => 23
+  ];
+
+  public $ctl;
+
+  public function __construct( $plugin, $init = true ){
+    $this->plugin = $plugin;
+
+    if ( $init ){
+      $this->init();
+    }
+  }
+
+  public function init(){
+    $this->ctl = new UcdlibIntranetGroupsCtl( $this );
+  }
+}

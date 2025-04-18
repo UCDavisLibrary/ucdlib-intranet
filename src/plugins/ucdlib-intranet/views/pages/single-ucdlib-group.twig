@@ -1,0 +1,22 @@
+{% from getUcdMacro('links') import breadcrumbs as render_crumbs %}
+
+{% extends getUcdTemplate('base') %}
+
+{% block content_container %}
+  <div class="l-container l-basic--flipped">
+    <div class="l-content">{{post.content}}</div>
+    <div class="l-sidebar-second">
+      {% if sidebar %}
+        {{sidebar}}
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}
+
+{% block breadcrumbs %}
+  {{render_crumbs(post.groupPageBreadcrumbs)}}
+{% endblock %}
+
+{% block page_title %}
+  {% include '@ucdlib-intranet/partials/favorite-header.twig' %}
+{% endblock %}

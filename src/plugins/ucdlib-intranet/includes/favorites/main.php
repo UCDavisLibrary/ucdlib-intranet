@@ -57,8 +57,7 @@ class UcdlibIntranetFavorites {
 
   public function registerPostMeta(){
 
-    // todo: add department post type
-    $postTypes = ['page'];
+    $postTypes = ['page', 'ucdlib-group'];
     foreach ( $postTypes as $postType ){
       register_post_meta( $postType, 'favoriteDefaultIcon' , [
         'show_in_rest' => true,

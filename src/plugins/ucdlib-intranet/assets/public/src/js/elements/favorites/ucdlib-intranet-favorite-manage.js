@@ -359,10 +359,10 @@ export default class UcdlibIntranetFavoriteManage extends LitElement {
       this.searchResults = [];
       return;
     }
-    // todo: add departments to search when post type is created
+
     const params = {
       search: value,
-      subtype: 'page'
+      subtype: 'page,ucdlib-group'
     };
     const r = await this.wpApi.get('search', params);
     if ( r.status === 'error' ){

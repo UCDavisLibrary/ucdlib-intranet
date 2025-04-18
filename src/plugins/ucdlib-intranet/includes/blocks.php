@@ -21,6 +21,9 @@ class UcdlibIntranetBlocks extends UCDThemeBlockRenderer {
     'ucdlib-intranet/favorites-list' => [
       'twig' => '@ucdlib-intranet/blocks/favorites-list.twig',
       'transform' => ['getFavoritesList']
+    ],
+    'ucdlib-intranet/group-subnav' => [
+      'twig' => '@ucdlib-intranet/blocks/group-subnav.twig'
     ]
   ];
 
