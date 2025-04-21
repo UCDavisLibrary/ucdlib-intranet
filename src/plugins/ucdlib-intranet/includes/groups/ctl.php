@@ -65,6 +65,25 @@ class UcdlibIntranetGroupsCtl {
       'type' => 'string',
       'default' => 'committee'
     ] );
+
+    register_post_meta( $slug, $metaSlugs['parent'] , [
+      'show_in_rest' => true,
+      'single' => true,
+      'type' => 'integer',
+      'default' => 0
+    ] );
+    register_post_meta( $slug, $metaSlugs['endedYear'] , [
+      'show_in_rest' => true,
+      'single' => true,
+      'type' => 'integer',
+      'default' => 0
+    ] );
+    register_post_meta( $slug, $metaSlugs['hideOnLandingPage'] , [
+      'show_in_rest' => true,
+      'single' => true,
+      'type' => 'boolean',
+      'default' => false
+    ] );
   }
 
   // tell Timber about our post model

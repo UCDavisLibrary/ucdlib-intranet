@@ -5,6 +5,7 @@ import customBlocks from "./lib/blocks";
 import { select } from "@wordpress/data";
 
 import favoriteSettings from "./lib/plugins/favorite-settings";
+import groupSettings from "./lib/plugins/group-settings";
 
 customBlocks.forEach(block => {
   registerBlockType( block.name, block.settings );
@@ -12,4 +13,5 @@ customBlocks.forEach(block => {
 
 if ( select('core/editor') ){
   registerPlugin( favoriteSettings.name, favoriteSettings.settings );
+  registerPlugin( groupSettings.name, groupSettings.settings );
 };

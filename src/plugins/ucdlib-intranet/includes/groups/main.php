@@ -1,6 +1,7 @@
 <?php
 
 require_once( __DIR__ . '/ctl.php' );
+require_once(__DIR__ . '/rest.php');
 
 class UcdlibIntranetGroups {
 
@@ -10,7 +11,8 @@ class UcdlibIntranetGroups {
     'meta' => [
       'type' => 'ucdlibGroupType',
       'parent' => 'ucdlibGroupParent',
-      'endedYear' => 'ucdlibGroupEndedYear'
+      'endedYear' => 'ucdlibGroupEndedYear',
+      'hideOnLandingPage' => 'ucdlibHideOnLandingPage',
     ]
   ];
 
@@ -22,6 +24,7 @@ class UcdlibIntranetGroups {
   ];
 
   public $ctl;
+  public $rest;
 
   public function __construct( $plugin, $init = true ){
     $this->plugin = $plugin;
@@ -33,5 +36,6 @@ class UcdlibIntranetGroups {
 
   public function init(){
     $this->ctl = new UcdlibIntranetGroupsCtl( $this );
+    $this->rest = new UcdlibIntranetGroupsRest( $this );
   }
 }
