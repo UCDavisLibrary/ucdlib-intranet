@@ -148,7 +148,7 @@ class UcdlibIntranetGroupsCtl {
       if ( empty($p) ) {
         return;
       }
-      $groupType = $p->groupType() ?? '';
+      $groupType = ucfirst($p->groupType() ?? '');
       $groupTitle = $p->landingPage()->title() ?? '';
       echo '<div class="ucdlib-group-title"><strong>' . $groupTitle . '</strong></div>';
       echo '<div class="ucdlib-group-type">' . $groupType . '</div>';

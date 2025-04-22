@@ -51,6 +51,40 @@ class UcdlibIntranetGroupsTimberModel extends UcdThemePost {
     return $this->groupParent;
   }
 
+  protected $groupParentPost;
+  public function groupParentPost(){
+    if ( ! empty( $this->groupParentPost ) ) {
+      return $this->groupParentPost;
+    }
+    $parentId = $this->groupParent();
+    if ( empty($parentId) ) {
+      return null;
+    }
+    $this->groupParentPost = Timber::get_post($parentId);
+    return $this->groupParentPost;
+  }
+
+  protected $groupChildren;
+  public function groupChildren(){
+    if ( ! empty( $this->groupChildren ) ) {
+      return $this->groupChildren;
+    }
+    $this->groupChildren = self::queryGroups([
+      'groupParent' => $this->landingPage()->id
+    ]);
+    return $this->groupChildren;
+  }
+
+  public function hasChildrenOrParent(){
+    if ( ! empty( $this->groupChildren()->found_posts ) ) {
+      return true;
+    }
+    if ( ! empty( $this->groupParentPost() ) ) {
+      return true;
+    }
+    return false;
+  }
+
   protected $groupEndedYear;
   public function groupEndedYear(){
     if ( ! empty( $this->groupEndedYear ) ) {
@@ -140,6 +174,14 @@ class UcdlibIntranetGroupsTimberModel extends UcdThemePost {
       $q['meta_query'][] = [
         'key' => $mainClass->slugs['meta']['type'],
         'value' => $query['groupType'],
+        'compare' => '='
+      ];
+    }
+
+    if ( !empty($query['groupParent']) ){
+      $q['meta_query'][] = [
+        'key' => $mainClass->slugs['meta']['parent'],
+        'value' => $query['groupParent'],
         'compare' => '='
       ];
     }
