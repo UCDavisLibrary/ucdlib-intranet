@@ -171,11 +171,25 @@ class UcdlibIntranetGroupsTimberModel extends UcdThemePost {
     ];
 
     if ( !empty($query['groupType']) ){
-      $q['meta_query'][] = [
-        'key' => $mainClass->slugs['meta']['type'],
-        'value' => $query['groupType'],
-        'compare' => '='
+
+      $groupTypeQuery = [
+        'relation' => 'OR',
+        [
+          'key' => $mainClass->slugs['meta']['type'],
+          'value' => $query['groupType'],
+          'compare' => '='
+        ]
       ];
+
+      // committee is default meta value
+      if ( $query['groupType'] == 'committee' ){
+        $groupTypeQuery[] = [
+          'key' => $mainClass->slugs['meta']['type'],
+          'compare' => 'NOT EXISTS'
+        ];
+      }
+
+      $q['meta_query'][] = $groupTypeQuery;
     }
 
     if ( !empty($query['groupParent']) ){
@@ -183,6 +197,56 @@ class UcdlibIntranetGroupsTimberModel extends UcdThemePost {
         'key' => $mainClass->slugs['meta']['parent'],
         'value' => $query['groupParent'],
         'compare' => '='
+      ];
+    }
+
+    if ( !empty($query['active']) ){
+      $q['meta_query'][] = [
+        'relation' => 'OR',
+        [
+          'key' => $mainClass->slugs['meta']['endedYear'],
+          'value' => 0,
+          'compare' => '='
+        ],
+        [
+          'key' => $mainClass->slugs['meta']['endedYear'],
+          'compare' => 'NOT EXISTS'
+        ]
+        ];
+    }
+
+    if ( !empty($query['inactive']) ){
+      $q['meta_query'][] = [
+        'relation' => 'AND',
+        [
+          'key' => $mainClass->slugs['meta']['endedYear'],
+          'value' => 0,
+          'compare' => '!='
+        ],
+        [
+          'key' => $mainClass->slugs['meta']['endedYear'],
+          'compare' => 'EXISTS'
+        ]
+      ];
+    }
+
+    if ( !empty($query['notHidden']) ){
+      $q['meta_query'][] = [
+        'relation' => 'OR',
+        [
+          'key' => $mainClass->slugs['meta']['hideOnLandingPage'],
+          'value' => 0,
+          'compare' => '='
+        ],
+        [
+          'key' => $mainClass->slugs['meta']['hideOnLandingPage'],
+          'value' => false,
+          'compare' => '='
+        ],
+        [
+          'key' => $mainClass->slugs['meta']['hideOnLandingPage'],
+          'compare' => 'NOT EXISTS'
+        ]
       ];
     }
     return Timber::get_posts($q);

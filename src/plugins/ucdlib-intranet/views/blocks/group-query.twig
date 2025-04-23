@@ -1,0 +1,23 @@
+<div class='block--group-query'>
+  {% if attributes.posts|length %}
+    <div class='{{attributes.columns.layoutClass}}'>
+    {% for col in attributes.columns.columns %}
+      <div class='{{col.layoutClass}}'>
+        {% for item in col.items %}
+          <a class='icon-ucdlib category-brand--{{attributes.brandColor}}' href="{{item.link}}">
+            <ucdlib-icon icon="{{attributes.icon}}"></ucdlib-icon>
+            <div>
+              <div>{{item.title}}</div>
+              {% if item.groupEndedYear %}
+              <div class='block--group-query__ended'>ended {{item.groupEndedYear}}</div>
+              {% endif %}
+            </div>
+          </a>
+        {% endfor %}
+      </div>
+    {% endfor %}
+    </div>
+  {% else %}
+    <p>No library groups found.</p>
+  {% endif %}
+</div>

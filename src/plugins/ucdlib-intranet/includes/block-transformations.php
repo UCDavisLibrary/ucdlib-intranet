@@ -3,11 +3,38 @@
 // Contains methods that transform the attributes of a block (mostly fetching additional data)
 // See 'transform' property in $registry array in UCDThemeBlocks class.
 class UcdlibIntranetBlockTransformations {
+
   /**
    * Retrieves current post object and saves in "post" attribute
    */
   public static function getCurrentPost($attrs=array()){
     $attrs['post'] = Timber::get_post();
+    return $attrs;
+  }
+
+  public static function queryGroups($attrs=[]){
+    $model = UcdlibIntranetGroupsTimberModel::class;
+    $q = [];
+    if ( !empty($attrs['groupType']) ){
+      $q['groupType'] = $attrs['groupType'];
+    }
+    if ( isset($attrs['activeStatus']) ){
+      if ( $attrs['activeStatus'] === 'active' ){
+        $q['active'] = true;
+      } else if ( $attrs['activeStatus'] === 'inactive' ){
+        $q['inactive'] = true;
+      }
+    }
+
+    if ( empty($attrs['showHidden']) ){
+      $q['notHidden'] = true;
+    }
+
+    $attrs['groupQuery'] = $q;
+    $posts = $GLOBALS['ucdlibIntranet']->timber->extractPosts($model::queryGroups($q));
+    $attrs['posts'] = $posts;
+    $attrs['columns'] = $GLOBALS['ucdlibIntranet']->utils->newspaperChunk($posts, 3);
+    $attrs['icon'] = 'ucd-public:fa-circle-chevron-right';
     return $attrs;
   }
 

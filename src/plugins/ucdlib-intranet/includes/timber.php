@@ -38,4 +38,15 @@ class UcdlibIntranetTimber {
   public function timberExists(){
     return class_exists('Timber');
   }
+
+  /**
+   * @description Get a normal array of posts from a Timber\​PostQuery object
+   */
+  public function extractPosts( $postQuery ){
+    $posts = [];
+    foreach ($postQuery as $post) {
+      $posts[] = $post;
+    }
+    return $posts;
+  }
 }

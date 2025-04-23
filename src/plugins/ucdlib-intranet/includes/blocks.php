@@ -27,6 +27,10 @@ class UcdlibIntranetBlocks extends UCDThemeBlockRenderer {
     ],
     'ucdlib-intranet/group-hierarchy' => [
       'twig' => '@ucdlib-intranet/blocks/group-hierarchy.twig'
+    ],
+    'ucdlib-intranet/group-query' => [
+      'twig' => '@ucdlib-intranet/blocks/group-query.twig',
+      'transform' => ['queryGroups']
     ]
   ];
 
