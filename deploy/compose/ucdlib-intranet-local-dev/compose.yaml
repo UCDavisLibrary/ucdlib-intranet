@@ -162,8 +162,7 @@ services:
     env_file:
       - .env
     environment:
-      ELASTIC_SEARCH_LOGGER_STREAM: 'console'
-      ELASTIC_SEARCH_GC_KEY_FILENAME: '/secrets/gc-reader-key.json'
+      INDEXER_LOGGER_STREAM: 'console'
     depends_on:
       - elasticsearch
       - wordpress
@@ -182,3 +181,4 @@ volumes:
   db-data:
   uploads-data:
   wp-logs-data:
+  es-data:
