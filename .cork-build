@@ -37,6 +37,9 @@
           "BASE_IMAGE=${ucdlib-intranet.ucdlib-intranet}"
         ]
       }
+    },
+    "ucdlib-intranet-es-indexer" : {
+      "contextPath" : "./elastic-search"
     }
   }
 }

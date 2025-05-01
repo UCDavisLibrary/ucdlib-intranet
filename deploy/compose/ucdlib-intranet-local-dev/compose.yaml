@@ -2,6 +2,8 @@ x-variables:
   main-image: &main-image localhost/local-dev/ucdlib-intranet:local-dev
   utils-image: &utils-image localhost/local-dev/ucdlib-intranet-utils:local-dev
   wp-gmail-image: &wp-gmail-image localhost/local-dev/gmail-wp-pipeline:local-dev
+  indexer-image: &indexer-image localhost/local-dev/ucdlib-intranet-es-indexer:local-dev
+
 services:
   wordpress:
     image: *main-image
@@ -125,6 +127,51 @@ services:
       nofile:
         soft: 262114
         hard: 262114
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.17.5
+    environment:
+      - bootstrap.memory_lock=true
+      - discovery.type=single-node
+      - cluster.routing.allocation.disk.threshold_enabled=false
+      - cluster.routing.allocation.disk.watermark.flood_stage=98%
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - xpack.security.enabled=false
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - es-data:/usr/share/elasticsearch/data
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.17.5
+    ports:
+      - ${KIBANA_HOST_PORT:-3002}:5601
+    environment:
+      - ELASTICSEARCH_URL:http://elasticsearch:9200
+      - xpack.security.enabled=false
+      - telemetry.enabled=false
+    depends_on:
+      - elasticsearch
+
+  indexer:
+    image: *indexer-image
+    ports:
+      - ${INDEXER_HOST_PORT:-3001}:3000
+    env_file:
+      - .env
+    environment:
+      ELASTIC_SEARCH_LOGGER_STREAM: 'console'
+      ELASTIC_SEARCH_GC_KEY_FILENAME: '/secrets/gc-reader-key.json'
+    depends_on:
+      - elasticsearch
+      - wordpress
+    volumes:
+      - ../../../elastic-search:/service
+      - /service/node_modules
+      - ../../secrets:/secrets
+    command: ["tail", "-f", "/dev/null"]
 
   adminer:
     image: adminer:4
