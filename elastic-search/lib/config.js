@@ -6,6 +6,13 @@ class Config {
     this.appName = this.getEnv('INDEXER_NAME', 'intranet-indexer');
     this.port = 3000;
 
+    this.postTypes = this.toArray(
+      this.getEnv(
+        'INDEXER_POST_TYPES',
+        'page, ucdlib-group, post'
+      )
+    );
+
     // google cloud credentials, for logging
     this.gc = {
       projectId: this.getEnv('INDEXER_GC_PROJECT_ID', 'digital-ucdavis-edu'),
@@ -15,9 +22,26 @@ class Config {
 
     this.logger = {
       name: this.getEnv('INDEXER_LOGGER_NAME', this.appName),
-      //streams: this.toArray( this.getEnv('INDEXER_LOGGER_STREAM', 'console,gc') ), TODO: change back after restart
-      streams: this.toArray( this.getEnv('INDEXER_LOGGER_STREAM', 'console') ),
+      streams: this.toArray( this.getEnv('INDEXER_LOGGER_STREAM', 'console,gc') ),
       level: this.getEnv('INDEXER_LOGGER_LEVEL', 'warn')
+    }
+
+    this.elasticSearch = {
+      host: this.getEnv('INDEXER_ES_HOST', 'elasticsearch'),
+      port: this.getEnv('INDEXER_ES_PORT', '9200'),
+      username: this.getEnv('INDEXER_ES_USERNAME', 'elastic'),
+      password: this.getEnv('INDEXER_ES_PASSWORD', 'changeme'),
+      requestTimeout: this.getEnv('INDEXER_ES_REQUEST_TIMEOUT', 3*60*1000),
+      indexAlias : 'ucdlib-intranet',
+      fields : {
+        exclude : ['_'],
+      }
+    }
+
+    this.wp = {
+      url: this.getEnv('INDEXER_WP_URL', 'http://wordpress:80'),
+      username: this.getEnv('INDEXER_WP_USERNAME', false, true),
+      password: this.getEnv('INDEXER_WP_PASSWORD', false, true)
     }
 
   }

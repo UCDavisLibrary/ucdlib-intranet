@@ -49,7 +49,7 @@ services:
       - .env
     environment:
       RUN_INIT: "true"
-      INIT_DATA_ENV: ${INIT_DATA_ENV:-local-dev}
+      INIT_DATA_ENV: ${INIT_DATA_ENV:-stage}
       SERVER_URL: http://localhost:${HOST_PORT:-3000}
       GC_PROJECT: ${GC_PROJECT:-digital-ucdavis-edu}
       GC_BUCKET_BACKUPS: ${GC_BUCKET_BACKUPS:-itis-backups/ucdlib-intranet}
@@ -134,7 +134,10 @@ services:
       - bootstrap.memory_lock=true
       - discovery.type=single-node
       - cluster.routing.allocation.disk.threshold_enabled=false
-      - cluster.routing.allocation.disk.watermark.flood_stage=98%
+      - cluster.routing.allocation.disk.watermark.low=100%
+      - cluster.routing.allocation.disk.watermark.high=100%
+      - cluster.routing.allocation.disk.watermark.flood_stage=100%
+      - cluster.routing.allocation.disk.watermark.flood_stage.max_headroom=0b
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
       - xpack.security.enabled=false
     ulimits:

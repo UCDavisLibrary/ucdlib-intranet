@@ -10,6 +10,7 @@
   "type": "module",
   "license": "ISC",
   "dependencies": {
+    "@elastic/elasticsearch": "^8.18.2",
     "@google-cloud/logging-bunyan": "^5.1.0",
     "bunyan": "^1.8.15",
     "express": "^4.21.2",

@@ -8,6 +8,31 @@ class UcdlibIntranetGroupsRest {
 
     // register rest routes
     add_action( 'rest_api_init', [$this, 'registerRoutes'] );
+
+    // register custom rest fields
+    add_action( 'rest_api_init', [$this, 'registerRestFields'] );
+  }
+
+  public function registerRestFields(){
+    $postType = $this->groups->slugs['postType'];
+
+    register_rest_field( $postType, 'libraryGroup', [
+      'get_callback' => [$this, 'getLibraryGroup'],
+      'schema' => [
+        'description' => 'Library group this page belongs to',
+        'type' => 'object',
+        'context' => ['view', 'edit']
+      ]
+    ]);
+  }
+
+  public function getLibraryGroup( $post_arr ){
+    $post = Timber::get_post($post_arr['id']);
+    $landingPage = $post->landingPage();
+    return [
+      'id' => $landingPage->id,
+      'name' => $landingPage->title()
+    ];
   }
 
   public function registerRoutes(){
