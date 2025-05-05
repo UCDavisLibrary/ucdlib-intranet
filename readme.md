@@ -1,6 +1,19 @@
 # UC Davis Library Intranet
 
-In active development...
+IN DEVELOPMENT
+
+This is a standard Docker-based Wordpress installation that runs our [custom theme](https://github.com/UCDavisLibrary/ucdlib-theme-wp).
+
+## Custom Functionality
+In addition to OOB Wordpress functionality, we add a few custom features:
+
+### Liball News Importer
+
+### Library Group Post Type
+
+### Elasticsearch Indexer
+
+### Favorite Pages
 
 ## Local Development
 
@@ -24,5 +37,6 @@ By default, [the service](https://github.com/UCDavisLibrary/gmail-wp-pipeline) t
 To run it:
 - manually start the main process with `docker compose exec wp-gmail bash` and `node ./server.js`
 - and then in another terminal manually run the script with `docker compose exec wp-gmail bash` and `node ./cli.js run -w`
+
 
 

@@ -24,6 +24,10 @@ class UcdlibIntranetConfig {
     return $this->envVariables[$key];
   }
 
+  public function indexerUrl(){
+    return $this->getEnv('INDEXER_URL') ?: 'http://indexer:3000';
+  }
+
   public function isDevEnv(){
     return $this->getEnv('UCDLIB_INTRANET_ENV') == 'dev';
   }

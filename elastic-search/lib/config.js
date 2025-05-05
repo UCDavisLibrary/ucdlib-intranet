@@ -6,12 +6,8 @@ class Config {
     this.appName = this.getEnv('INDEXER_NAME', 'intranet-indexer');
     this.port = 3000;
 
-    this.postTypes = this.toArray(
-      this.getEnv(
-        'INDEXER_POST_TYPES',
-        'page, ucdlib-group, post'
-      )
-    );
+    const postTypes = 'page, ucdlib-group, post';
+    this.postTypes = this.toArray(this.getEnv('INDEXER_POST_TYPES', postTypes));
 
     // google cloud credentials, for logging
     this.gc = {
@@ -42,6 +38,10 @@ class Config {
       url: this.getEnv('INDEXER_WP_URL', 'http://wordpress:80'),
       username: this.getEnv('INDEXER_WP_USERNAME', false, true),
       password: this.getEnv('INDEXER_WP_PASSWORD', false, true)
+    }
+
+    this.query = {
+      perPage: this.getEnv('INDEXER_QUERY_PER_PAGE', 10)
     }
 
   }

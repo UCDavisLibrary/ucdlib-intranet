@@ -6,11 +6,24 @@ import transform from './transform.js';
 
 class Indexer {
 
+  constructor(){
+    this.countByType = {};
+  }
+
+  incrementCounter(postType){
+    if( !this.countByType[postType] ) {
+      this.countByType[postType] = 0;
+    }
+    this.countByType[postType]++;
+  }
+
   async reindexAll() {
+    this.countByType = {};
     await this.deleteAll();
     for (let postType of config.postTypes) {
       await this.reindexPostType(postType);
     }
+    logger.info({message: `Reindexing complete`, countByType: this.countByType});
   }
 
   async reindexPost(postId, postType) {
@@ -65,6 +78,7 @@ class Indexer {
           if( insertRes.result !== 'updated' && insertRes.result !== 'created' ) {
             throw new Error('Unknown result from elasicsearch insert: '+insertRes.result);
           }
+          this.incrementCounter(postType);
         }
 
       } catch(e) {
@@ -83,7 +97,7 @@ class Indexer {
       body : {
         query: {
           bool : {
-            should : config.postTypes.map(type => ({term: {type}}))
+            should : config.postTypes.map(postType => ({term: {postType}}))
           }
         }
       }

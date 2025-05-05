@@ -1,5 +1,6 @@
 import author from "./author.js";
 import logger from "./logger.js";
+import taxonomy from "./taxonomy.js";
 
 /**
  * @description Transform a post object from WordPress to the format defined by the elastic search index schema
@@ -28,6 +29,14 @@ async function transform(post){
     esPost.type = 'info-page';
   }
 
+  // sort date
+  if ( post.type === 'post' ){
+    esPost.sortByDate = post.date;
+  } else {
+    esPost.sortByDate = post.modified;
+  }
+
+  // post icon
   if ( post.meta?.favoriteDefaultIcon ){
     esPost.icon = post.meta.favoriteDefaultIcon;
   }
@@ -35,6 +44,7 @@ async function transform(post){
     esPost.iconBrandColor = post.meta.favoriteDefaultIconColor;
   }
 
+  // library group (department, committee, etc)
   if ( post?.libraryGroup?.id ){
     esPost.libraryGroupIds = [post.libraryGroup.id];
   }
@@ -42,6 +52,7 @@ async function transform(post){
     esPost.libraryGroupNames = [post.libraryGroup.name];
   }
 
+  // author
   if ( post?.author && !post.meta?.ucd_hide_author ){
     esPost.authorIds = [post.author];
     try {
@@ -49,6 +60,20 @@ async function transform(post){
       esPost.authorNames = [authorData.name];
     } catch (error) {
       logger.warn({message: `Error fetching author`, error, postId: post.id});
+    }
+  }
+
+  // categories
+  if ( Array.isArray(post.categories) && post.categories.length > 0 ){
+    esPost.categoryIds = post.categories;
+    esPost.categories = [];
+    for (let categoryId of post.categories) {
+      try {
+        const categoryData = await taxonomy.get('category', categoryId);
+        esPost.categories.push(categoryData.name);
+      } catch (error) {
+        logger.warn({message: `Error fetching category`, error, postId: post.id});
+      }
     }
   }
 

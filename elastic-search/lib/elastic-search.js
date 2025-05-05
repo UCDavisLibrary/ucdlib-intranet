@@ -118,6 +118,13 @@ class ElasticSearch {
     });
   }
 
+  async search(query, index) {
+    return this.client.search({
+      index : index || config.elasticSearch.indexAlias,
+      body : query
+    });
+  }
+
   /**
    * @method createIndex
    * @description create new new index with a unique name based on alias name

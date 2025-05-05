@@ -60,6 +60,10 @@
       }
     },
 
+    "categoryIds" : {
+      "type": "keyword"
+    },
+
     "categories" : {
       "type" : "keyword",
       "fields": {
@@ -130,6 +134,10 @@
 
     "link" : {
       "type" : "keyword"
+    },
+
+    "sortByDate" : {
+      "type" : "date"
     }
 
   }
