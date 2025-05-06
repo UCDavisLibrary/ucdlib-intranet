@@ -1,0 +1,23 @@
+{% macro search_result(result) %}
+  <article class="vm-teaser vm-teaser--search">
+    <div class="vm-teaser__body">
+      <div class="vm-teaser__title"><a href="{{result.link}}">{{result.title}}</a></div>
+      <div class="vm-teaser__result-type">{{result.typeFacet.labelSingular}}</div>
+      <div class="vm-teaser__summary">
+        {% if result.type == 'news' %}
+          <ul class='list--pipe'>
+          {% if result.authorNames|length %}
+            <li>{{result.authorNames|join(', ')}}</li>
+          {% endif %}
+          {% if result.created %}
+            <li>{{result.created|date('F j, Y')}}</li>
+          {% endif %}
+          <li style='display:inline;'>{{result.teaserExcerpt}}</li>
+          </ul>
+        {% else %}
+          <div>{{result.teaserExcerpt}}</div>
+        {% endif %}
+      </div>
+    </div>
+  </article>
+{% endmacro %}

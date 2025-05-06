@@ -10,6 +10,10 @@ class DynamicScriptLoader {
         name: 'favorites-admin',
         cssQuery: ['ucdlib-intranet-favorite-manage']
       },
+      {
+        name: 'search',
+        cssQuery: ['ucdlib-intranet-search-bar']
+      }
     ];
   }
 
@@ -35,6 +39,8 @@ class DynamicScriptLoader {
 
     if ( bundleName == 'favorites-admin' ){
       this.loaded[bundleName] = import(/* webpackChunkName: "jobs-board-admin" */ './elements/favorites/ucdlib-intranet-favorite-manage.js');
+    } else if ( bundleName == 'search' ){
+      this.loaded[bundleName] = import(/* webpackChunkName: "ucdlib-intranet-search" */ './elements/search/index.js');
     }
 
     return this.loaded[bundleName]

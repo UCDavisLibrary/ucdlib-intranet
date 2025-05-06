@@ -1,12 +1,39 @@
 {% extends getUcdTemplate('base') %}
+{% from '@ucdlib-intranet/macros/search-result.twig' import search_result %}
 
-{% from getUcdMacro('links') import pagination %}
-{% from getUcdMacro('links') import breadcrumbs as render_crumbs %}
 
 {% block content_container %}
+
 <div class="l-container l-basic--flipped">
-  <div class="l-sidebar-first"></div>
-  <div class="l-content">todo: wire up elasticsearch...</div>
+  <div class="l-sidebar-first">
+    <ucdlib-intranet-search-filters>
+      <script type="application/json">
+        {{filterEleProps|json_encode|raw}}
+      </script>
+    </ucdlib-intranet-search-filters>
+  </div>
+  <div class="l-content">
+    <ucdlib-intranet-search-bar value="{{searchQuery}}"></ucdlib-intranet-search-bar>
+    {% if searchError %}
+      <div class="alert alert--error">There was an error when processing your search. Please try again.</div>
+    {% endif %}
+    {% if results is not empty %}
+      <div class='h4 u-space-mb--medium'>{{totalResults}} results</div>
+      <div class="search-results">
+        {% for result in results %}
+          {{ search_result(result) }}
+        {% endfor %}
+      </div>
+      {% if totalPages > 1 %}
+        <ucdlib-intranet-search-pagination
+          max-pages="{{totalPages}}"
+          current-page="{{currentPage}}">
+        </ucdlib-intranet-search-pagination>
+      {% endif %}
+    {% else %}
+      <p class='u-space-mt--large'>No results found for your search.</p>
+    {% endif %}
+  </div>
 </div>
 
 {% endblock %}

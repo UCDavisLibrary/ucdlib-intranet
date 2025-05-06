@@ -13,14 +13,16 @@ class UcdlibIntranetIndexer {
 
   public function init(){
 
-    // Hooks to notify the indexer to reindex on change
+    // Hooks to notify the indexer to reindex on post update
     add_action( 'save_post', [$this, '_onSavePost'], 10, 3 );
     add_action( 'wp_trash_post', [$this, '_onDeletePost'], 10, 1 );
     add_action( 'before_delete_post', [$this, '_onDeletePost'], 10, 1 );
     add_action( 'transition_post_status', [$this, '_onUnpublishPost'], 10, 3);
 
     // Hooks to intercept wp query, query es, and display results
-    //add_filter( 'ucd-theme/templates/search', array($this, 'setTemplate'), 10, 2 );
+    add_filter( 'posts_pre_query', [$this, 'suppressWpSearch'], 10, 2 );
+    add_filter( 'ucd-theme/context/search', [$this, 'addSearchToContext'], 10, 1 );
+    add_filter( 'ucd-theme/templates/search', array($this, 'setTemplate'), 10, 2 );
   }
 
   /**
@@ -79,15 +81,104 @@ class UcdlibIntranetIndexer {
     }
   }
 
-  public function setTemplate( $templates, $context ){
-    if ( array_key_exists('is404', $context) && $context['is404']){
-      status_header(404);
-      $views = $GLOBALS['UcdSite']->views;
-      $templates = array( $views->getTemplate('404') );
-    } else {
-      $templates = array_merge( array("@" . $this->config->slug . "/search.twig"), $templates );
+  /**
+   * @description Prevent WP from querying mysql for search results
+   */
+  public function suppressWpSearch( $posts, $query ){
+    if (!is_admin() && $query->is_main_query() && $query->is_search()) {
+      $query->is_404 = false;
+      return [];
+    }
+    return null;
+  }
+
+  public function addSearchToContext( $context ){
+    $context['title'] = 'Search the Intranet';
+    $context['breadcrumbs'] = [
+      ['title' => 'Home', 'link' => '/'],
+      ['title' => 'Search']
+    ];
+    $context['typeFacets'] = [
+      [
+        'value' => 'form',
+        'labelSingular' => 'Form',
+        'labelPlural' => 'Forms'
+      ],
+      [
+        'value' => 'news',
+        'labelSingular' => 'Internal News',
+        'labelPlural' => 'Internal News'
+      ],
+      [
+        'value' => 'info-page',
+        'labelSingular' => 'Information Page',
+        'labelPlural' => 'Information Pages'
+      ]
+    ];
+    $query = [];
+    $params = [
+      's' => 'q',
+      'page' => 'page',
+      'type' => 'type',
+      'sort' => 'sort',
+      'libraryGroupIds' => 'libraryGroupIds'
+    ];
+    foreach ( $params as $param => $key ) {
+      if ( isset($_GET[$param]) ) {
+        $query[$key] = $_GET[$param];
+      }
     }
 
+    $url = $this->plugin->config->indexerUrl() . '/search?' . http_build_query($query);
+    $response = wp_remote_get($url, [
+        'timeout'  => 5,
+    ]);
+    if ( is_wp_error($response) ) {
+      error_log('Failed to fetch search results: ' . $response->get_error_message());
+      $context['searchError'] = true;
+      return $context;
+    }
+    $body = wp_remote_retrieve_body($response);
+    $data = json_decode($body, true);
+    $context['data'] = $data;
+
+    $context['searchQuery'] = isset($query['q']) ? $query['q'] : '';
+    $context['currentPage'] = $data['res']['page'];
+    $context['totalPages'] = $data['res']['totalPages'];
+    $context['totalResults'] = $data['res']['total'];
+    $context['results'] = array_map(function($item) use ($context) {
+      $item['typeFacet'] = array_filter($context['typeFacets'], function($facet) use ($item) {
+        return $facet['value'] === $item['type'];
+      });
+      if ( count($item['typeFacet']) > 0 ) {
+        $item['typeFacet'] = array_values($item['typeFacet'])[0];
+      }
+
+      $item['teaserExcerpt'] = '';
+      if ( $item['excerpt'] ){
+        $item['teaserExcerpt'] = $item['excerpt'];
+        $item['teaserExcerpt'] = strip_tags($item['teaserExcerpt']);
+        $item['teaserExcerpt'] = preg_replace('/ \[\&hellip\;\]/', '...', $item['teaserExcerpt']);
+        $item['teaserExcerpt'] = preg_replace('/\s+/', ' ', $item['teaserExcerpt']);
+        $item['teaserExcerpt'] = trim($item['teaserExcerpt']);
+      }
+      return $item;
+    }, $data['res']['items']);
+
+    $context['filterEleProps'] = [
+      'filters' => $context['typeFacets']
+    ];
+    return $context;
+  }
+
+  /**
+   * @description Override default template for search results
+   */
+  public function setTemplate( $templates, $context ){
+    $templates = array_merge(
+      ['@' . $this->plugin->timber->nameSpace . '/pages/search.twig'],
+      $templates
+     );
     return $templates;
   }
 }
