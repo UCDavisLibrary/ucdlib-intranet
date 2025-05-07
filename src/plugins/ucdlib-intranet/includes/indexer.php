@@ -5,9 +5,11 @@
  */
 class UcdlibIntranetIndexer {
   public $plugin;
+  public $iconsUsed;
 
   public function __construct( $plugin ){
     $this->plugin = $plugin;
+    $this->iconsUsed = [];
     $this->init();
   }
 
@@ -102,19 +104,28 @@ class UcdlibIntranetIndexer {
       [
         'value' => 'form',
         'labelSingular' => 'Form',
-        'labelPlural' => 'Forms'
+        'labelPlural' => 'Forms',
+        'icon' => 'ucd-public:fa-file-pen',
+        'thumbnail' => 'search-thiebaud-icing.jpg'
       ],
       [
         'value' => 'news',
         'labelSingular' => 'Internal News',
-        'labelPlural' => 'Internal News'
+        'labelPlural' => 'Internal News',
+        'icon' => 'ucd-public:fa-newspaper',
+        'thumbnail' => 'search-sage.jpg'
       ],
       [
         'value' => 'info-page',
         'labelSingular' => 'Information Page',
-        'labelPlural' => 'Information Pages'
+        'labelPlural' => 'Information Pages',
+        'icon' => 'ucd-public:logo-uc-davis-library',
+        'thumbnail' => 'search-default.jpg'
       ]
     ];
+    $this->iconsUsed = array_map(function($facet) {
+      return $facet['icon'];
+    }, $context['typeFacets']);
     $query = [];
     $params = [
       's' => 'q',
@@ -162,8 +173,20 @@ class UcdlibIntranetIndexer {
         $item['teaserExcerpt'] = preg_replace('/\s+/', ' ', $item['teaserExcerpt']);
         $item['teaserExcerpt'] = trim($item['teaserExcerpt']);
       }
+
+      $item['teaserImage'] = $this->plugin->config->pluginUrl() . 'assets/assets/img/search-thumbnails/' . $item['typeFacet']['thumbnail'];
+
+      if ( !empty($item['icon']) ){
+        $this->iconsUsed[] = $item['icon'];
+        $item['teaserIcon'] = $item['icon'];
+      } else {
+        $item['teaserIcon'] = $item['typeFacet']['icon'];
+      }
+
       return $item;
     }, $data['res']['items']);
+
+    add_filter( 'ucd-theme/loaded-icons', [$this, 'loadIcons'], 10, 1);
 
     $context['filterEleProps'] = [
       'filters' => $context['typeFacets']
@@ -180,5 +203,14 @@ class UcdlibIntranetIndexer {
       $templates
      );
     return $templates;
+  }
+
+  public function loadIcons($icons){
+    if ( isset($this->iconsUsed) ) {
+      foreach ($this->iconsUsed as $icon) {
+        if ( !array_key_exists($icon, $icons) ) $icons[] = $icon;
+      }
+    }
+    return $icons;
   }
 }

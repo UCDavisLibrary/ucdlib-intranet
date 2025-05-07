@@ -116,6 +116,15 @@ class UcdlibIntranetGroupsTimberModel extends UcdThemePost {
     return $this->groupTypeLandingPage;
   }
 
+  protected $groupIcon;
+  public function groupIcon(){
+    if ( ! empty( $this->groupIcon ) ) {
+      return $this->groupIcon;
+    }
+    $this->groupIcon = $this->landingPage()->meta('favoriteDefaultIcon');
+    return $this->groupIcon;
+  }
+
   public function groupMeta(){
     return [
       'groupId' => $this->landingPage()->id,

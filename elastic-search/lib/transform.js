@@ -23,7 +23,9 @@ async function transform(post){
   }
 
   // todo: handle forms
-  if ( post.type === 'post') {
+  if ( (esPost.content || '').includes('forminator-custom-form') ){
+    esPost.type = 'form';
+  } else if ( post.type === 'post') {
     esPost.type = 'news';
   } else {
     esPost.type = 'info-page';
@@ -36,20 +38,23 @@ async function transform(post){
     esPost.sortByDate = post.modified;
   }
 
-  // post icon
-  if ( post.meta?.favoriteDefaultIcon ){
-    esPost.icon = post.meta.favoriteDefaultIcon;
-  }
-  if ( post.meta?.favoriteDefaultIconColor ){
-    esPost.iconBrandColor = post.meta.favoriteDefaultIconColor;
-  }
-
   // library group (department, committee, etc)
   if ( post?.libraryGroup?.id ){
     esPost.libraryGroupIds = [post.libraryGroup.id];
   }
   if ( post?.libraryGroup?.name ){
     esPost.libraryGroupNames = [post.libraryGroup.name];
+  }
+
+  // post icon
+  if ( post.meta?.favoriteDefaultIcon ){
+    esPost.icon = post.meta.favoriteDefaultIcon;
+  } else if ( post?.libraryGroup?.icon){
+    esPost.icon = post.libraryGroup.icon;
+  }
+
+  if ( post.meta?.favoriteDefaultIconColor ){
+    esPost.iconBrandColor = post.meta.favoriteDefaultIconColor;
   }
 
   // author

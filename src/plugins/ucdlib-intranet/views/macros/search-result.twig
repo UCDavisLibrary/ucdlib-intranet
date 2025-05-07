@@ -1,5 +1,10 @@
 {% macro search_result(result) %}
   <article class="vm-teaser vm-teaser--search">
+    <div class="vm-teaser__figure" style="width:20%;max-width:80px;">
+      <a href="{{result.link}}" style="background-image:url({{result.teaserImage}})" class="u-background-image">
+        <ucdlib-icon icon="{{result.teaserIcon}}"></ucdlib-icon>
+      </a>
+    </div>
     <div class="vm-teaser__body">
       <div class="vm-teaser__title"><a href="{{result.link}}">{{result.title}}</a></div>
       <div class="vm-teaser__result-type">{{result.typeFacet.labelSingular}}</div>
