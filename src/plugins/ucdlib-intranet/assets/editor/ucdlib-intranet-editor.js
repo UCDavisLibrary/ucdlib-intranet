@@ -11,7 +11,7 @@ customBlocks.forEach(block => {
   registerBlockType( block.name, block.settings );
 });
 
-if ( select('core/editor') ){
+if ( select('core/edit-post') ) {
   registerPlugin( favoriteSettings.name, favoriteSettings.settings );
   registerPlugin( groupSettings.name, groupSettings.settings );
 };

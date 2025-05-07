@@ -16,10 +16,7 @@ import { html, SelectUtils } from "@ucd-lib/brand-theme-editor/lib/utils";
 const name = 'ucdlib-intranet-group-settings';
 
 const Edit = () => {
-
-  if ( !['ucdlib-group'].includes(SelectUtils.editedPostAttribute('type')) ){
-    return html`<${Fragment} />`;
-  }
+  const postType = SelectUtils.editedPostAttribute('type');
 
   // post metadata
   const postTitle = SelectUtils.editedPostAttribute('title');
@@ -67,7 +64,7 @@ const Edit = () => {
   const [ parentError, setParentError ] = useState( false );
   const [ landingPageId, setLandingPageId ] = useState( 0 );
   useEffect(() => {
-    if ( !parent ) {
+    if ( !parent || postType !== 'ucdlib-group' ) {
       setParentError(false);
       setStateFromCurrentPage();
       return;
@@ -98,6 +95,9 @@ const Edit = () => {
   const [ allGroups, setAllGroups ] = useState([]);
   const [ filteredGroups, setFilteredGroups ] = useState([]);
   useEffect(() => {
+    if ( postType !== 'ucdlib-group' ){
+      return;
+    }
     const path = `ucdlib-intranet/groups`;
     apiFetch( {path} ).then(
       ( r ) => {
@@ -144,6 +144,10 @@ const Edit = () => {
       editPost( data );
     }
     closeModal();
+  }
+
+  if ( postType !== 'ucdlib-group' ){
+    return html`<${Fragment} />`;
   }
 
   return html`

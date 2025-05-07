@@ -14,10 +14,6 @@ const name = 'ucdlib-intranet-favorite-settings';
 
 const Edit = () => {
 
-  if ( !['page', 'ucdlib-group'].includes(SelectUtils.editedPostAttribute('type')) ){
-    return html`<${Fragment} />`;
-  }
-
   // post metadata
   const meta = SelectUtils.editedPostAttribute('meta');
   const defaultIcon = meta.favoriteDefaultIcon || '';
@@ -65,6 +61,10 @@ const Edit = () => {
       c = getColorObject(v,'color').slug;
     }
     editPost({meta: {favoriteDefaultIconColor: c}});
+  }
+
+  if ( !['page', 'ucdlib-group'].includes(SelectUtils.editedPostAttribute('type')) ){
+    return html`<${Fragment} />`;
   }
 
   return html`
