@@ -125,6 +125,28 @@ class UcdlibIntranetGroupsTimberModel extends UcdThemePost {
     return $this->groupIcon;
   }
 
+  protected $groupSubnavPattern;
+  public function groupSubnavPattern(){
+    if ( ! empty( $this->groupSubnavPattern ) ) {
+      return $this->groupSubnavPattern;
+    }
+    $this->groupSubnavPattern = $this->landingPage()->meta($this->getMetaSlug('subnavPattern'));
+    return $this->groupSubnavPattern;
+  }
+
+  protected $groupSubnavPatternPost;
+  public function groupSubnavPatternPost(){
+    if ( ! empty( $this->groupSubnavPatternPost ) ) {
+      return $this->groupSubnavPatternPost;
+    }
+    $patternId = $this->groupSubnavPattern();
+    if ( empty($patternId) ) {
+      return null;
+    }
+    $this->groupSubnavPatternPost = Timber::get_post($patternId);
+    return $this->groupSubnavPatternPost;
+  }
+
   public function groupMeta(){
     return [
       'groupId' => $this->landingPage()->id,
@@ -132,7 +154,8 @@ class UcdlibIntranetGroupsTimberModel extends UcdThemePost {
       'groupType' => $this->groupType(),
       'groupParent' => $this->groupParent(),
       'groupEndedYear' => $this->groupEndedYear(),
-      'groupHideOnLandingPage' => $this->groupHideOnLandingPage()
+      'groupHideOnLandingPage' => $this->groupHideOnLandingPage(),
+      'groupSubnavPattern' => $this->groupSubnavPattern()
     ];
   }
 

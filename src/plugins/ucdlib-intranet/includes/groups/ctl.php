@@ -84,6 +84,11 @@ class UcdlibIntranetGroupsCtl {
       'type' => 'boolean',
       'default' => false
     ] );
+    register_post_meta( $slug, $metaSlugs['subnavPattern'] , [
+      'show_in_rest' => true,
+      'single' => true,
+      'type' => 'integer'
+    ] );
   }
 
   // tell Timber about our post model

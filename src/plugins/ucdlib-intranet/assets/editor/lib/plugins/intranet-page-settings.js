@@ -4,13 +4,14 @@ import { useDispatch } from "@wordpress/data";
 import {
   Button,
   ColorPalette,
-  BaseControl
+  BaseControl,
+  ToggleControl
  } from '@wordpress/components';
 import { html, SelectUtils } from "@ucd-lib/brand-theme-editor/lib/utils";
 import { IconPicker } from "@ucd-lib/brand-theme-editor/lib/block-components";
 import { categoryBrands } from "@ucd-lib/theme-sass/colors";
 
-const name = 'ucdlib-intranet-favorite-settings';
+const name = 'ucdlib-intranet-page-settings';
 
 const Edit = () => {
 
@@ -18,9 +19,11 @@ const Edit = () => {
   const meta = SelectUtils.editedPostAttribute('meta');
   const defaultIcon = meta.favoriteDefaultIcon || '';
   const defaultIconColor = meta.favoriteDefaultIconColor || '';
+  const hideModifiedDate = meta.hideModifiedDate || false;
   const watchedVars = [
     defaultIconColor,
-    defaultIcon
+    defaultIcon,
+    hideModifiedDate
   ]
   const { editPost } = useDispatch( 'core/editor', watchedVars );
 
@@ -70,14 +73,23 @@ const Edit = () => {
   return html`
     <${PluginDocumentSettingPanel}
       className=${name}
-      icon=${html`<ucdlib-icon style=${{marginLeft: '8px', width: '15px', minWidth: '15px'}} icon="ucd-public:fa-star"></ucdlib-icon>`}
-      title='Favorites List Settings'>
+      icon=${html`<ucdlib-icon style=${{marginLeft: '8px', width: '15px', minWidth: '15px'}} icon="ucd-public:logo-uc-davis-library"></ucdlib-icon>`}
+      title='Intranet Page Settings'>
       <style>
         .${name} {
           --ucdlib-icon-height: 50px;
           --ucdlib-icon-width: 50px;
         }
       </style>
+      <${ToggleControl}
+        label="Hide Modified Date"
+        help="Hides the modified date from the bottom of the page."
+        checked=${hideModifiedDate}
+        onChange=${() => {
+          editPost({meta: {hideModifiedDate: !hideModifiedDate}});
+        }}
+      />
+      <div style=${{marginTop:'30px'}}><h4>Favorite Settings</h4></div>
       <div style=${{marginBottom:'20px'}}>
         <small>Controls how this page will be displayed in a user's favorites list. Can be overriden by user.</small>
       </div>

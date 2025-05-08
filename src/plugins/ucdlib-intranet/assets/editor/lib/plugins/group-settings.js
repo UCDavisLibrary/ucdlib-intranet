@@ -28,7 +28,8 @@ const Edit = () => {
     postMeta.ucdlibGroupType,
     postMeta.ucdlibGroupParent,
     postMeta.ucdlibGroupEndedYear,
-    postMeta.ucdlibHideOnLandingPage
+    postMeta.ucdlibHideOnLandingPage,
+    postMeta.ucdlibSubnavPattern
   ]
   const { editPost } = useDispatch( 'core/editor', watchedVars );
   const [ groupType, setGroupType ] = useState( postMeta.ucdlibGroupType );
@@ -36,6 +37,7 @@ const Edit = () => {
   const [ groupParent, setGroupParent ] = useState( postMeta.ucdlibGroupParent );
   const [ groupEndedYear, setGroupEndedYear ] = useState( postMeta.ucdlibGroupEndedYear );
   const [ groupHideOnLandingPage, setGroupHideOnLandingPage ] = useState( postMeta.ucdlibHideOnLandingPage );
+  const [ groupSubnavPattern, setGroupSubnavPattern ] = useState( postMeta.subnavPattern );
 
   const {editEntityRecord} = useDispatch( 'core' );
 
@@ -48,7 +50,7 @@ const Edit = () => {
     setGroupParent( postMeta.ucdlibGroupParent );
     setGroupEndedYear( postMeta.ucdlibGroupEndedYear || '');
     setGroupHideOnLandingPage( postMeta.ucdlibHideOnLandingPage || false );
-
+    setGroupSubnavPattern( postMeta.ucdlibSubnavPattern );
   }
 
   // modal state
@@ -79,6 +81,7 @@ const Edit = () => {
         setGroupParent( r.groupParent );
         setGroupEndedYear( r.groupEndedYear || '' );
         setGroupHideOnLandingPage( r.groupHideOnLandingPage || false );
+        setGroupSubnavPattern( r.groupSubnavPattern );
       },
       (error) => {
         setParentError(true);
@@ -127,6 +130,41 @@ const Edit = () => {
     setFilteredGroups( filtered );
   }
 
+  // set up pattern picker
+  const [ allPatterns, setAllPatterns ] = useState([]);
+  const [ filteredPatterns, setFilteredPatterns ] = useState([]);
+  useEffect(() => {
+    if ( postType !== 'ucdlib-group' ){
+      return;
+    }
+    const path = `ucdlib-intranet/groups/patterns`;
+    apiFetch( {path} ).then(
+      ( r ) => {
+        let allPatterns = r.map( pattern => {
+          return {
+            label: pattern.post_title,
+            value: String(pattern.id)
+          }
+        });
+        setAllPatterns( allPatterns );
+        setFilteredPatterns( allPatterns );
+      },
+      (error) => {
+        console.error('Error fetching patterns', error);
+      });
+  }, []);
+  const _onFilterPatterns = ( value ) => {
+    if ( !value ) {
+      setFilteredPatterns( allPatterns );
+      return;
+    }
+    const filtered = allPatterns
+    .filter( pattern => {
+      return pattern.label.toLowerCase().includes( value.toLowerCase() );
+    })
+    setFilteredPatterns( filtered );
+  }
+
   // save component state variables to either the current page or hackathon landing page
   const saveMetadata = () => {
     const data = {
@@ -134,7 +172,8 @@ const Edit = () => {
         ucdlibGroupType: groupType,
         ucdlibGroupParent: groupParent,
         ucdlibGroupEndedYear: groupEndedYear || null,
-        ucdlibHideOnLandingPage: groupHideOnLandingPage
+        ucdlibHideOnLandingPage: groupHideOnLandingPage,
+        ucdlibSubnavPattern: groupSubnavPattern
       }
     }
 
@@ -208,6 +247,18 @@ const Edit = () => {
               }}
               help="If checked, this group will not be displayed on the library group landing page.">
             </${ToggleControl}>
+
+            <${ComboboxControl}
+              className=${`${name}-field`}
+              label="Custom Subnav"
+              value=${ groupSubnavPattern ? String(groupSubnavPattern) : '' }
+              options=${filteredPatterns}
+              onChange=${(value) => {
+                setGroupSubnavPattern(value);
+              }}
+              onFilterValueChange=${_onFilterPatterns}
+              help="By default, a subnav will be automatically generated based on this group's page hierarchy. To use a custom subnav, select an existing pattern.">
+            </${ComboboxControl}>
           </div>
         `}
         <div style=${{marginTop: '20px', marginBottom: '10px'}}>

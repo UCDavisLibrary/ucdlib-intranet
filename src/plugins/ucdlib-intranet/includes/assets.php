@@ -83,6 +83,7 @@ class UcdlibIntranetAssets {
     }, 1000);
     add_action('admin_enqueue_scripts', [$this, 'enqueuePublicScriptsInAdmin']);
     add_action('enqueue_block_editor_assets', [$this, 'enqueueEditorScripts'], 3);
+    add_filter('ucd-theme/admin-variable/editor-script', [$this, 'updateEditorScriptVariable' ]);
 
     add_action('admin_head', function () {
       echo '<style>
@@ -91,6 +92,15 @@ class UcdlibIntranetAssets {
           }
       </style>';
   });
+  }
+
+  public function updateEditorScriptVariable(){
+    $url = $this->jsEditorUrlDist;
+    if ( $this->plugin->config->isDevEnv() ){
+      $url = $this->jsEditorUrlDev;
+    }
+    $url .= '?v=' . $this->bundleVersion();
+    return $url;
   }
 
   /**

@@ -55,6 +55,23 @@ class UcdlibIntranetGroupsRest {
         return is_user_logged_in();
       }
     ]);
+
+    register_rest_route($pluginNs, $ns . '/patterns', [
+      'methods' => 'GET',
+      'callback' => [$this, 'getAllPatterns'],
+      'permission_callback' => function() {
+        return is_user_logged_in();
+      }
+    ]);
+  }
+
+  public function getAllPatterns(){
+    global $wpdb;
+    $blocks = [];
+    $blockQuery = $wpdb->get_results(
+      "SELECT id, post_title FROM {$wpdb->prefix}posts WHERE post_type = 'wp_block' AND post_status = 'publish' ORDER BY post_title ASC"
+    );
+    return rest_ensure_response($blockQuery);
   }
 
   public function searchCallback($request){

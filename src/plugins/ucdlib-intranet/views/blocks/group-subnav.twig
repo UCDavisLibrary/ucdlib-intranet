@@ -1,7 +1,9 @@
 {% from getUcdMacro('menus') import subnav %}
 
 {% set post = siteContext.post %}
-{% if post and post.groupIsHierarchical %}
+{% if post and post.groupSubnavPatternPost %}
+  {{ post.groupSubnavPatternPost.content }}
+{% elseif post and post.groupIsHierarchical %}
 
   {% set kwargs = {
     title: post.landingPage.title,
