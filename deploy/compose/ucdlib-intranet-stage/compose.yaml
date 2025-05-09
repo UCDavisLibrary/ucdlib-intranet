@@ -152,12 +152,11 @@ services:
       - .env
     environment:
       INDEXER_NAME: ${INDEXER_NAME:-intranet-indexer-stage}
+      INDEXER_WP_URL: ${INDEXER_WP_URL:-https://stage.staff.library.ucdavis.edu}
     depends_on:
       - elasticsearch
       - wordpress
     volumes:
-      - ../../../elastic-search:/service
-      - /service/node_modules
       - ../../secrets:/secrets
 
 volumes:
