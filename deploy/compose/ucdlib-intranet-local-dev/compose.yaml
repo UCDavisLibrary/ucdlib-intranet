@@ -173,7 +173,6 @@ services:
       - ../../../elastic-search:/service
       - /service/node_modules
       - ../../secrets:/secrets
-    command: ["tail", "-f", "/dev/null"]
 
   adminer:
     image: adminer:4
