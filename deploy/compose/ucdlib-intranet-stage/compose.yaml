@@ -151,7 +151,7 @@ services:
     env_file:
       - .env
     environment:
-      INDEXER_NAME: ${INDEXER_NAME:-ucdlib-intranet-stage}
+      INDEXER_NAME: ${INDEXER_NAME:-intranet-indexer-stage}
     depends_on:
       - elasticsearch
       - wordpress
