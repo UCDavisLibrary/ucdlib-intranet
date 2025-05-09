@@ -167,3 +167,4 @@ volumes:
   db-data:
   uploads-data:
   wp-logs-data:
+  es-data:
