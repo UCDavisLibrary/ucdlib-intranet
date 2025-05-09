@@ -2,7 +2,7 @@ x-variables:
   main-image: &main-image us-west1-docker.pkg.dev/digital-ucdavis-edu/wordpress/ucdlib-intranet:dev
   utils-image: &utils-image us-west1-docker.pkg.dev/digital-ucdavis-edu/wordpress/ucdlib-intranet-utils:dev
   wp-gmail-image: &wp-gmail-image us-west1-docker.pkg.dev/digital-ucdavis-edu/pub/gmail-wp-pipeline:dev
-  indexer-image: &indexer-image us-west1-docker.pkg.dev/digital-ucdavis-edu/wordpress/ucdlib-intranet-es-indexer:local-dev
+  indexer-image: &indexer-image us-west1-docker.pkg.dev/digital-ucdavis-edu/wordpress/ucdlib-intranet-es-indexer:dev
 
 services:
   wordpress:
