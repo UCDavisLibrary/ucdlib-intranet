@@ -120,6 +120,11 @@ RUN git -c advice.detachedHead=false \
 	clone https://github.com/UCDavisLibrary/forminator-theme-styles.git \
 	--branch v1.1.0 --single-branch --depth 1
 
+# Get our rt forminator addon plugin
+RUN git -c advice.detachedHead=false \
+	clone https://github.com/UCDavisLibrary/forminator-addon-rt.git \
+	--branch v2.0.0 --single-branch --depth 1
+
 # Copy our custom plugins
 COPY src/plugins/ucdlib-oidc ucdlib-oidc
 COPY src/plugins/ucdlib-intranet ucdlib-intranet
