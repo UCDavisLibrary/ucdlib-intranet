@@ -20,10 +20,12 @@ const Edit = () => {
   const defaultIcon = meta.favoriteDefaultIcon || '';
   const defaultIconColor = meta.favoriteDefaultIconColor || '';
   const hideModifiedDate = meta.hideModifiedDate || false;
+  const hideInSubnav = meta.ucdlibHideInSubnav || false;
   const watchedVars = [
     defaultIconColor,
     defaultIcon,
-    hideModifiedDate
+    hideModifiedDate,
+    hideInSubnav
   ]
   const { editPost } = useDispatch( 'core/editor', watchedVars );
 
@@ -66,7 +68,8 @@ const Edit = () => {
     editPost({meta: {favoriteDefaultIconColor: c}});
   }
 
-  if ( !['page', 'ucdlib-group'].includes(SelectUtils.editedPostAttribute('type')) ){
+  const postType = SelectUtils.editedPostAttribute('type');
+  if ( !['page', 'ucdlib-group'].includes(postType) ){
     return html`<${Fragment} />`;
   }
 
@@ -82,13 +85,23 @@ const Edit = () => {
         }
       </style>
       <${ToggleControl}
-        label="Hide Modified Date"
+        label="Hide modified date"
         help="Hides the modified date from the bottom of the page."
         checked=${hideModifiedDate}
         onChange=${() => {
           editPost({meta: {hideModifiedDate: !hideModifiedDate}});
         }}
       />
+      ${postType === 'ucdlib-group' && html`
+        <${ToggleControl}
+          label="Hide page in subnav"
+          help="Hides this page in the auto-generated subnav for this group."
+          checked=${hideInSubnav}
+          onChange=${() => {
+            editPost({meta: {ucdlibHideInSubnav: !hideInSubnav}});
+          }}
+        />
+        `}
       <div style=${{marginTop:'30px'}}><h4>Favorite Settings</h4></div>
       <div style=${{marginBottom:'20px'}}>
         <small>Controls how this page will be displayed in a user's favorites list. Can be overriden by user.</small>

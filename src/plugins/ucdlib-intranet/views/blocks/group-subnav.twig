@@ -3,12 +3,12 @@
 {% set post = siteContext.post %}
 {% if post and post.groupSubnavPatternPost %}
   {{ post.groupSubnavPatternPost.content }}
-{% elseif post and post.groupIsHierarchical %}
+{% elseif attributes.isHierarchical %}
 
   {% set kwargs = {
     title: post.landingPage.title,
     titleLink: post.landingPage.link,
-    items: post.landingPage.children,
+    items: attributes.children,
     oBox: false,
     panel: false,
     show_children: true

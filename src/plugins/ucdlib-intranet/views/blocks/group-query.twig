@@ -1,4 +1,4 @@
-<div class='block--group-query'>
+<div class='block--group-query {{not attributes.posts|length ? "no-groups" : ""}}'>
   {% if attributes.posts|length %}
     <div class='{{attributes.columns.layoutClass}}'>
     {% for col in attributes.columns.columns %}

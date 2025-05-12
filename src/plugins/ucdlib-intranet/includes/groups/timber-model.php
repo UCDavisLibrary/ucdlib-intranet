@@ -7,7 +7,7 @@ class UcdlibIntranetGroupsTimberModel extends UcdThemePost {
 
   // override children method to only return group pages
   // otherwise we get images in our nav
-  protected $children;
+  public $children;
   public function children($post_type = 'any'){
     if ( ! empty( $this->children ) ) {
       return $this->children;

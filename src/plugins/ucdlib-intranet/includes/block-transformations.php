@@ -12,6 +12,49 @@ class UcdlibIntranetBlockTransformations {
     return $attrs;
   }
 
+  /**
+   * Gets children/grandchildren of the current group page. Filters out any posts that are marked as hidden in the subnav.
+   */
+  public static function constructSubnav($attrs=[]){
+    $attrs['post'] = Timber::get_post();
+    if ( empty($attrs['post']) ){
+      return $attrs;
+    }
+    if ( $attrs['post']->post_type !== 'ucdlib-group' ){
+      return $attrs;
+    }
+
+    $landingPage = $attrs['post']->landingPage();
+    $isHierarchical = false;
+    $attrs['children'] = [];
+    $children = $GLOBALS['ucdlibIntranet']->timber->extractPosts($landingPage->children());
+    $children = self::filterOutHiddenSubnavPosts($children);
+    foreach ($children as $child) {
+      if ( !$isHierarchical ){
+        $isHierarchical = true;
+      }
+      $grandchildren = $GLOBALS['ucdlibIntranet']->timber->extractPosts($child->children());
+      $grandchildren = self::filterOutHiddenSubnavPosts($grandchildren);
+      $child->children = $grandchildren;
+
+      $attrs['children'][] = $child;
+    }
+
+    $attrs['isHierarchical'] = $isHierarchical;
+
+    return $attrs;
+  }
+
+  public static function filterOutHiddenSubnavPosts($posts){
+    $posts = array_filter($posts, function($post){
+      if ( !empty($post->meta('ucdlibHideInSubnav')) ){
+        return false;
+      }
+      return true;
+    });
+    return $posts;
+  }
+
   public static function queryGroups($attrs=[]){
     $model = UcdlibIntranetGroupsTimberModel::class;
     $q = [];

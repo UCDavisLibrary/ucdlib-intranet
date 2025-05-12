@@ -13,7 +13,8 @@ class UcdlibIntranetGroups {
       'parent' => 'ucdlibGroupParent',
       'endedYear' => 'ucdlibGroupEndedYear',
       'hideOnLandingPage' => 'ucdlibHideOnLandingPage',
-      'subnavPattern' => 'ucdlibSubnavPattern'
+      'subnavPattern' => 'ucdlibSubnavPattern',
+      'hideInSubnav' => 'ucdlibHideInSubnav'
     ]
   ];
 
