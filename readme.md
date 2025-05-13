@@ -49,10 +49,5 @@ Finally, go to `./deploy/compose/ucdlib-intranet-dev` and `docker compose up -d`
 There are two JS bundles; one for public views, and one for the block editor. To start either of these watch processes, go to the respective directory in `src/plugins/ucdlib-intranet/assets` and run `npm run watch`
 
 ### Liball News Importer
-By default, [the service](https://github.com/UCDavisLibrary/gmail-wp-pipeline) that checks for library-wide list emails and posts them as news is disabled in local development.
-To run it:
-- manually start the main process with `docker compose exec wp-gmail bash` and `node ./server.js`
-- and then in another terminal manually run the script with `docker compose exec wp-gmail bash` and `node ./cli.js run -w`
-
-
+By default, the index is not built during the init script. So if you want the full index, you will have to manually poke it with `docker compose exec wordpress curl http://indexer:3000/reindex`. Even if you don't trigger a full reindex, it will still index a post when you update it locally.
 

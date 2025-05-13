@@ -33,6 +33,8 @@ services:
       OIDC_LINK_EXISTING_USERS: ${OIDC_LINK_EXISTING_USERS:-true}
       OIDC_REDIRECT_USER_BACK: ${OIDC_REDIRECT_USER_BACK:-true}
       OIDC_ENFORCE_PRIVACY: ${OIDC_ENFORCE_PRIVACY:-true}
+      FORMINATOR_ADDON_RT_HOST: ${FORMINATOR_ADDON_RT_HOST:-https://rt.lib.ucdavis.edu}
+      UCDLIB_PERSONNEL_API_URL: ${UCDLIB_PERSONNEL_API_URL:-https://iam.staff.library.ucdavis.edu/json}
     tmpfs:
       - /run
       - /tmp
@@ -40,6 +42,7 @@ services:
       - uploads-data:/usr/src/wordpress/wp-content/uploads
       - wp-logs-data:/var/log/wordpress
       - ../../../../ucdlib-theme-wp:/usr/src/wordpress/wp-content/themes/ucdlib-theme-wp
+      # - ../../../../forminator-addon-rt:/usr/src/wordpress/wp-content/plugins/forminator-addon-rt
       - ../../../src/plugins/ucdlib-oidc:/usr/src/wordpress/wp-content/plugins/ucdlib-oidc
       - ../../../src/plugins/ucdlib-intranet:/usr/src/wordpress/wp-content/plugins/ucdlib-intranet
 
@@ -173,7 +176,7 @@ services:
       - ../../../elastic-search:/service
       - /service/node_modules
       - ../../secrets:/secrets
-    command: ["tail", "-f", "/dev/null"]
+    # command: ["tail", "-f", "/dev/null"]
 
   adminer:
     image: adminer:4
