@@ -19,7 +19,8 @@ async function transform(post){
     menuOrder: post.menu_order || 0,
     updated: post.modified,
     created: post.date,
-    link: post.link
+    link: post.link,
+    isLibraryGroupLandingPage: false
   }
 
   // todo: handle forms
@@ -44,6 +45,12 @@ async function transform(post){
   }
   if ( post?.libraryGroup?.name ){
     esPost.libraryGroupNames = [post.libraryGroup.name];
+  }
+  if ( post?.libraryGroup?.isLandingPage ){
+    esPost.isLibraryGroupLandingPage = true;
+  }
+  if ( post?.libraryGroup?.type ){
+    esPost.libraryGroupTypes = [post.libraryGroup.type];
   }
 
   // post icon

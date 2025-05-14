@@ -33,6 +33,15 @@ class UcdlibIntranetGroupsTimberModel extends UcdThemePost {
     return $this->landingPage;
   }
 
+  protected $isLandingPage;
+  public function isLandingPage(){
+    if ( ! empty( $this->isLandingPage ) ) {
+      return $this->isLandingPage;
+    }
+    $this->isLandingPage = $this->landingPage()->id == $this->id ? true : false;
+    return $this->isLandingPage;
+  }
+
   protected $groupType;
   public function groupType(){
     if ( ! empty( $this->groupType ) ) {

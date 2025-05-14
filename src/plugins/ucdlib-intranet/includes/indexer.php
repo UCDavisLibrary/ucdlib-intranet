@@ -183,6 +183,10 @@ class UcdlibIntranetIndexer {
         $item['teaserIcon'] = $item['typeFacet']['icon'];
       }
 
+      if ( !empty($item['isLibraryGroupLandingPage']) && !empty($item['libraryGroupTypes'])){
+        $item['libraryGroupType'] = ucfirst($item['libraryGroupTypes'][0]);
+      }
+
       return $item;
     }, $data['res']['items']);
 

@@ -32,7 +32,9 @@ class UcdlibIntranetGroupsRest {
     return [
       'id' => $landingPage->id,
       'name' => $landingPage->title(),
-      'icon' => $post->groupIcon()
+      'icon' => $post->groupIcon(),
+      'type' => $post->groupType(),
+      'isLandingPage' => $post->isLandingPage()
     ];
   }
 

@@ -7,7 +7,12 @@
     </div>
     <div class="vm-teaser__body">
       <div class="vm-teaser__title"><a href="{{result.link}}">{{result.title}}</a></div>
-      <div class="vm-teaser__result-type">{{result.typeFacet.labelSingular}}</div>
+      <div class="vm-teaser__result-type">
+        {% if result.libraryGroupType %}
+          <span>{{result.libraryGroupType}} | </span>
+        {% endif %}
+        <span>{{result.typeFacet.labelSingular}}</span>
+      </div>
       <div class="vm-teaser__summary">
         {% if result.type == 'news' %}
           <ul class='list--pipe'>
