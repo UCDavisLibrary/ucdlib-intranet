@@ -25,4 +25,15 @@
   .block--group-query .l-2col > :where(* + *) {
     margin-top: 0;
   }
+  .committee-meta {
+    padding: .75rem;
+  }
+}
+
+.committee-meta {
+  background-color: #ebf3fa;
+  padding: 1.5rem;
+}
+.committee-meta__section {
+  margin-bottom: 1rem;
 }

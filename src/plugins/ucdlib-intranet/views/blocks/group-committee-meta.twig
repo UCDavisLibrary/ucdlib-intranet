@@ -1,0 +1,32 @@
+{% set post = siteContext.post %}
+{% if post and post.hasCommitteeMeta %}
+  <div class='o-box panel'>
+    <div class='committee-meta'>
+      {% if post.committeeMeta.leaderName or post.committeeMeta.leaderEmail %}
+        <div class='committee-meta__section'>
+          <div class='h4'>Leader/Facilitator</div>
+          {% if post.committeeMeta.leaderName %}
+            <div>{{ post.committeeMeta.leaderName }}</div>
+          {% endif %}
+          {% if post.committeeMeta.leaderEmail %}
+            <div>
+              <a href='mailto:{{ post.committeeMeta.leaderEmail }}'>{{ post.committeeMeta.leaderEmail }}</a>
+            </div>
+          {% endif %}
+        </div>
+      {% endif %}
+      {% if post.committeeMeta.sponsorName %}
+        <div class='committee-meta__section'>
+          <div class='h4'>Sponsor</div>
+          <div>{{ post.committeeMeta.sponsorName }}</div>
+        </div>
+      {% endif %}
+      {% if post.committeeMeta.startDate %}
+        <div class='committee-meta__section'>
+          <div class='h4'>Start Date</div>
+          <div>{{ post.committeeMeta.startDate|date('F, Y', false) }}</div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endif %}

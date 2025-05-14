@@ -14,7 +14,13 @@ class UcdlibIntranetGroups {
       'endedYear' => 'ucdlibGroupEndedYear',
       'hideOnLandingPage' => 'ucdlibHideOnLandingPage',
       'subnavPattern' => 'ucdlibSubnavPattern',
-      'hideInSubnav' => 'ucdlibHideInSubnav'
+      'hideInSubnav' => 'ucdlibHideInSubnav',
+      'committeePermanence' => 'ucdlibCommitteePermanence',
+      'committeeLeaderName' => 'ucdlibCommitteeLeaderName',
+      'committeeLeaderEmail' => 'ucdlibCommitteeLeaderEmail',
+      'committeeSponsorName' => 'ucdlibCommitteeSponsorName',
+      'committeeStartDate' => 'ucdlibCommitteeStartDate',
+      'committeeReviewDate' => 'ucdlibCommitteeReviewDate'
     ]
   ];
 

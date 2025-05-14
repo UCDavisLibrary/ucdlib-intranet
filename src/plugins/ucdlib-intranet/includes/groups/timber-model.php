@@ -156,6 +156,38 @@ class UcdlibIntranetGroupsTimberModel extends UcdThemePost {
     return $this->groupSubnavPatternPost;
   }
 
+  protected $committeeMeta;
+  public function committeeMeta(){
+    if ( ! empty( $this->committeeMeta ) ) {
+      return $this->committeeMeta;
+    }
+    if ( $this->groupType() != 'committee' ) {
+      return null;
+    }
+    $this->committeeMeta = [
+      'permanence' => $this->landingPage()->meta($this->getMetaSlug('committeePermanence')),
+      'leaderName' => $this->landingPage()->meta($this->getMetaSlug('committeeLeaderName')),
+      'leaderEmail' => $this->landingPage()->meta($this->getMetaSlug('committeeLeaderEmail')),
+      'sponsorName' => $this->landingPage()->meta($this->getMetaSlug('committeeSponsorName')),
+      'startDate' => $this->landingPage()->meta($this->getMetaSlug('committeeStartDate')),
+      'reviewDate' => $this->landingPage()->meta($this->getMetaSlug('committeeReviewDate'))
+    ];
+    return $this->committeeMeta;
+  }
+
+  public function hasCommitteeMeta(){
+    $committeeMeta = $this->committeeMeta();
+    if ( empty($committeeMeta) ) {
+      return false;
+    }
+    foreach ($committeeMeta as $key => $value) {
+      if ( ! empty($value) ) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   public function groupMeta(){
     return [
       'groupId' => $this->landingPage()->id,
@@ -164,7 +196,8 @@ class UcdlibIntranetGroupsTimberModel extends UcdThemePost {
       'groupParent' => $this->groupParent(),
       'groupEndedYear' => $this->groupEndedYear(),
       'groupHideOnLandingPage' => $this->groupHideOnLandingPage(),
-      'groupSubnavPattern' => $this->groupSubnavPattern()
+      'groupSubnavPattern' => $this->groupSubnavPattern(),
+      'groupCommitteeMeta' => $this->committeeMeta()
     ];
   }
 

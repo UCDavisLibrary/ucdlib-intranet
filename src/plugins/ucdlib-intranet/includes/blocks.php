@@ -32,6 +32,9 @@ class UcdlibIntranetBlocks extends UCDThemeBlockRenderer {
     'ucdlib-intranet/group-query' => [
       'twig' => '@ucdlib-intranet/blocks/group-query.twig',
       'transform' => ['queryGroups']
+    ],
+    'ucdlib-intranet/group-committee-meta' => [
+      'twig' => '@ucdlib-intranet/blocks/group-committee-meta.twig'
     ]
   ];
 

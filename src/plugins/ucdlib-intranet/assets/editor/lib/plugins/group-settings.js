@@ -5,6 +5,8 @@ import { useDispatch } from "@wordpress/data";
 import {
   Button,
   ComboboxControl,
+  DateTimePicker,
+  Dropdown,
   RadioControl,
   TextControl,
   ToggleControl,
@@ -29,7 +31,13 @@ const Edit = () => {
     postMeta.ucdlibGroupParent,
     postMeta.ucdlibGroupEndedYear,
     postMeta.ucdlibHideOnLandingPage,
-    postMeta.ucdlibSubnavPattern
+    postMeta.ucdlibSubnavPattern,
+    postMeta.ucdlibCommitteePermanence,
+    postMeta.ucdlibCommitteeLeaderName,
+    postMeta.ucdlibCommitteeLeaderEmail,
+    postMeta.ucdlibCommitteeSponsorName,
+    postMeta.ucdlibCommitteeStartDate,
+    postMeta.ucdlibCommitteeReviewDate
   ]
   const { editPost } = useDispatch( 'core/editor', watchedVars );
   const [ groupType, setGroupType ] = useState( postMeta.ucdlibGroupType );
@@ -38,6 +46,12 @@ const Edit = () => {
   const [ groupEndedYear, setGroupEndedYear ] = useState( postMeta.ucdlibGroupEndedYear );
   const [ groupHideOnLandingPage, setGroupHideOnLandingPage ] = useState( postMeta.ucdlibHideOnLandingPage );
   const [ groupSubnavPattern, setGroupSubnavPattern ] = useState( postMeta.subnavPattern );
+  const [ groupCommitteePermanence, setGroupCommitteePermanence ] = useState( postMeta.ucdlibCommitteePermanence );
+  const [ groupCommitteeLeaderName, setGroupCommitteeLeaderName ] = useState( postMeta.ucdlibCommitteeLeaderName );
+  const [ groupCommitteeLeaderEmail, setGroupCommitteeLeaderEmail ] = useState( postMeta.ucdlibCommitteeLeaderEmail );
+  const [ groupCommitteeSponsorName, setGroupCommitteeSponsorName ] = useState( postMeta.ucdlibCommitteeSponsorName );
+  const [ groupCommitteeStartDate, setGroupCommitteeStartDate ] = useState( postMeta.ucdlibCommitteeStartDate );
+  const [ groupCommitteeReviewDate, setGroupCommitteeReviewDate ] = useState( postMeta.ucdlibCommitteeReviewDate );
 
   const {editEntityRecord} = useDispatch( 'core' );
 
@@ -51,6 +65,12 @@ const Edit = () => {
     setGroupEndedYear( postMeta.ucdlibGroupEndedYear || '');
     setGroupHideOnLandingPage( postMeta.ucdlibHideOnLandingPage || false );
     setGroupSubnavPattern( postMeta.ucdlibSubnavPattern );
+    setGroupCommitteePermanence( postMeta.ucdlibCommitteePermanence );
+    setGroupCommitteeLeaderName( postMeta.ucdlibCommitteeLeaderName );
+    setGroupCommitteeLeaderEmail( postMeta.ucdlibCommitteeLeaderEmail );
+    setGroupCommitteeSponsorName( postMeta.ucdlibCommitteeSponsorName );
+    setGroupCommitteeStartDate( postMeta.ucdlibCommitteeStartDate );
+    setGroupCommitteeReviewDate( postMeta.ucdlibCommitteeReviewDate );
   }
 
   // modal state
@@ -82,6 +102,12 @@ const Edit = () => {
         setGroupEndedYear( r.groupEndedYear || '' );
         setGroupHideOnLandingPage( r.groupHideOnLandingPage || false );
         setGroupSubnavPattern( r.groupSubnavPattern );
+        setGroupCommitteePermanence( r?.groupCommitteeMeta?.permanence || '' );
+        setGroupCommitteeLeaderName( r?.groupCommitteeMeta?.leaderName || '' );
+        setGroupCommitteeLeaderEmail( r?.groupCommitteeMeta?.leaderEmail || '' );
+        setGroupCommitteeSponsorName( r?.groupCommitteeMeta?.sponsorName || '' );
+        setGroupCommitteeStartDate( r?.groupCommitteeMeta?.startDate || '' );
+        setGroupCommitteeReviewDate( r?.groupCommitteeMeta?.reviewDate || '' );
       },
       (error) => {
         setParentError(true);
@@ -173,7 +199,13 @@ const Edit = () => {
         ucdlibGroupParent: groupParent,
         ucdlibGroupEndedYear: groupEndedYear || null,
         ucdlibHideOnLandingPage: groupHideOnLandingPage,
-        ucdlibSubnavPattern: groupSubnavPattern
+        ucdlibSubnavPattern: groupSubnavPattern,
+        ucdlibCommitteePermanence: groupCommitteePermanence,
+        ucdlibCommitteeLeaderName: groupCommitteeLeaderName,
+        ucdlibCommitteeLeaderEmail: groupCommitteeLeaderEmail,
+        ucdlibCommitteeSponsorName: groupCommitteeSponsorName,
+        ucdlibCommitteeStartDate: groupCommitteeStartDate,
+        ucdlibCommitteeReviewDate: groupCommitteeReviewDate
       }
     }
 
@@ -183,6 +215,104 @@ const Edit = () => {
       editPost( data );
     }
     closeModal();
+  }
+
+  // start and review date pickers
+  const datePickerDropdown = (onDropdownClose, field) => {
+    let value = field == 'groupCommitteeStartDate' ? groupCommitteeStartDate : groupCommitteeReviewDate;
+    if ( value ) {
+      value = `${value}T12:00:00`;
+    }
+
+    const onChange = (v) => {
+      const d = v.split('T')[0];
+      if ( field === 'groupCommitteeStartDate' ) {
+        setGroupCommitteeStartDate(d);
+      } else {
+        setGroupCommitteeReviewDate(d);
+      }
+    }
+    const onReset = () => {
+      if ( field === 'groupCommitteeStartDate' ) {
+        setGroupCommitteeStartDate(null);
+      } else {
+        setGroupCommitteeReviewDate(null);
+      }
+      onDropdownClose();
+    }
+    return html`
+      <div>
+        <${DateTimePicker}
+          is12Hour={ true }
+          onChange=${onChange}
+          currentDate=${value}
+        />
+        <div style=${{display: 'flex', justifyContent: 'space-between', marginTop: '1rem'}}>
+          ${value && html`
+            <${Button} variant='link' isDestructive=${true} onClick=${onReset}>Reset</${Button}>
+          `}
+          <${Button} variant='link' onClick=${onDropdownClose}>Close</${Button}>
+        </div>
+      </div>
+    `;
+  }
+  const dateLabel = (d) => {
+    if ( !d ) return 'Not Set';
+    return d;
+  }
+
+  const renderCommitteeMetadata = () => {
+    return html`
+      <style>
+        .components-datetime__time-wrapper {
+          display: none !important;
+        }
+        .components-datetime__time-legend {
+          display: none !important;
+        }
+      </style>
+      <div>
+        <h4>Committee Leader/Facilitator</h4>
+        <div style=${{padding: '0 20px'}}>
+          <${TextControl}
+            className=${`${name}-field`}
+            label="Name"
+            value=${groupCommitteeLeaderName}
+            onChange=${(value) => {
+              setGroupCommitteeLeaderName(value);
+            }}>
+          </${TextControl}>
+          <${TextControl}
+            className=${`${name}-field`}
+            label="Email"
+            type="email"
+            value=${groupCommitteeLeaderEmail}
+            onChange=${(value) => {
+              setGroupCommitteeLeaderEmail(value);
+            }}>
+          </${TextControl}>
+        </div>
+        <${TextControl}
+          className=${`${name}-field`}
+          label="Committee Sponsor"
+          value=${groupCommitteeSponsorName}
+          onChange=${(value) => {
+            setGroupCommitteeSponsorName(value);
+          }}>
+        </${TextControl}>
+        <div className=${`${name}-field`}>
+          <${Dropdown}
+            renderToggle=${({onToggle }) => html`
+              <div onClick=${onToggle} style=${{cursor:'pointer'}}>
+                <span>Committee Start Date: </span>
+                <span className='components-button is-link'>${dateLabel(groupCommitteeStartDate)}</span>
+              </div>
+            `}
+            renderContent=${({ onClose }) => datePickerDropdown(onClose, 'groupCommitteeStartDate')}
+          />
+        </div>
+      </div>
+    `;
   }
 
   if ( postType !== 'ucdlib-group' ){
@@ -259,6 +389,8 @@ const Edit = () => {
               onFilterValueChange=${_onFilterPatterns}
               help="By default, a subnav will be automatically generated based on this group's page hierarchy. To use a custom subnav, select an existing pattern.">
             </${ComboboxControl}>
+
+            ${(groupType === 'committee' || !groupType) && renderCommitteeMetadata()}
           </div>
         `}
         <div style=${{marginTop: '20px', marginBottom: '10px'}}>
