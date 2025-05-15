@@ -2,6 +2,12 @@
 {% if post and post.hasCommitteeMeta %}
   <div class='o-box panel'>
     <div class='committee-meta'>
+      {% if post.committeeMeta.permanenceLabel %}
+        <div class='committee-meta__section'>
+          <div class='h4'>Permanence</div>
+          <div>{{ post.committeeMeta.permanenceLabel }}</div>
+        </div>
+      {% endif %}
       {% if post.committeeMeta.leaderName or post.committeeMeta.leaderEmail %}
         <div class='committee-meta__section'>
           <div class='h4'>Leader/Facilitator</div>
@@ -25,6 +31,17 @@
         <div class='committee-meta__section'>
           <div class='h4'>Start Date</div>
           <div>{{ post.committeeMeta.startDate|date('F, Y', false) }}</div>
+        </div>
+      {% endif %}
+      {% if post.groupEndedYear %}
+        <div class='committee-meta__section'>
+          <div class='h4'>Year Ended</div>
+          <div>{{ post.groupEndedYear }}</div>
+        </div>
+      {% elseif post.committeeMeta.reviewDate %}
+        <div class='committee-meta__section'>
+          <div class='h4'>Review Date</div>
+          <div>{{ post.committeeMeta.reviewDate|date('F, Y', false) }}</div>
         </div>
       {% endif %}
     </div>

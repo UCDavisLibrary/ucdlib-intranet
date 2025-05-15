@@ -8,6 +8,7 @@ import {
   DateTimePicker,
   Dropdown,
   RadioControl,
+  SelectControl,
   TextControl,
   ToggleControl,
   __experimentalText as Text,
@@ -191,6 +192,13 @@ const Edit = () => {
     setFilteredPatterns( filtered );
   }
 
+  // permanence options
+  const permanenceOptions = [
+    { label: 'Please Select', value: '' },
+    { label: 'Permanent', value: 'permanent' },
+    { label: 'Temporary', value: 'temporary' }
+  ];
+
   // save component state variables to either the current page or hackathon landing page
   const saveMetadata = () => {
     const data = {
@@ -264,14 +272,21 @@ const Edit = () => {
   const renderCommitteeMetadata = () => {
     return html`
       <style>
-        .components-datetime__time-wrapper {
-          display: none !important;
-        }
-        .components-datetime__time-legend {
+        .components-datetime__time > fieldset:first-of-type {
           display: none !important;
         }
       </style>
       <div>
+        <h3>Committee Information</h3>
+        <${SelectControl}
+          className=${`${name}-field`}
+          label="Committee Permanence"
+          value=${groupCommitteePermanence}
+          options=${permanenceOptions}
+          onChange=${(value) => {
+            setGroupCommitteePermanence(value);
+          }}>
+        </${SelectControl}>
         <h4>Committee Leader/Facilitator</h4>
         <div style=${{padding: '0 20px'}}>
           <${TextControl}
@@ -309,6 +324,17 @@ const Edit = () => {
               </div>
             `}
             renderContent=${({ onClose }) => datePickerDropdown(onClose, 'groupCommitteeStartDate')}
+          />
+        </div>
+        <div className=${`${name}-field`}>
+          <${Dropdown}
+            renderToggle=${({onToggle }) => html`
+              <div onClick=${onToggle} style=${{cursor:'pointer'}}>
+                <span>Committee Review Date: </span>
+                <span className='components-button is-link'>${dateLabel(groupCommitteeReviewDate)}</span>
+              </div>
+            `}
+            renderContent=${({ onClose }) => datePickerDropdown(onClose, 'groupCommitteeReviewDate')}
           />
         </div>
       </div>

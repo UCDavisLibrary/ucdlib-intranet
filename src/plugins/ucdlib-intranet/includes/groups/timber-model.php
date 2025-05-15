@@ -172,6 +172,18 @@ class UcdlibIntranetGroupsTimberModel extends UcdThemePost {
       'startDate' => $this->landingPage()->meta($this->getMetaSlug('committeeStartDate')),
       'reviewDate' => $this->landingPage()->meta($this->getMetaSlug('committeeReviewDate'))
     ];
+
+    $permanenceLabels = [
+      'permanent' => 'Permanent',
+      'temporary' => 'Temporary'
+    ];
+    if ( ! empty($this->committeeMeta['permanence']) &&
+         array_key_exists($this->committeeMeta['permanence'], $permanenceLabels) ) {
+      $this->committeeMeta['permanenceLabel'] = $permanenceLabels[$this->committeeMeta['permanence']];
+    } else {
+      $this->committeeMeta['permanenceLabel'] = $this->committeeMeta['permanence'];
+    }
+
     return $this->committeeMeta;
   }
 
