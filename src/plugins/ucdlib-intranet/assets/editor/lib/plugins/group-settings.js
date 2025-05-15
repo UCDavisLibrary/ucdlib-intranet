@@ -195,7 +195,7 @@ const Edit = () => {
   // permanence options
   const permanenceOptions = [
     { label: 'Please Select', value: '' },
-    { label: 'Permanent', value: 'permanent' },
+    { label: 'Ongoing', value: 'ongoing' },
     { label: 'Temporary', value: 'temporary' }
   ];
 
@@ -374,7 +374,7 @@ const Edit = () => {
             <${ComboboxControl}
               className=${`${name}-field`}
               label="Parent Group"
-              value=${groupParent}
+              value=${groupParent ? String(groupParent) : ''}
               options=${filteredGroups}
               onChange=${(value) => {
                 setGroupParent(value);

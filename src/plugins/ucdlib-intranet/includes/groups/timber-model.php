@@ -175,7 +175,8 @@ class UcdlibIntranetGroupsTimberModel extends UcdThemePost {
 
     $permanenceLabels = [
       'permanent' => 'Permanent',
-      'temporary' => 'Temporary'
+      'temporary' => 'Temporary',
+      'ongoing' => 'Ongoing'
     ];
     if ( ! empty($this->committeeMeta['permanence']) &&
          array_key_exists($this->committeeMeta['permanence'], $permanenceLabels) ) {
