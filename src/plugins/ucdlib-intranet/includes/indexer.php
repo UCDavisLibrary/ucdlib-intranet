@@ -17,7 +17,6 @@ class UcdlibIntranetIndexer {
 
     // Hooks to notify the indexer to reindex on post update
     add_action( 'save_post', [$this, '_onSavePost'], 10, 3 );
-    add_action( 'wp_trash_post', [$this, '_onDeletePost'], 10, 1 );
     add_action( 'before_delete_post', [$this, '_onDeletePost'], 10, 1 );
     add_action( 'transition_post_status', [$this, '_onUnpublishPost'], 10, 3);
 
