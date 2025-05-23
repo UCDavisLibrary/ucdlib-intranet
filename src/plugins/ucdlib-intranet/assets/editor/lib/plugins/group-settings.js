@@ -337,6 +337,17 @@ const Edit = () => {
             renderContent=${({ onClose }) => datePickerDropdown(onClose, 'groupCommitteeReviewDate')}
           />
         </div>
+
+        <${TextControl}
+          className=${`${name}-field`}
+          label="Ended Year"
+          type="number"
+          value=${groupEndedYear}
+          onChange=${(value) => {
+            setGroupEndedYear(value);
+          }}
+          help="If not currently active, enter the last year this group was active.">
+        </${TextControl}>
       </div>
     `;
   }
@@ -371,38 +382,20 @@ const Edit = () => {
               }}>
             </${RadioControl}>
 
-            <${ComboboxControl}
-              className=${`${name}-field`}
-              label="Parent Group"
-              value=${groupParent ? String(groupParent) : ''}
-              options=${filteredGroups}
-              onChange=${(value) => {
-                setGroupParent(value);
-              }}
-              onFilterValueChange=${_onFilterGroups}
-              help="Select the parent group for this group, if applicable.">
-            </${ComboboxControl}>
+            ${groupType === 'department' && html`
+              <${ComboboxControl}
+                className=${`${name}-field`}
+                label="Parent Group (if applicable)"
+                value=${groupParent ? String(groupParent) : ''}
+                options=${filteredGroups}
+                onChange=${(value) => {
+                  setGroupParent(value);
+                }}
+                onFilterValueChange=${_onFilterGroups}>
+              </${ComboboxControl}>
+            `}
 
-            <${TextControl}
-              className=${`${name}-field`}
-              label="Ended Year"
-              type="number"
-              value=${groupEndedYear}
-              onChange=${(value) => {
-                setGroupEndedYear(value);
-              }}
-              help="If not currently active, enter the last year this group was active.">
-            </${TextControl}>
-
-            <${ToggleControl}
-              className=${`${name}-field`}
-              label="Hide on Group Landing Page"
-              checked=${groupHideOnLandingPage}
-              onChange=${(value) => {
-                setGroupHideOnLandingPage(value);
-              }}
-              help="If checked, this group will not be displayed on the library group landing page.">
-            </${ToggleControl}>
+            ${(groupType === 'committee' || !groupType) && renderCommitteeMetadata()}
 
             <${ComboboxControl}
               className=${`${name}-field`}
@@ -416,7 +409,15 @@ const Edit = () => {
               help="By default, a subnav will be automatically generated based on this group's page hierarchy. To use a custom subnav, select an existing pattern.">
             </${ComboboxControl}>
 
-            ${(groupType === 'committee' || !groupType) && renderCommitteeMetadata()}
+            <${ToggleControl}
+              className=${`${name}-field`}
+              label="Hide on Group Landing Page"
+              checked=${groupHideOnLandingPage}
+              onChange=${(value) => {
+                setGroupHideOnLandingPage(value);
+              }}>
+            </${ToggleControl}>
+
           </div>
         `}
         <div style=${{marginTop: '20px', marginBottom: '10px'}}>
