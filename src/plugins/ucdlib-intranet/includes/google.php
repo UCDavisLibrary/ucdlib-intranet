@@ -18,6 +18,10 @@ class UcdlibIntranetGoogle {
   }
 
   public function addAnalytics($context){
+    if ( $this->plugin->config->isDevEnv() ) {
+      return $context;
+    }
+
     $twigLocation = '@' . $this->plugin->config->slug . '/partials/gtag.twig';
     $context['twigHooks']['base']['postHead'][] = $twigLocation;
     return $context;

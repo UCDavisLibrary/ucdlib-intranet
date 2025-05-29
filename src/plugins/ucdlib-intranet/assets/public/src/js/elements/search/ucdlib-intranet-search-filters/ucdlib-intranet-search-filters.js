@@ -108,7 +108,6 @@ export default class UcdlibIntranetSearchFilters extends LitElement {
         console.error('Failed to parse SSR properties', e);
       }
     }
-    console.log('SSR properties loaded', this.filters);
   }
 
 }
