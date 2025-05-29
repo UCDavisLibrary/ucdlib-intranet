@@ -47,5 +47,25 @@ class UcdlibIntranet {
     $this->rt = new UcdlibIntranetRt( $this );
     $this->settings = new UcdlibIntranetSettings( $this );
     $this->timber = new UcdlibIntranetTimber( $this );
+
+    // hooks
+    add_filter( 'ucd-theme/context/category', [$this, 'setCategoryBreadcrumbs'], 10, 1 );
+  }
+
+  public function setCategoryBreadcrumbs( $context ){
+
+    $page_for_posts_id = get_option('page_for_posts');
+    $page_for_posts = Timber::get_post( $page_for_posts_id );
+    if ( !$page_for_posts ) {
+      return $context;
+    }
+
+    $context['breadcrumbs'] = [
+      ['title' => 'Home', 'link' => '/'],
+      ['title' => $page_for_posts->title, 'link' => $page_for_posts->link()],
+      ['title' => $context]['title']
+    ];
+
+    return $context;
   }
 }
