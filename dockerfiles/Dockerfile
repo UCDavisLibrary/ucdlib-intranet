@@ -1,12 +1,12 @@
 # Multistage build args
-ARG WP_CORE_VERSION="6.6.2"
-ARG REDIRECTION_ZIP_FILE="redirection-5.5.0.zip"
-ARG SMTP_MAILER_ZIP_FILE="smtp-mailer-1.1.15.zip"
+ARG WP_CORE_VERSION="6.8.1"
+ARG REDIRECTION_ZIP_FILE="redirection-5.5.2.zip"
+ARG SMTP_MAILER_ZIP_FILE="smtp-mailer-1.1.20.zip"
 ARG OPENID_CONNECT_GENERIC_DIR="openid-connect-generic-3.10.0"
 ARG OPENID_CONNECT_GENERIC_ZIP_FILE="${OPENID_CONNECT_GENERIC_DIR}.zip"
-ARG DEFENDER_PRO_ZIP_FILE="defender-pro-4.10.zip"
-ARG FORMINATOR_PRO_ZIP_FILE="forminator-pro-1.35.1.zip"
-ARG WPMU_DEV_DASHBOARD_ZIP_FILE="wpmu-dev-dashboard-4.11.26.zip"
+ARG DEFENDER_PRO_ZIP_FILE="defender-pro-5.2.zip"
+ARG FORMINATOR_PRO_ZIP_FILE="forminator-pro-1.44.zip"
+ARG WPMU_DEV_DASHBOARD_ZIP_FILE="wpmu-dev-dashboard-4.11.29.zip"
 ARG UCDLIB_THEME_WP_NODE_IMAGE
 
 # Download plugins from Google Cloud Storage
