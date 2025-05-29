@@ -48,6 +48,13 @@ Finally, go to `./deploy/compose/ucdlib-intranet-dev` and `docker compose up -d`
 
 There are two JS bundles; one for public views, and one for the block editor. To start either of these watch processes, go to the respective directory in `src/plugins/ucdlib-intranet/assets` and run `npm run watch`
 
-### Liball News Importer
+### Indexer
 By default, the index is not built during the init script. So if you want the full index, you will have to manually poke it with `docker compose exec wordpress curl http://indexer:3000/reindex`. Even if you don't trigger a full reindex, it will still index a post when you update it locally.
+
+### Liball News Importer
+The news importer container will be idle during local dev, and the cron process will be disabled even if you start the main process. To work on the importer, 
+- bash into the container and start the process with `node server.js`
+- open a new terminal and bash into the container, and run a single import check with `node ./cli.js run -w`
+
+The script assigns a label in gmail after a message is processed, so you don't have to worry about interfering with the production process eventhough the same mailbox is used. If you want to use a custom label as opposed to the default local-dev label, set the `GMAILWP_INSTANCE_NAME` env variable.
 
