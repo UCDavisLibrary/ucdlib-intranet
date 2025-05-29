@@ -38,7 +38,7 @@ class UcdlibIntranet {
 
     $this->assets = new UcdlibIntranetAssets( $this );
     $this->blocks = new UcdlibIntranetBlocks( $this );
-    //$this->google = new UcdlibIntranetGoogle( $this );
+    $this->google = new UcdlibIntranetGoogle( $this );
     $this->indexer = new UcdlibIntranetIndexer( $this );
     $this->groups = new UcdlibIntranetGroups( $this );
     $this->log = new UcdlibIntranetLog( $this );
@@ -52,20 +52,20 @@ class UcdlibIntranet {
     add_filter( 'ucd-theme/context/category', [$this, 'setCategoryBreadcrumbs'], 10, 1 );
   }
 
+  /**
+   * @description Insert news homepage into categegory breadcrumbs
+   */
   public function setCategoryBreadcrumbs( $context ){
-
     $page_for_posts_id = get_option('page_for_posts');
     $page_for_posts = Timber::get_post( $page_for_posts_id );
     if ( !$page_for_posts ) {
       return $context;
     }
-
     $context['breadcrumbs'] = [
       ['title' => 'Home', 'link' => '/'],
       ['title' => $page_for_posts->title, 'link' => $page_for_posts->link()],
       ['title' => $context]['title']
     ];
-
     return $context;
   }
 }
