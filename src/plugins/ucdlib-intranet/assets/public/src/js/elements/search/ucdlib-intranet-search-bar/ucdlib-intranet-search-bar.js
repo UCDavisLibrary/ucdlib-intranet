@@ -22,6 +22,7 @@ export default class UcdlibIntranetSearchBar extends LitElement {
   _onSearch(e){
     this.value = e.detail.searchTerm || '';
     const url = new URL(window.location);
+    url.searchParams.delete('page');
     url.searchParams.set('s', this.value);
     window.location.href = url.toString();
   }

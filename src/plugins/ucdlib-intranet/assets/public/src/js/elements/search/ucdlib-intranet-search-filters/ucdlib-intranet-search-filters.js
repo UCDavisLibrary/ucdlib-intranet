@@ -67,6 +67,7 @@ export default class UcdlibIntranetSearchFilters extends LitElement {
     } else {
       params.set('type', this.selectedFilters.join(','));
     }
+    params.delete('page');
     url.search = params.toString();
     window.location.href = url.toString();
   }
@@ -79,6 +80,7 @@ export default class UcdlibIntranetSearchFilters extends LitElement {
     }
     this.selectedSortOption = option;
     params.set('sort', option);
+    params.delete('page');
     url.search = params.toString();
     window.location.href = url.toString();
   }
