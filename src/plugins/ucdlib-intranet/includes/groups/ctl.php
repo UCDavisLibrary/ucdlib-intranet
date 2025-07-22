@@ -135,16 +135,16 @@ class UcdlibIntranetGroupsCtl {
 
   public function getLabels(){
     return [
-      'name' => 'Library Groups',
-      'singular_name' => 'Library Group',
+      'name' => 'Library Group Pages',
+      'singular_name' => 'Library Group Page',
       'add_new' => 'Add New Library Group Page',
       'add_new_item' => 'Add New Library Group Page',
       'edit_item' => 'Edit Library Group Page',
       'new_item' => 'New Library Group Page',
-      'all_items' => 'All Library Groups Pages',
-      'view_item' => 'View Library Group Pages',
+      'all_items' => 'All Library Group Pages',
+      'view_item' => 'View Library Group Page',
       'search_items' => 'Search Library Group Pages',
-      'not_found' => 'No library group pagesfound',
+      'not_found' => 'No library group pages found',
       'not_found_in_trash' => 'No library group pages found in Trash',
       'parent_item_colon' => '',
       'menu_name' => 'Library Groups'
