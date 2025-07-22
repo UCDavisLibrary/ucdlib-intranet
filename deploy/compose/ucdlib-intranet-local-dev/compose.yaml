@@ -116,7 +116,7 @@ services:
     command: ["tail", "-f", "/dev/null"]
 
   db:
-    image: mysql:5.7
+    image: mysql:8.0
     env_file:
       - .env
     environment:
@@ -179,7 +179,7 @@ services:
     # command: ["tail", "-f", "/dev/null"]
 
   adminer:
-    image: adminer:4
+    image: adminer:5
     ports:
       - ${ADMINER_HOST_PORT:-8080}:8080
 

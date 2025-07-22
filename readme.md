@@ -44,7 +44,9 @@ Next, run the following scripts:
 -  `./deploy/cmds/init-local-dev.sh`
 -  `./deploy/cmds/build-local-dev.sh <version>`
 
-Finally, go to `./deploy/compose/ucdlib-intranet-dev` and `docker compose up -d`
+Review your env file downloaded to `deploy/compose/ucdlib-intranet-local-dev`
+
+Finally, go to `./deploy/compose/ucdlib-intranet-local-dev` and `docker compose up -d`
 
 There are two JS bundles; one for public views, and one for the block editor. To start either of these watch processes, go to the respective directory in `src/plugins/ucdlib-intranet/assets` and run `npm run watch`
 
