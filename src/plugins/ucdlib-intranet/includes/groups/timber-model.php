@@ -254,7 +254,8 @@ class UcdlibIntranetGroupsTimberModel extends UcdThemePost {
       'post_parent' => 0,
       'orderby' => 'title',
       'order' => 'ASC',
-      'meta_query' => []
+      'meta_query' => [],
+      'status' => 'publish'
     ];
 
     if ( !empty($query['groupType']) ){

@@ -6,9 +6,11 @@ require_once( __DIR__ . '/timber-model.php' );
 class UcdlibIntranetGroupsCtl {
 
   public $groups;
+  public $plugin;
 
   public function __construct( $groups ){
     $this->groups = $groups;
+    $this->plugin = $this->groups->plugin;
 
     // timber
     add_filter( 'timber/post/classmap', [$this, 'registerModel'] );
@@ -25,6 +27,8 @@ class UcdlibIntranetGroupsCtl {
     // admin hooks
     add_filter( 'manage_' . $this->groups->slugs['postType'] . '_posts_columns', [$this, 'addAdminColumns'] );
     add_action( 'manage_' . $this->groups->slugs['postType'] . '_posts_custom_column', [$this, 'addAdminColumnContent'], 10, 2 );
+    add_action( 'restrict_manage_posts', [$this, 'addGroupFilterToAdminPostList'] );
+    add_action( 'pre_get_posts', [$this, 'filterAdminQueryByGroupOwner'] );
   }
 
   public function register(){
@@ -149,6 +153,70 @@ class UcdlibIntranetGroupsCtl {
       'parent_item_colon' => '',
       'menu_name' => 'Library Groups'
     ];
+  }
+
+  /**
+   * @description Filter the admin query to only show pagesowned by the selected group
+   * Used in conjunction with this->addGroupFilterToAdminPostList
+   */
+  public function filterAdminQueryByGroupOwner($query ){
+    global $pagenow;
+    $queryName = 'ucdlib_group_owner';
+
+    if (
+      is_admin() &&
+      $query->is_main_query() &&
+      $pagenow === 'edit.php' &&
+      isset($_GET['post_type']) && $_GET['post_type'] === 'ucdlib-group' &&
+      !empty($_GET[$queryName])
+    ) {
+      $ancestor_id = intval($_GET[$queryName]);
+      if ( !$ancestor_id ) {
+        return;
+      }
+
+      // Get all descendants of the selected ancestor
+      $descendants = get_pages( [
+        'post_type' => 'ucdlib-group',
+        'child_of'  => $ancestor_id
+      ] );
+      if ( empty($descendants) ) {
+        $descendants = [];
+      } else {
+        $descendants = wp_list_pluck($descendants, 'ID');
+      }
+
+      $post__in = array_merge( [$ancestor_id], $descendants );
+      $query->set( 'post__in', $post__in );
+    }
+  }
+
+  /**
+   * Add a select to the admin post list for filter pages by their group owner
+   */
+  public function addGroupFilterToAdminPostList(){
+    global $typenow;
+
+    if ( $typenow !== 'ucdlib-group' ) {
+      return;
+    }
+
+    $departments = UcdlibIntranetGroupsTimberModel::queryGroups(["groupType" => "department"]);
+    $activeCommittees = UcdlibIntranetGroupsTimberModel::queryGroups(["groupType" => "committee", "active" => true]);
+    $inactiveCommittees = UcdlibIntranetGroupsTimberModel::queryGroups(["groupType" => "committee", "inactive" => true]);
+
+
+    $queryName = 'ucdlib_group_owner';
+    $selected = isset($_GET[$queryName]) ? intval($_GET[$queryName]) : 0;
+
+    $context = [
+      'selected' => $selected,
+      'queryName' => $queryName,
+      'departments' => $departments,
+      'activeCommittees' => $activeCommittees,
+      'inactiveCommittees' => $inactiveCommittees
+    ];
+    $this->plugin->timber->renderAdminTemplate('group-select', $context);
   }
 
   public function registerSidebar(){
