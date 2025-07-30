@@ -11,7 +11,7 @@
     {% endif %}
     {% if post.groupChildren.found_posts %}
       <div class='u-space-mb'>
-        <div class='h4 u-space-mb--small'>Subunits</div>
+        <div class='h4 u-space-mb--small'>{{post.groupType == 'department' ? 'Subunits' : 'Subgroups'}}</div>
         {% for child in post.groupChildren %}
           <div class='u-space-mb--small'>
             <a class='btn btn--alt2 btn--round' href='{{ child.link }}'>{{ child.title }}</a>

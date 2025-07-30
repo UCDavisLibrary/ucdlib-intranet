@@ -204,7 +204,7 @@ class UcdlibIntranetGroupsTimberModel extends UcdThemePost {
   public function groupMeta(){
     return [
       'groupId' => $this->landingPage()->id,
-      'groupTitle' => $this->landingPage()->title(),
+      'groupTitle' => html_entity_decode($this->landingPage()->title()),
       'groupType' => $this->groupType(),
       'groupDirectoryUrl' => $this->groupDirectoryUrl(),
       'groupParent' => $this->groupParent(),

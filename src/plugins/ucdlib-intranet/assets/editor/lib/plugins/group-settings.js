@@ -387,18 +387,16 @@ const Edit = () => {
               }}>
             </${RadioControl}>
 
-            ${groupType === 'department' && html`
-              <${ComboboxControl}
-                className=${`${name}-field`}
-                label="Parent Group (if applicable)"
-                value=${groupParent ? String(groupParent) : ''}
-                options=${filteredGroups}
-                onChange=${(value) => {
-                  setGroupParent(value);
-                }}
-                onFilterValueChange=${_onFilterGroups}>
-              </${ComboboxControl}>
-            `}
+            <${ComboboxControl}
+              className=${`${name}-field`}
+              label="Parent Group (if applicable)"
+              value=${groupParent ? String(groupParent) : ''}
+              options=${filteredGroups}
+              onChange=${(value) => {
+                setGroupParent(value);
+              }}
+              onFilterValueChange=${_onFilterGroups}>
+            </${ComboboxControl}>
 
             ${groupType === 'department' && html`
               <${TextControl}
