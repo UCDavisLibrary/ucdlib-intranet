@@ -206,12 +206,22 @@ class UcdlibIntranetGroupsTimberModel extends UcdThemePost {
       'groupId' => $this->landingPage()->id,
       'groupTitle' => $this->landingPage()->title(),
       'groupType' => $this->groupType(),
+      'groupDirectoryUrl' => $this->groupDirectoryUrl(),
       'groupParent' => $this->groupParent(),
       'groupEndedYear' => $this->groupEndedYear(),
       'groupHideOnLandingPage' => $this->groupHideOnLandingPage(),
       'groupSubnavPattern' => $this->groupSubnavPattern(),
       'groupCommitteeMeta' => $this->committeeMeta()
     ];
+  }
+
+  protected $groupDirectoryUrl;
+  public function groupDirectoryUrl(){
+    if ( ! empty( $this->groupDirectoryUrl ) ) {
+      return $this->groupDirectoryUrl;
+    }
+    $this->groupDirectoryUrl = $this->landingPage()->meta($this->getMetaSlug('directoryUrl'));
+    return $this->groupDirectoryUrl;
   }
 
   protected $groupIsHierarchical;

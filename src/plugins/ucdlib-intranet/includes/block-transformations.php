@@ -13,6 +13,30 @@ class UcdlibIntranetBlockTransformations {
   }
 
   /**
+   * Constructs data attribute for focal link in group directory URL block.
+   */
+  public static function addGroupDirectoryUrl($attrs=[]){
+    $post = Timber::get_post();
+    if ( empty($post) || $post->post_type !== 'ucdlib-group' ){
+      return $attrs;
+    }
+    if ( empty($post->groupDirectoryUrl()) ){
+      return $attrs;
+    }
+
+    $icon = 'ucd-public:fa-users';
+    $attrs['icon'] = $icon;
+    $attrs['focalLink'] = [
+      'href' => $post->groupDirectoryUrl(),
+      'text' => 'Team Directory',
+      'icon' => $icon,
+      'brandColor' => 'secondary',
+    ];
+
+    return $attrs;
+  }
+
+  /**
    * Gets children/grandchildren of the current group page. Filters out any posts that are marked as hidden in the subnav.
    */
   public static function constructSubnav($attrs=[]){

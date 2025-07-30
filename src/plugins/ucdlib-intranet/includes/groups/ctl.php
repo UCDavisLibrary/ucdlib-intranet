@@ -70,6 +70,13 @@ class UcdlibIntranetGroupsCtl {
       'default' => 'committee'
     ] );
 
+    register_post_meta( $slug, $metaSlugs['directoryUrl'] , [
+      'show_in_rest' => true,
+      'single' => true,
+      'type' => 'string',
+      'default' => ''
+    ] );
+
     register_post_meta( $slug, $metaSlugs['parent'] , [
       'show_in_rest' => true,
       'single' => true,

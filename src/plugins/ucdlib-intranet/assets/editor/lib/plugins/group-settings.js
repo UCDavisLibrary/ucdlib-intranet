@@ -29,6 +29,7 @@ const Edit = () => {
     postTitle,
     postId,
     postMeta.ucdlibGroupType,
+    postMeta.ucdlibGroupDirectoryUrl,
     postMeta.ucdlibGroupParent,
     postMeta.ucdlibGroupEndedYear,
     postMeta.ucdlibHideOnLandingPage,
@@ -42,6 +43,7 @@ const Edit = () => {
   ]
   const { editPost } = useDispatch( 'core/editor', watchedVars );
   const [ groupType, setGroupType ] = useState( postMeta.ucdlibGroupType );
+  const [ groupDirectoryUrl, setGroupDirectoryUrl ] = useState( postMeta.ucdlibGroupDirectoryUrl || '' );
   const [ groupTitle, setGroupTitle ] = useState( postTitle );
   const [ groupParent, setGroupParent ] = useState( postMeta.ucdlibGroupParent );
   const [ groupEndedYear, setGroupEndedYear ] = useState( postMeta.ucdlibGroupEndedYear );
@@ -61,6 +63,7 @@ const Edit = () => {
   const setStateFromCurrentPage = () => {
     setLandingPageId( 0 );
     setGroupType( postMeta.ucdlibGroupType || 'committee' );
+    setGroupDirectoryUrl( postMeta.ucdlibGroupDirectoryUrl || '' );
     setGroupTitle( postTitle );
     setGroupParent( postMeta.ucdlibGroupParent );
     setGroupEndedYear( postMeta.ucdlibGroupEndedYear || '');
@@ -99,6 +102,7 @@ const Edit = () => {
         setLandingPageId( r.groupId )
         setGroupTitle( r.groupTitle );
         setGroupType( r.groupType || 'committee' );
+        setGroupDirectoryUrl( r.groupDirectoryUrl || '' );
         setGroupParent( r.groupParent );
         setGroupEndedYear( r.groupEndedYear || '' );
         setGroupHideOnLandingPage( r.groupHideOnLandingPage || false );
@@ -204,6 +208,7 @@ const Edit = () => {
     const data = {
       meta: {
         ucdlibGroupType: groupType,
+        ucdlibGroupDirectoryUrl: groupDirectoryUrl,
         ucdlibGroupParent: groupParent,
         ucdlibGroupEndedYear: groupEndedYear || null,
         ucdlibHideOnLandingPage: groupHideOnLandingPage,
@@ -393,6 +398,18 @@ const Edit = () => {
                 }}
                 onFilterValueChange=${_onFilterGroups}>
               </${ComboboxControl}>
+            `}
+
+            ${groupType === 'department' && html`
+              <${TextControl}
+                className=${`${name}-field`}
+                label="Team Directory URL"
+                value=${groupDirectoryUrl}
+                onChange=${(value) => {
+                  setGroupDirectoryUrl(value);
+                }}
+                help="Add a sidebar link to your unit's library website directory listing or team page.">
+              </${TextControl}>
             `}
 
             ${(groupType === 'committee' || !groupType) && renderCommitteeMetadata()}

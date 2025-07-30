@@ -11,6 +11,7 @@ class UcdlibIntranetGroups {
     'meta' => [
       'type' => 'ucdlibGroupType',
       'parent' => 'ucdlibGroupParent',
+      'directoryUrl' => 'ucdlibGroupDirectoryUrl',
       'endedYear' => 'ucdlibGroupEndedYear',
       'hideOnLandingPage' => 'ucdlibHideOnLandingPage',
       'subnavPattern' => 'ucdlibSubnavPattern',

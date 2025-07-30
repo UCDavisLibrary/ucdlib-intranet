@@ -1,0 +1,9 @@
+{% from getUcdMacro('links') import focal_link %}
+
+{% if attributes.focalLink %}
+  <div class='o-box panel'>
+    <div style="background-color:#fff9e6;">
+      {{ focal_link(attributes.focalLink) }}
+    </div>
+  </div>
+{% endif %}
