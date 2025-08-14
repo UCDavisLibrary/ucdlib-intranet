@@ -375,7 +375,8 @@ const Edit = () => {
           <div><p>There was an error when retrieving library group metadata. Please try again later.</p></div>
         ` : html`
           <div>
-            <h2>${groupTitle}</h2>
+            <p>For help creating and managing library group pages, please see the corresponding <a href='/how-do-i/create/intranet/#group-pages'>how-do-i page.</a></p>
+            <h2>Group Name: ${groupTitle}</h2>
 
             <${RadioControl}
               className=${`${name}-field`}
@@ -395,7 +396,9 @@ const Edit = () => {
               onChange=${(value) => {
                 setGroupParent(value);
               }}
-              onFilterValueChange=${_onFilterGroups}>
+              onFilterValueChange=${_onFilterGroups}
+              help="Use this field to create a group hierarchy for departments and subunits (e.g., 'Online Strategy' is the Parent for Subunit 'ITIS'). Do not use this field to assign general subpages to a subunit — instead, use the 'Parent' field in the Library Group Page menu (in the right sidebar)."
+              >
             </${ComboboxControl}>
 
             ${groupType === 'department' && html`
