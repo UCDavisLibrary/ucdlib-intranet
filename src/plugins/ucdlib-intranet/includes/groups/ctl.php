@@ -136,6 +136,12 @@ class UcdlibIntranetGroupsCtl {
       'single' => true,
       'type' => 'string'
     ] );
+    register_post_meta( $slug, $metaSlugs['committeeReviewedAnnually'] , [
+      'show_in_rest' => true,
+      'single' => true,
+      'type' => 'boolean',
+      'default' => false
+    ] );
   }
 
   // tell Timber about our post model

@@ -21,7 +21,8 @@ class UcdlibIntranetGroups {
       'committeeLeaderEmail' => 'ucdlibCommitteeLeaderEmail',
       'committeeSponsorName' => 'ucdlibCommitteeSponsorName',
       'committeeStartDate' => 'ucdlibCommitteeStartDate',
-      'committeeReviewDate' => 'ucdlibCommitteeReviewDate'
+      'committeeReviewDate' => 'ucdlibCommitteeReviewDate',
+      'committeeReviewedAnnually' => 'ucdlibCommitteeReviewedAnnually'
     ]
   ];
 

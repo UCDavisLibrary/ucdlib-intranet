@@ -39,7 +39,8 @@ const Edit = () => {
     postMeta.ucdlibCommitteeLeaderEmail,
     postMeta.ucdlibCommitteeSponsorName,
     postMeta.ucdlibCommitteeStartDate,
-    postMeta.ucdlibCommitteeReviewDate
+    postMeta.ucdlibCommitteeReviewDate,
+    postMeta.ucdlibCommitteeReviewedAnnually
   ]
   const { editPost } = useDispatch( 'core/editor', watchedVars );
   const [ groupType, setGroupType ] = useState( postMeta.ucdlibGroupType );
@@ -55,6 +56,7 @@ const Edit = () => {
   const [ groupCommitteeSponsorName, setGroupCommitteeSponsorName ] = useState( postMeta.ucdlibCommitteeSponsorName );
   const [ groupCommitteeStartDate, setGroupCommitteeStartDate ] = useState( postMeta.ucdlibCommitteeStartDate );
   const [ groupCommitteeReviewDate, setGroupCommitteeReviewDate ] = useState( postMeta.ucdlibCommitteeReviewDate );
+  const [ groupCommitteeReviewedAnnually, setGroupCommitteeReviewedAnnually ] = useState( postMeta.ucdlibCommitteeReviewedAnnually );
 
   const {editEntityRecord} = useDispatch( 'core' );
 
@@ -75,6 +77,7 @@ const Edit = () => {
     setGroupCommitteeSponsorName( postMeta.ucdlibCommitteeSponsorName );
     setGroupCommitteeStartDate( postMeta.ucdlibCommitteeStartDate );
     setGroupCommitteeReviewDate( postMeta.ucdlibCommitteeReviewDate );
+    setGroupCommitteeReviewedAnnually( postMeta.ucdlibCommitteeReviewedAnnually || false );
   }
 
   // modal state
@@ -113,6 +116,7 @@ const Edit = () => {
         setGroupCommitteeSponsorName( r?.groupCommitteeMeta?.sponsorName || '' );
         setGroupCommitteeStartDate( r?.groupCommitteeMeta?.startDate || '' );
         setGroupCommitteeReviewDate( r?.groupCommitteeMeta?.reviewDate || '' );
+        setGroupCommitteeReviewedAnnually( r?.groupCommitteeMeta?.reviewedAnnually || false );
       },
       (error) => {
         setParentError(true);
@@ -218,7 +222,8 @@ const Edit = () => {
         ucdlibCommitteeLeaderEmail: groupCommitteeLeaderEmail,
         ucdlibCommitteeSponsorName: groupCommitteeSponsorName,
         ucdlibCommitteeStartDate: groupCommitteeStartDate,
-        ucdlibCommitteeReviewDate: groupCommitteeReviewDate
+        ucdlibCommitteeReviewDate: groupCommitteeReviewDate,
+        ucdlibCommitteeReviewedAnnually: groupCommitteeReviewedAnnually
       }
     }
 
@@ -243,6 +248,7 @@ const Edit = () => {
         setGroupCommitteeStartDate(d);
       } else {
         setGroupCommitteeReviewDate(d);
+        setGroupCommitteeReviewedAnnually(false);
       }
     }
     const onReset = () => {
@@ -269,8 +275,8 @@ const Edit = () => {
       </div>
     `;
   }
-  const dateLabel = (d) => {
-    if ( !d ) return 'Not Set';
+  const dateLabel = (d, emptyLabel = 'Not Set') => {
+    if ( !d ) return emptyLabel;
     return d;
   }
 
@@ -331,16 +337,27 @@ const Edit = () => {
             renderContent=${({ onClose }) => datePickerDropdown(onClose, 'groupCommitteeStartDate')}
           />
         </div>
-        <div className=${`${name}-field`}>
+        <div className=${`${name}-field ${name}-field--review-date`}>
           <${Dropdown}
             renderToggle=${({onToggle }) => html`
               <div onClick=${onToggle} style=${{cursor:'pointer'}}>
                 <span>Committee Review Date: </span>
-                <span className='components-button is-link'>${dateLabel(groupCommitteeReviewDate)}</span>
+                <span className='components-button is-link'>${dateLabel(groupCommitteeReviewDate, 'Set Custom')}</span>
               </div>
             `}
             renderContent=${({ onClose }) => datePickerDropdown(onClose, 'groupCommitteeReviewDate')}
           />
+          <div>or</div>
+          <${ToggleControl}
+            label="Reviewed Annually"
+            checked=${groupCommitteeReviewedAnnually}
+            onChange=${(value) => {
+              setGroupCommitteeReviewedAnnually(value);
+              if ( value ) {
+                setGroupCommitteeReviewDate(null);
+              }
+            }}>
+          </${ToggleControl}>
         </div>
 
         <${TextControl}
@@ -366,6 +383,10 @@ const Edit = () => {
       <style>
         .${name}-field {
           margin-bottom: 20px;
+        }
+        .${name}-field--review-date {
+          display: flex;
+          gap: .5rem;
         }
       </style>
       <${Button} onClick=${openModal} variant="primary">Edit Library Group Metadata</${Button}>

@@ -30,7 +30,7 @@
       {% if post.committeeMeta.startDate %}
         <div class='committee-meta__section'>
           <div class='h4'>Start Date</div>
-          <div>{{ post.committeeMeta.startDate|date('F, Y', false) }}</div>
+          <div>{{ post.committeeMeta.startDate|date('F Y', false) }}</div>
         </div>
       {% endif %}
       {% if post.groupEndedYear %}
@@ -38,10 +38,14 @@
           <div class='h4'>Year Ended</div>
           <div>{{ post.groupEndedYear }}</div>
         </div>
-      {% elseif post.committeeMeta.reviewDate %}
+      {% elseif post.committeeMeta.reviewDate or post.committeeMeta.reviewedAnnually %}
         <div class='committee-meta__section'>
           <div class='h4'>Review Date</div>
-          <div>{{ post.committeeMeta.reviewDate|date('F, Y', false) }}</div>
+          {% if post.committeeMeta.reviewedAnnually %}
+            <div>Annually</div>
+          {% elseif post.committeeMeta.reviewDate %}
+            <div>{{ post.committeeMeta.reviewDate|date('F Y', false) }}</div>
+          {% endif %}
         </div>
       {% endif %}
     </div>
