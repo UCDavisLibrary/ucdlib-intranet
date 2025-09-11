@@ -17,6 +17,7 @@ class UcdlibIntranetGroups {
       'subnavPattern' => 'ucdlibSubnavPattern',
       'hideInSubnav' => 'ucdlibHideInSubnav',
       'committeePermanence' => 'ucdlibCommitteePermanence',
+      'committeeLeaders' => 'ucdlibCommitteeLeaders',
       'committeeLeaderName' => 'ucdlibCommitteeLeaderName',
       'committeeLeaderEmail' => 'ucdlibCommitteeLeaderEmail',
       'committeeSponsorName' => 'ucdlibCommitteeSponsorName',

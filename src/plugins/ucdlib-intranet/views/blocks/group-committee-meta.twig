@@ -8,17 +8,19 @@
           <div>{{ post.committeeMeta.permanenceLabel }}</div>
         </div>
       {% endif %}
-      {% if post.committeeMeta.leaderName or post.committeeMeta.leaderEmail %}
+      {% if post.committeeMeta.leaders|length %}
         <div class='committee-meta__section'>
           <div class='h4'>Leader/Facilitator</div>
-          {% if post.committeeMeta.leaderName %}
-            <div>{{ post.committeeMeta.leaderName }}</div>
-          {% endif %}
-          {% if post.committeeMeta.leaderEmail %}
-            <div>
-              <a href='mailto:{{ post.committeeMeta.leaderEmail }}'>{{ post.committeeMeta.leaderEmail }}</a>
+          {% for leader in post.committeeMeta.leaders %}
+            <div class='u-space-mb--small'>
+              {% if leader.name %}
+                <div>{{ leader.name }}</div>
+              {% endif %}
+              {% if leader.email %}
+                <div><a href='mailto:{{ leader.email }}'>{{ leader.email }}</a></div>
+              {% endif %}
             </div>
-          {% endif %}
+          {% endfor %}
         </div>
       {% endif %}
       {% if post.committeeMeta.sponsorName %}

@@ -38,6 +38,8 @@ services:
     tmpfs:
       - /run
       - /tmp
+    depends_on:
+      - db
     volumes:
       - uploads-data:/usr/src/wordpress/wp-content/uploads
       - wp-logs-data:/var/log/wordpress
@@ -45,6 +47,7 @@ services:
       # - ../../../../forminator-addon-rt:/usr/src/wordpress/wp-content/plugins/forminator-addon-rt
       - ../../../src/plugins/ucdlib-oidc:/usr/src/wordpress/wp-content/plugins/ucdlib-oidc
       - ../../../src/plugins/ucdlib-intranet:/usr/src/wordpress/wp-content/plugins/ucdlib-intranet
+      - ../../../utils/wp-scripts:/deploy-utils/wp-scripts
 
   init:
     image: *utils-image

@@ -111,6 +111,28 @@ class UcdlibIntranetGroupsCtl {
       'single' => true,
       'type' => 'string'
     ] );
+    register_post_meta( $slug, $metaSlugs['committeeLeaders'] , [
+      'single' => true,
+      'type' => 'array',
+      'show_in_rest' => [
+        'schema' => [
+          'type' => 'array',
+          'items' => [
+            'type' => 'object',
+            'properties' => [
+              'name' => [
+                'type' => 'string',
+                'description' => 'Name of the committee leader'
+              ],
+              'email' => [
+                'type' => 'string',
+                'description' => 'Email address of the committee leader'
+              ]
+            ]
+          ]
+        ]
+      ]
+    ] );
     register_post_meta( $slug, $metaSlugs['committeeLeaderName'] , [
       'show_in_rest' => true,
       'single' => true,

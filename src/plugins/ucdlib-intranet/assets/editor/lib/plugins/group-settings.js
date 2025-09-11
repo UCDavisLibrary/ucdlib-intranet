@@ -35,8 +35,7 @@ const Edit = () => {
     postMeta.ucdlibHideOnLandingPage,
     postMeta.ucdlibSubnavPattern,
     postMeta.ucdlibCommitteePermanence,
-    postMeta.ucdlibCommitteeLeaderName,
-    postMeta.ucdlibCommitteeLeaderEmail,
+    postMeta.ucdlibCommitteeLeaders,
     postMeta.ucdlibCommitteeSponsorName,
     postMeta.ucdlibCommitteeStartDate,
     postMeta.ucdlibCommitteeReviewDate,
@@ -51,8 +50,7 @@ const Edit = () => {
   const [ groupHideOnLandingPage, setGroupHideOnLandingPage ] = useState( postMeta.ucdlibHideOnLandingPage );
   const [ groupSubnavPattern, setGroupSubnavPattern ] = useState( postMeta.subnavPattern );
   const [ groupCommitteePermanence, setGroupCommitteePermanence ] = useState( postMeta.ucdlibCommitteePermanence );
-  const [ groupCommitteeLeaderName, setGroupCommitteeLeaderName ] = useState( postMeta.ucdlibCommitteeLeaderName );
-  const [ groupCommitteeLeaderEmail, setGroupCommitteeLeaderEmail ] = useState( postMeta.ucdlibCommitteeLeaderEmail );
+  const [ groupCommitteeLeaders, setGroupCommitteeLeaders ] = useState( postMeta.ucdlibCommitteeLeaders || [] );
   const [ groupCommitteeSponsorName, setGroupCommitteeSponsorName ] = useState( postMeta.ucdlibCommitteeSponsorName );
   const [ groupCommitteeStartDate, setGroupCommitteeStartDate ] = useState( postMeta.ucdlibCommitteeStartDate );
   const [ groupCommitteeReviewDate, setGroupCommitteeReviewDate ] = useState( postMeta.ucdlibCommitteeReviewDate );
@@ -72,8 +70,7 @@ const Edit = () => {
     setGroupHideOnLandingPage( postMeta.ucdlibHideOnLandingPage || false );
     setGroupSubnavPattern( postMeta.ucdlibSubnavPattern );
     setGroupCommitteePermanence( postMeta.ucdlibCommitteePermanence );
-    setGroupCommitteeLeaderName( postMeta.ucdlibCommitteeLeaderName );
-    setGroupCommitteeLeaderEmail( postMeta.ucdlibCommitteeLeaderEmail );
+    setGroupCommitteeLeaders( postMeta.ucdlibCommitteeLeaders || [] );
     setGroupCommitteeSponsorName( postMeta.ucdlibCommitteeSponsorName );
     setGroupCommitteeStartDate( postMeta.ucdlibCommitteeStartDate );
     setGroupCommitteeReviewDate( postMeta.ucdlibCommitteeReviewDate );
@@ -111,8 +108,7 @@ const Edit = () => {
         setGroupHideOnLandingPage( r.groupHideOnLandingPage || false );
         setGroupSubnavPattern( r.groupSubnavPattern );
         setGroupCommitteePermanence( r?.groupCommitteeMeta?.permanence || '' );
-        setGroupCommitteeLeaderName( r?.groupCommitteeMeta?.leaderName || '' );
-        setGroupCommitteeLeaderEmail( r?.groupCommitteeMeta?.leaderEmail || '' );
+        setGroupCommitteeLeaders( r?.groupCommitteeMeta?.leaders || [] );
         setGroupCommitteeSponsorName( r?.groupCommitteeMeta?.sponsorName || '' );
         setGroupCommitteeStartDate( r?.groupCommitteeMeta?.startDate || '' );
         setGroupCommitteeReviewDate( r?.groupCommitteeMeta?.reviewDate || '' );
@@ -207,7 +203,29 @@ const Edit = () => {
     { label: 'Temporary', value: 'temporary' }
   ];
 
-  // save component state variables to either the current page or hackathon landing page
+  // committee leaders
+  const setCommitteeLeader = (index, field, value) => {
+    const newLeaders = [...groupCommitteeLeaders];
+    if ( !newLeaders[index] ) return;
+    newLeaders[index][field] = value;
+    setGroupCommitteeLeaders(newLeaders);
+  }
+  const removeCommitteeLeader = (index) => {
+    const newLeaders = [...groupCommitteeLeaders];
+    newLeaders.splice(index, 1);
+    setGroupCommitteeLeaders(newLeaders);
+  }
+  const addCommitteeLeader = (index, above) => {
+    const newLeaders = [...groupCommitteeLeaders];
+    if ( index === undefined ) {
+      newLeaders.push({name:'', email:''});
+    } else {
+      newLeaders.splice(above ? index : index + 1, 0, {name:'', email:''});
+    }
+    setGroupCommitteeLeaders(newLeaders);
+  }
+
+  // save component state variables to either the current page or group landing page
   const saveMetadata = () => {
     const data = {
       meta: {
@@ -218,8 +236,7 @@ const Edit = () => {
         ucdlibHideOnLandingPage: groupHideOnLandingPage,
         ucdlibSubnavPattern: groupSubnavPattern,
         ucdlibCommitteePermanence: groupCommitteePermanence,
-        ucdlibCommitteeLeaderName: groupCommitteeLeaderName,
-        ucdlibCommitteeLeaderEmail: groupCommitteeLeaderEmail,
+        ucdlibCommitteeLeaders: groupCommitteeLeaders,
         ucdlibCommitteeSponsorName: groupCommitteeSponsorName,
         ucdlibCommitteeStartDate: groupCommitteeStartDate,
         ucdlibCommitteeReviewDate: groupCommitteeReviewDate,
@@ -298,25 +315,43 @@ const Edit = () => {
             setGroupCommitteePermanence(value);
           }}>
         </${SelectControl}>
-        <h4>Committee Leader/Facilitator</h4>
-        <div style=${{padding: '0 20px'}}>
-          <${TextControl}
-            className=${`${name}-field`}
-            label="Name"
-            value=${groupCommitteeLeaderName}
-            onChange=${(value) => {
-              setGroupCommitteeLeaderName(value);
-            }}>
-          </${TextControl}>
-          <${TextControl}
-            className=${`${name}-field`}
-            label="Email"
-            type="email"
-            value=${groupCommitteeLeaderEmail}
-            onChange=${(value) => {
-              setGroupCommitteeLeaderEmail(value);
-            }}>
-          </${TextControl}>
+        <div style=${{marginBottom: '20px'}}>
+          <h4>Committee Leader/Facilitator</h4>
+          ${groupCommitteeLeaders.map( (leader, index) => html`
+            <div key=${index} style=${{border: '1px solid #ccc', padding: '10px', marginBottom: '10px'}}>
+              <div style=${{padding: '0 20px'}}>
+                <${TextControl}
+                  className=${`${name}-field`}
+                  label="Name"
+                  value=${leader.name}
+                  onChange=${(value) => {
+                    setCommitteeLeader(index, 'name', value);
+                  }}>
+                </${TextControl}>
+                <${TextControl}
+                  className=${`${name}-field`}
+                  label="Email"
+                  type="email"
+                  value=${leader.email}
+                  onChange=${(value) => {
+                    setCommitteeLeader(index, 'email', value);
+                  }}>
+                </${TextControl}>
+              </div>
+              <div style=${{display: 'flex', gap: '10px', padding: '0 20px'}}>
+                <${Button} variant='link' onClick=${() => addCommitteeLeader(index)}>Add Below</${Button}>
+                ${index === 0 && html`
+                  <${Button} variant='link' onClick=${() => addCommitteeLeader(index, true)}>Add Above</${Button}>
+                `}
+                <${Button} variant='link' isDestructive=${true} onClick=${ () => removeCommitteeLeader(index) }>Remove</${Button}>
+              </div>
+            </div>
+          `)}
+          ${groupCommitteeLeaders.length === 0 && html`
+            <div>
+              <${Button} variant='secondary' onClick=${() => addCommitteeLeader()}>Add Leader</${Button}>
+            </div>
+          `}
         </div>
         <${TextControl}
           className=${`${name}-field`}

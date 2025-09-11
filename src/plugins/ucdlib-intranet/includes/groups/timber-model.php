@@ -164,8 +164,13 @@ class UcdlibIntranetGroupsTimberModel extends UcdThemePost {
     if ( $this->groupType() != 'committee' ) {
       return null;
     }
+    $leaders = $this->landingPage()->meta($this->getMetaSlug('committeeLeaders'));
+    if ( empty($leaders) ) {
+      $leaders = [];
+    }
     $this->committeeMeta = [
       'permanence' => $this->landingPage()->meta($this->getMetaSlug('committeePermanence')),
+      'leaders' => $leaders,
       'leaderName' => $this->landingPage()->meta($this->getMetaSlug('committeeLeaderName')),
       'leaderEmail' => $this->landingPage()->meta($this->getMetaSlug('committeeLeaderEmail')),
       'sponsorName' => $this->landingPage()->meta($this->getMetaSlug('committeeSponsorName')),

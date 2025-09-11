@@ -40,6 +40,8 @@ services:
     tmpfs:
       - /run
       - /tmp
+    depends_on:
+      - db
     volumes:
       - uploads-data:/usr/src/wordpress/wp-content/uploads
       - wp-logs-data:/var/log/wordpress
