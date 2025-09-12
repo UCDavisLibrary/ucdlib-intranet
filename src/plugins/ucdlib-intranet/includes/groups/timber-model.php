@@ -171,8 +171,6 @@ class UcdlibIntranetGroupsTimberModel extends UcdThemePost {
     $this->committeeMeta = [
       'permanence' => $this->landingPage()->meta($this->getMetaSlug('committeePermanence')),
       'leaders' => $leaders,
-      'leaderName' => $this->landingPage()->meta($this->getMetaSlug('committeeLeaderName')),
-      'leaderEmail' => $this->landingPage()->meta($this->getMetaSlug('committeeLeaderEmail')),
       'sponsorName' => $this->landingPage()->meta($this->getMetaSlug('committeeSponsorName')),
       'startDate' => $this->landingPage()->meta($this->getMetaSlug('committeeStartDate')),
       'reviewDate' => $this->landingPage()->meta($this->getMetaSlug('committeeReviewDate')),

@@ -18,8 +18,6 @@ class UcdlibIntranetGroups {
       'hideInSubnav' => 'ucdlibHideInSubnav',
       'committeePermanence' => 'ucdlibCommitteePermanence',
       'committeeLeaders' => 'ucdlibCommitteeLeaders',
-      'committeeLeaderName' => 'ucdlibCommitteeLeaderName',
-      'committeeLeaderEmail' => 'ucdlibCommitteeLeaderEmail',
       'committeeSponsorName' => 'ucdlibCommitteeSponsorName',
       'committeeStartDate' => 'ucdlibCommitteeStartDate',
       'committeeReviewDate' => 'ucdlibCommitteeReviewDate',

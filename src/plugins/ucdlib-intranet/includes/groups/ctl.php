@@ -133,16 +133,6 @@ class UcdlibIntranetGroupsCtl {
         ]
       ]
     ] );
-    register_post_meta( $slug, $metaSlugs['committeeLeaderName'] , [
-      'show_in_rest' => true,
-      'single' => true,
-      'type' => 'string'
-    ] );
-    register_post_meta( $slug, $metaSlugs['committeeLeaderEmail'] , [
-      'show_in_rest' => true,
-      'single' => true,
-      'type' => 'string'
-    ] );
     register_post_meta( $slug, $metaSlugs['committeeSponsorName'] , [
       'show_in_rest' => true,
       'single' => true,
