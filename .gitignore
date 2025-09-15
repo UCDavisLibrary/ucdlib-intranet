@@ -4,3 +4,4 @@ node_modules
 secrets
 src/plugins/ucdlib-intranet/assets/assets/js
 src/plugins/ucdlib-intranet/assets/assets/css
+package-lock.json
