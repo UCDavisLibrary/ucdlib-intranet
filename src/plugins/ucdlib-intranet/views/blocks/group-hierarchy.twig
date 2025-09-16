@@ -1,0 +1,24 @@
+{% set post = siteContext.post %}
+{% if post and post.hasChildrenOrParent %}
+  <div class='o-box panel'>
+    {% if post.groupParentPost %}
+      <div class='u-space-mb--medium'>
+        <div class='h4 u-space-mb--small'>Part of</div>
+        <div>
+          <a class='btn btn--alt btn--round' href='{{ post.groupParentPost.link }}'>{{ post.groupParentPost.title }}</a>
+        </div>
+      </div>
+    {% endif %}
+    {% if post.groupChildren.found_posts %}
+      <div class='u-space-mb'>
+        <div class='h4 u-space-mb--small'>{{post.groupType == 'department' ? 'Subunits' : 'Subgroups'}}</div>
+        {% for child in post.groupChildren %}
+          <div class='u-space-mb--small'>
+            <a class='btn btn--alt2 btn--round' href='{{ child.link }}'>{{ child.title }}</a>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+  </div>
+{% endif %}

@@ -1,0 +1,7 @@
+{% if post and not post.meta('hideModifiedDate') %}
+  <div class="l-container date-updated-container">
+    <div class="l-content">
+      <div class='caption'>Updated {{ post.modified_date() }}</div>
+    </div>
+  </div>
+{% endif %}

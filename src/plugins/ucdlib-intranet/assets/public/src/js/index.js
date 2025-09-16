@@ -1,10 +1,19 @@
 import "@ucd-lib/brand-theme";
+import './elements/favorites/ucdlib-intranet-favorite-toggle.js';
 
 class DynamicScriptLoader {
 
   constructor() {
     this.loaded = {};
     this.registration = [
+      {
+        name: 'favorites-admin',
+        cssQuery: ['ucdlib-intranet-favorite-manage']
+      },
+      {
+        name: 'search',
+        cssQuery: ['ucdlib-intranet-search-bar']
+      }
     ];
   }
 
@@ -28,7 +37,11 @@ class DynamicScriptLoader {
     if( typeof bundleName !== 'string' ) return;
     if( this.loaded[bundleName] ) return this.loaded[bundleName];
 
-    // load scripts here
+    if ( bundleName == 'favorites-admin' ){
+      this.loaded[bundleName] = import(/* webpackChunkName: "jobs-board-admin" */ './elements/favorites/ucdlib-intranet-favorite-manage.js');
+    } else if ( bundleName == 'search' ){
+      this.loaded[bundleName] = import(/* webpackChunkName: "ucdlib-intranet-search" */ './elements/search/index.js');
+    }
 
     return this.loaded[bundleName]
   }

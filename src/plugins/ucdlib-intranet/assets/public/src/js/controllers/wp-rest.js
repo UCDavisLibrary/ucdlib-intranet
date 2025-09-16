@@ -1,7 +1,8 @@
 export default class WpRest {
-  constructor(host){
+  constructor(host, restNamespace){
     (this.host = host).addController(this);
 
+    this.restNamespace = restNamespace;
     this.cache = {};
     this.requestsInProgress = {};
   }
@@ -16,7 +17,7 @@ export default class WpRest {
     }
   }
 
-  async get(path, params={}) {
+  async get(path='', params={}) {
     try {
       const data = await this._fetch(path, {params, method: 'GET'});
       return {
@@ -64,6 +65,23 @@ export default class WpRest {
     }
   }
 
+  async delete(path, payload={}, params={}) {
+    try {
+      const data = await this._fetch(path, {method: 'DELETE', payload, params});
+      return {
+        status: 'success',
+        data: data.data,
+        cacheKey: data.cacheKey
+      }
+    }
+    catch (error) {
+      return {
+        status: 'error',
+        error
+      }
+    }
+  }
+
   _fetch(path, options={}) {
     let url = this.getApiUrl(path);
     if ( Object.keys(options.params || {}).length ) {
@@ -92,6 +110,8 @@ export default class WpRest {
 
     if( this.host.wpNonce ) {
       headers['X-WP-Nonce'] = this.host.wpNonce;
+    } else if ( this.host.hasAttribute('wp-nonce') ){
+      headers['X-WP-Nonce'] = this.host.getAttribute('wp-nonce');
     }
 
     let body = null;
@@ -121,7 +141,12 @@ export default class WpRest {
   }
 
   getApiUrl(path) {
-    return `${window.location.origin}/wp-json/${this.host.restNamespace}/${path}`;
+    const namespace = this.restNamespace || this.host.restNamespace;
+    let url = `${window.location.origin}/wp-json/${namespace}/${path}`;
+    if ( url.endsWith('/') ) {
+      url = url.slice(0, -1);
+    }
+    return url;
   }
 
   _getCacheKey(path, options={}) {

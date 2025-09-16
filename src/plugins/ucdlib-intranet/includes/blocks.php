@@ -18,6 +18,28 @@ class UcdlibIntranetBlocks extends UCDThemeBlockRenderer {
   public static $transformationClass = 'UcdlibIntranetBlockTransformations';
 
   public static $registry = [
+    'ucdlib-intranet/favorites-list' => [
+      'twig' => '@ucdlib-intranet/blocks/favorites-list.twig',
+      'transform' => ['getFavoritesList']
+    ],
+    'ucdlib-intranet/group-directory-url' => [
+      'twig' => '@ucdlib-intranet/blocks/group-directory-url.twig',
+      'transform' => ['addGroupDirectoryUrl']
+    ],
+    'ucdlib-intranet/group-subnav' => [
+      'twig' => '@ucdlib-intranet/blocks/group-subnav.twig',
+      'transform' => ['constructSubnav']
+    ],
+    'ucdlib-intranet/group-hierarchy' => [
+      'twig' => '@ucdlib-intranet/blocks/group-hierarchy.twig'
+    ],
+    'ucdlib-intranet/group-query' => [
+      'twig' => '@ucdlib-intranet/blocks/group-query.twig',
+      'transform' => ['queryGroups']
+    ],
+    'ucdlib-intranet/group-committee-meta' => [
+      'twig' => '@ucdlib-intranet/blocks/group-committee-meta.twig'
+    ]
   ];
 
   /**

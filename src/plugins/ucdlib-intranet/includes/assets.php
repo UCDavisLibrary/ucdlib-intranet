@@ -83,6 +83,15 @@ class UcdlibIntranetAssets {
     }, 1000);
     add_action('admin_enqueue_scripts', [$this, 'enqueuePublicScriptsInAdmin']);
     add_action('enqueue_block_editor_assets', [$this, 'enqueueEditorScripts'], 3);
+    add_action( 'enqueue_block_assets', array($this, "enqueue_block_assets") );
+
+    add_action('admin_head', function () {
+      echo '<style>
+          .update-nag {
+              display: none !important;
+          }
+      </style>';
+  });
   }
 
   /**
@@ -116,8 +125,10 @@ class UcdlibIntranetAssets {
   /**
    * Register and load public js/css assets
    */
-  public function enqueuePublicScripts($dontLoadStyles=false){
-    $slug = $this->plugin->config->slug;
+  public function enqueuePublicScripts($dontLoadStyles=false, $slug=''){
+    if ( empty($slug) ){
+      $slug = $this->plugin->config->slug;
+    }
     $pluginDir = $this->plugin->config->pluginUrl();
     $jsPath = $this->jsPublicUrlDist;
     $cssPath = $this->cssUrlDist;
@@ -183,6 +194,17 @@ class UcdlibIntranetAssets {
       $this->bundleVersion(),
       true
     );
+  }
+
+  /**
+   * Enqueue public script in block editor environment
+   * Ensures that custom elements work in iframed block editor
+   */
+  public function enqueue_block_assets(){
+    if ( is_admin() ) {
+      $this->enqueuePublicScripts(true, $this->plugin->config->slug . '-editor-public');
+      wp_deregister_script('ucd-editor-public');
+    }
   }
 
   /**

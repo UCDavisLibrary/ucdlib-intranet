@@ -1,0 +1,14 @@
+{% from getUcdMacro('links') import focal_link %}
+
+<div class='block--favorites-list'>
+{% for row in attributes.rows %}
+  <div class='l-2col'>
+    {% for favorite in row %}
+    <div class="{{loop.first ? 'l-first' : 'l-second'}}">
+      {{ focal_link(favorite) }}
+    </div>
+    {% endfor %}
+  </div>
+{% endfor %}
+</div>
+

@@ -1,0 +1,43 @@
+.block--group-query {
+  .icon-ucdlib {
+    margin-bottom: 1.25rem;
+    font-weight: 700;
+    text-decoration: none;
+    align-items: flex-start;
+    display: inline-flex;
+
+    .block--group-query__ended {
+      color: #4C4C4C;
+      font-size: 0.875rem;
+      font-weight: 400;
+      line-height: 1.3rem;
+    }
+    ucdlib-icon {
+      margin-top: 6px;
+    }
+  }
+}
+
+@media (max-width: 991px) {
+  .block--group-query .l-3col > :where(* + *) {
+    margin-top: 0;
+  }
+  .block--group-query .l-2col > :where(* + *) {
+    margin-top: 0;
+  }
+  .committee-meta {
+    padding: .75rem;
+  }
+}
+
+.committee-meta {
+  background-color: #ebf3fa;
+  padding: 1.5rem;
+}
+.committee-meta__section {
+  margin-top: 1rem;
+
+  &:first-child {
+    margin-top: 0;
+  }
+}

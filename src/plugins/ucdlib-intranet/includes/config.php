@@ -4,9 +4,11 @@ class UcdlibIntranetConfig {
 
   public $slug = 'ucdlib-intranet';
   public $plugin;
+  public $entryPoint;
 
   public function __construct( $plugin ){
     $this->plugin = $plugin;
+    $this->entryPoint = plugin_dir_path( __DIR__ ) . $this->slug .'.php';
     $this->setBuildEnvVars();
   }
 
@@ -20,6 +22,10 @@ class UcdlibIntranetConfig {
     }
     $this->envVariables[$key] = getenv($key);
     return $this->envVariables[$key];
+  }
+
+  public function indexerUrl(){
+    return $this->getEnv('INDEXER_URL') ?: 'http://indexer:3000';
   }
 
   public function isDevEnv(){

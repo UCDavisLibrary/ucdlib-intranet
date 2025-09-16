@@ -12,6 +12,35 @@ class UcdlibIntranetUtils {
   }
 
   /**
+   * Chunk an array into a newspaper column style layout e.g. top-bottom then left-right
+   * Includes theme layout class names
+   */
+  public function newspaperChunk($items, $columnCt){
+    $columnClasses = ['l-first', 'l-second', 'l-third', 'l-fourth'];
+    $layoutClass = 'l-' . $columnCt . 'col';
+    $out = [
+      'layoutClass' => $layoutClass,
+      'columns' => []
+    ];
+    $chunks = [];
+    $chunkSize = ceil(count($items) / $columnCt);
+    for ( $i = 0; $i < $columnCt; $i++ ){
+      $chunks[$i] = array_slice($items, $i * $chunkSize, $chunkSize);
+    }
+    $chunks = array_filter($chunks, function($chunk) {
+      return !empty($chunk);
+    });
+    $chunks = array_values($chunks);
+    foreach ( $chunks as $i => $chunk ){
+      $out['columns'][] = [
+        'layoutClass' => $columnClasses[$i],
+        'items' => $chunk
+      ];
+    }
+    return $out;
+  }
+
+  /**
    * Check if a plugin is active
    */
   private $activePlugins;

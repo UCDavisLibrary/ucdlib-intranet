@@ -1,6 +1,9 @@
 x-variables:
-  main-image: &main-image localhost/local-dev/datalab-main-site:local-dev
-  utils-image: &utils-image localhost/local-dev/datalab-main-site-utils:local-dev
+  main-image: &main-image localhost/local-dev/ucdlib-intranet:local-dev
+  utils-image: &utils-image localhost/local-dev/ucdlib-intranet-utils:local-dev
+  wp-gmail-image: &wp-gmail-image localhost/local-dev/gmail-wp-pipeline:local-dev
+  indexer-image: &indexer-image localhost/local-dev/ucdlib-intranet-es-indexer:local-dev
+
 services:
   wordpress:
     image: *main-image
@@ -9,7 +12,7 @@ services:
     ports:
       - ${HOST_PORT:-3000}:80
     environment:
-      UCDLIB_DATALAB_ENV: ${UCDLIB_DATALAB_ENV:-dev}
+      UCDLIB_INTRANET_ENV: ${UCDLIB_INTRANET_ENV:-dev}
       WORDPRESS_DB_HOST: ${DB_HOST:-db:3306}
       WORDPRESS_DB_DATABASE: ${DB_DATABASE:-wordpress}
       WORDPRESS_DB_PASSWORD: ${DB_PASSWORD:-wordpress}
@@ -19,7 +22,7 @@ services:
       WORDPRESS_DISABLE_FATAL_ERROR_HANDLER: ${WORDPRESS_DISABLE_FATAL_ERROR_HANDLER:-1}
       WORDPRESS_CONFIG_EXTRA: |
         define( 'WP_ENVIRONMENT_TYPE', 'local' );
-      OIDC_CLIENT_ID: ${OIDC_CLIENT_ID:-datalab-main-site}
+      OIDC_CLIENT_ID: ${OIDC_CLIENT_ID:-ucdlib-intranet}
       OIDC_ENDPOINT_LOGIN_URL: ${OIDC_ENDPOINT_LOGIN_URL:-https://auth.library.ucdavis.edu/realms/internal/protocol/openid-connect/auth}
       OIDC_ENDPOINT_USERINFO_URL: ${OIDC_ENDPOINT_USERINFO_URL:-}
       OIDC_ENDPOINT_TOKEN_URL: ${OIDC_ENDPOINT_TOKEN_URL:-https://auth.library.ucdavis.edu/realms/internal/protocol/openid-connect/token}
@@ -29,18 +32,22 @@ services:
       OIDC_CREATE_IF_DOES_NOT_EXIST: ${OIDC_CREATE_IF_DOES_NOT_EXIST:-true}
       OIDC_LINK_EXISTING_USERS: ${OIDC_LINK_EXISTING_USERS:-true}
       OIDC_REDIRECT_USER_BACK: ${OIDC_REDIRECT_USER_BACK:-true}
-      OIDC_ENFORCE_PRIVACY: ${OIDC_ENFORCE_PRIVACY:-false}
+      OIDC_ENFORCE_PRIVACY: ${OIDC_ENFORCE_PRIVACY:-true}
+      FORMINATOR_ADDON_RT_HOST: ${FORMINATOR_ADDON_RT_HOST:-https://rt.lib.ucdavis.edu}
+      UCDLIB_PERSONNEL_API_URL: ${UCDLIB_PERSONNEL_API_URL:-https://iam.staff.library.ucdavis.edu/json}
     tmpfs:
       - /run
       - /tmp
+    depends_on:
+      - db
     volumes:
       - uploads-data:/usr/src/wordpress/wp-content/uploads
       - wp-logs-data:/var/log/wordpress
-      - wphb-logs:/usr/src/wordpress/wp-content/wphb-logs
-      - wphb-cache:/usr/src/wordpress/wp-content/wphb-cache
       - ../../../../ucdlib-theme-wp:/usr/src/wordpress/wp-content/themes/ucdlib-theme-wp
+      # - ../../../../forminator-addon-rt:/usr/src/wordpress/wp-content/plugins/forminator-addon-rt
       - ../../../src/plugins/ucdlib-oidc:/usr/src/wordpress/wp-content/plugins/ucdlib-oidc
-      - ../../../src/plugins/ucdlib-datalab:/usr/src/wordpress/wp-content/plugins/ucdlib-datalab
+      - ../../../src/plugins/ucdlib-intranet:/usr/src/wordpress/wp-content/plugins/ucdlib-intranet
+      - ../../../utils/wp-scripts:/deploy-utils/wp-scripts
 
   init:
     image: *utils-image
@@ -48,9 +55,10 @@ services:
       - .env
     environment:
       RUN_INIT: "true"
+      INIT_DATA_ENV: ${INIT_DATA_ENV:-stage}
       SERVER_URL: http://localhost:${HOST_PORT:-3000}
       GC_PROJECT: ${GC_PROJECT:-digital-ucdavis-edu}
-      GC_BUCKET_BACKUPS: ${GC_BUCKET_BACKUPS:-datalab-main-site-content}
+      GC_BUCKET_BACKUPS: ${GC_BUCKET_BACKUPS:-itis-backups/ucdlib-intranet}
       BACKUP_FILE_NAME: ${BACKUP_FILE_NAME:-db.sql.gz}
       UPLOADS_FILE_NAME: ${UPLOADS_FILE_NAME:-uploads.tar.gz}
       WORDPRESS_DB_HOST: ${DB_HOST:-db:3306}
@@ -63,7 +71,6 @@ services:
       - wordpress
     volumes:
       - uploads-data:/uploads
-      - wphb-cache:/wphb-cache
       - ../../../utils/init:/deploy-utils/init
       - ../../../utils/wp-scripts:/deploy-utils/wp-scripts
       - ../../secrets/gc-reader-key.json:/etc/service-account.json
@@ -74,8 +81,8 @@ services:
     env_file:
       - .env
     environment:
-      BACKUP_DATA_ENV: ${BACKUP_DATA_ENV:-localhost}
-      GC_BUCKET_BACKUPS: ${GC_BUCKET_BACKUPS:-datalab-main-site-content}
+      BACKUP_DATA_ENV: ${BACKUP_DATA_ENV:-local-dev}
+      GC_BUCKET_BACKUPS: ${GC_BUCKET_BACKUPS:-itis-backups/ucdlib-intranet}
       BACKUP_FILE_NAME: ${BACKUP_FILE_NAME:-db.sql.gz}
       UPLOADS_FILE_NAME: ${UPLOADS_FILE_NAME:-uploads.tar.gz}
       WORDPRESS_DB_HOST: ${DB_HOST:-db:3306}
@@ -88,14 +95,31 @@ services:
       - wordpress
     volumes:
       - uploads-data:/uploads
-      - wphb-cache:/wphb-cache
       - ../../../utils/backup:/deploy-utils/backup
       - ../../secrets/gc-writer-key.json:/etc/service-account.json
     command: ./tail.sh
     # command: "./backup/entrypoint.sh"
 
+  wp-gmail:
+    image: *wp-gmail-image
+    env_file:
+      - .env
+    environment:
+      GMAILWP_CRON_SCHEDULE: '*/1 * * * *'
+      GMAILWP_CRON_IDLE_AT_STARTUP: 'true'
+      GMAILWP_LOGGER_STREAM: 'console'
+      GMAILWP_INSTANCE_NAME: 'local-dev'
+      GMAILWP_GC_KEY_FILENAME: '/secrets/gc-reader-key.json'
+      GMAILWP_WP_URL: 'http://wordpress:80'
+      GMAILWP_CUSTOM_SCRIPT: 'ucdlib-intranet'
+    volumes:
+      - ../../../../gmail-wp-pipeline/src:/app
+      - /app/node_modules
+      - ../../secrets:/secrets
+    command: ["tail", "-f", "/dev/null"]
+
   db:
-    image: mysql:5.7
+    image: mysql:8.0
     env_file:
       - .env
     environment:
@@ -110,8 +134,55 @@ services:
         soft: 262114
         hard: 262114
 
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.17.5
+    environment:
+      - bootstrap.memory_lock=true
+      - discovery.type=single-node
+      - cluster.routing.allocation.disk.threshold_enabled=false
+      - cluster.routing.allocation.disk.watermark.low=100%
+      - cluster.routing.allocation.disk.watermark.high=100%
+      - cluster.routing.allocation.disk.watermark.flood_stage=100%
+      - cluster.routing.allocation.disk.watermark.flood_stage.max_headroom=0b
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - xpack.security.enabled=false
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - es-data:/usr/share/elasticsearch/data
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.17.5
+    ports:
+      - ${KIBANA_HOST_PORT:-3002}:5601
+    environment:
+      - ELASTICSEARCH_URL:http://elasticsearch:9200
+      - xpack.security.enabled=false
+      - telemetry.enabled=false
+    depends_on:
+      - elasticsearch
+
+  indexer:
+    image: *indexer-image
+    ports:
+      - ${INDEXER_HOST_PORT:-3001}:3000
+    env_file:
+      - .env
+    environment:
+      INDEXER_LOGGER_STREAM: 'console'
+    depends_on:
+      - elasticsearch
+      - wordpress
+    volumes:
+      - ../../../elastic-search:/service
+      - /service/node_modules
+      - ../../secrets:/secrets
+    # command: ["tail", "-f", "/dev/null"]
+
   adminer:
-    image: adminer:4
+    image: adminer:5
     ports:
       - ${ADMINER_HOST_PORT:-8080}:8080
 
@@ -119,5 +190,4 @@ volumes:
   db-data:
   uploads-data:
   wp-logs-data:
-  wphb-cache:
-  wphb-logs:
+  es-data:

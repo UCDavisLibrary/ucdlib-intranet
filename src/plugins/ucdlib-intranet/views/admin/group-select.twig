@@ -1,0 +1,28 @@
+<select name="{{queryName}}">
+  <option value="">All groups</option>
+  {% if departments %}
+    <optgroup label="Departments">
+      {{ _self.render_group_options(departments, selected) }}
+    </optgroup>
+  {% endif %}
+  {% if activeCommittees %}
+    <optgroup label="Current Committees">
+      {{ _self.render_group_options(activeCommittees, selected) }}
+    </optgroup>
+  {% endif %}
+  {% if inactiveCommittees %}
+    <optgroup label="Past Committees">
+      {{ _self.render_group_options(inactiveCommittees, selected) }}
+    </optgroup>
+  {% endif %}
+</select>
+
+{% macro render_group_options(groups, selected) %}
+  {% for post in groups %}
+    {% if post.post_title %}
+    <option value="{{ post.ID }}" {{ post.ID == selected ? 'selected' : '' }}>
+      {{ post.post_title }}
+    </option>
+    {% endif %}
+  {% endfor %}
+{% endmacro %}

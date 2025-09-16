@@ -1,1 +1,11 @@
 @use '@ucd-lib/brand-theme/scss/style.scss' as style;
+
+@use './favorites.scss' as favorites;
+@use './groups.scss' as groups;
+@use './heading-classes.scss' as heading-classes;
+@use './search.scss' as search;
+
+.date-updated-container {
+  margin-top: 2rem;
+}
+

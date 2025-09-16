@@ -1,0 +1,153 @@
+{
+  "dynamic" : false,
+
+  "properties" : {
+
+    "postId" : {
+      "type" : "keyword"
+    },
+
+    "postType" : {
+      "type" : "keyword"
+    },
+
+    "type" : {
+      "type" : "keyword"
+    },
+
+    "title" : {
+      "type" : "text",
+      "analyzer": "defaultAnalyzer",
+      "fields": {
+        "trigram": {
+          "type": "text",
+          "analyzer": "trigram"
+        },
+        "reverse": {
+          "type": "text",
+          "analyzer": "reverse"
+        }
+      }
+    },
+
+    "excerpt" : {
+      "type" : "text",
+      "analyzer": "defaultAnalyzer",
+      "fields": {
+        "trigram": {
+          "type": "text",
+          "analyzer": "trigram"
+        },
+        "reverse": {
+          "type": "text",
+          "analyzer": "reverse"
+        }
+      }
+    },
+
+    "content" : {
+      "type" : "text",
+      "analyzer": "defaultAnalyzer",
+      "fields": {
+        "trigram": {
+          "type": "text",
+          "analyzer": "trigram"
+        },
+        "reverse": {
+          "type": "text",
+          "analyzer": "reverse"
+        }
+      }
+    },
+
+    "categoryIds" : {
+      "type": "keyword"
+    },
+
+    "categories" : {
+      "type" : "keyword",
+      "fields": {
+        "text" : {
+          "type" : "text",
+          "analyzer": "defaultAnalyzer"
+        }
+      }
+    },
+
+    "tags" : {
+      "type" : "keyword",
+      "fields": {
+        "text" : {
+          "type" : "text",
+          "analyzer": "defaultAnalyzer"
+        }
+      }
+    },
+
+    "libraryGroupIds" : {
+      "type": "keyword"
+    },
+
+    "libraryGroupNames": {
+      "type" : "keyword",
+      "fields": {
+        "text" : {
+          "type" : "text",
+          "analyzer": "defaultAnalyzer"
+        }
+      }
+    },
+
+    "libraryGroupTypes" : {
+      "type": "keyword"
+    },
+
+    "isLibraryGroupLandingPage" : {
+      "type" : "boolean"
+    },
+
+    "menuOrder": {
+      "type": "integer"
+    },
+
+    "authorIds" : {
+      "type": "keyword"
+    },
+
+    "authorNames": {
+      "type" : "keyword",
+      "fields": {
+        "text" : {
+          "type" : "text",
+          "analyzer": "defaultAnalyzer"
+        }
+      }
+    },
+
+    "updated" : {
+      "type" : "date"
+    },
+
+    "created" : {
+      "type" : "date"
+    },
+
+    "icon" : {
+      "type" : "keyword"
+    },
+
+    "iconBrandColor" : {
+      "type" : "keyword"
+    },
+
+    "link" : {
+      "type" : "keyword"
+    },
+
+    "sortByDate" : {
+      "type" : "date"
+    }
+
+  }
+
+}

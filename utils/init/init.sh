@@ -5,8 +5,6 @@ WP_SCRIPTS_DIR=/deploy-utils/wp-scripts
 GOOGLE_APPLICATION_CREDENTIALS=/etc/service-account.json
 DATA_DIR=/deploy-utils/data/init
 WP_SRC_ROOT=/usr/src/wordpress
-WPHB_CACHE_DIR=/wphb-cache
-WPHB_OPTIONS_FILE=wphb-cache.php
 
 shopt -s expand_aliases
 
@@ -53,7 +51,7 @@ else
   WORDPRESS_DB_JUST_HOST=$WORDPRESS_DB_HOST
   WORDPRESS_DB_JUST_PORT=3306
 fi
-alias mysql="mysql --user=$WORDPRESS_DB_USER --host=$WORDPRESS_DB_JUST_HOST --port=$WORDPRESS_DB_JUST_PORT --password=$WORDPRESS_DB_PASSWORD $WORDPRESS_DB_DATABASE"
+alias mysql="mysql --ssl --ssl-verify-server-cert=OFF --user=$WORDPRESS_DB_USER --host=$WORDPRESS_DB_JUST_HOST --port=$WORDPRESS_DB_JUST_PORT --password=$WORDPRESS_DB_PASSWORD $WORDPRESS_DB_DATABASE"
 
 # wait for db to start up
 wait-for-it $WORDPRESS_DB_JUST_HOST:$WORDPRESS_DB_JUST_PORT -t 0
@@ -137,27 +135,6 @@ if [[ $UPLOADS_FILE_COUNT == 0 ]]; then
   fi
 else
   echo "Uploads folder has data. Skipping hydration."
-fi
-
-# check hummingbird caching plugin options
-WPHB_FILE_COUNT=$(ls -1q $WPHB_CACHE_DIR | wc -l)
-if [[ $WPHB_FILE_COUNT == 0 ]]; then
-  echo "Hummingbird cache options are missing, attempting to pull content for google cloud bucket"
-
-  gcloud auth login --quiet --cred-file=${GOOGLE_APPLICATION_CREDENTIALS}
-  gcloud config set project $GC_PROJECT
-
-  SOURCE_FILE="gs://${GC_BUCKET_BACKUPS}/${INIT_DATA_ENV}/${WPHB_OPTIONS_FILE}"
-  DESTINATION="$WPHB_CACHE_DIR/$WPHB_OPTIONS_FILE"
-  if gsutil stat "$SOURCE_FILE" >/dev/null 2>&1; then
-    echo "Downloading: $SOURCE_FILE"
-    gsutil cp "$SOURCE_FILE" "$DESTINATION"
-    chown www-data:www-data $DESTINATION
-  else
-    echo "Error: $SOURCE_FILE does not exist"
-  fi
-else
-  echo "Hummingbird cache options exist. Skipping hydration."
 fi
 
 echo "Init container is finished and exiting (this is supposed to happen)"

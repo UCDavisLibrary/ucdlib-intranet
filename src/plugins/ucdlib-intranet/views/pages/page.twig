@@ -1,0 +1,9 @@
+{% extends getUcdTemplate('page') %}
+
+{% block page_title %}
+  {% include '@ucdlib-intranet/partials/favorite-header.twig' %}
+{% endblock %}
+
+{% block content_container_after %}
+  {% include '@ucdlib-intranet/partials/page-updated.twig' %}
+{% endblock %}
