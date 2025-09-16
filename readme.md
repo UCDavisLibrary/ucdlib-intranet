@@ -1,7 +1,5 @@
 # UC Davis Library Intranet
 
-IN DEVELOPMENT
-
 This is a standard Docker-based Wordpress installation that runs our [custom theme](https://github.com/UCDavisLibrary/ucdlib-theme-wp).
 
 ## Custom Functionality
@@ -30,6 +28,24 @@ docker compose logs indexer -f
 
 ### Favorite Pages
 Employees can favorite pages on the intranet, which then get displayed on their homepage. The primary interface can be found at `/wp-admin/admin.php?page=ucdlib-intranet-favorites`, but pages can also be added/removed via the star icon on each page header.
+
+## Production Deployment
+
+On your machine:
+- Submit PR to main, merge, pull, tag, and push
+- Update production compose.yaml file with new tag
+- Update the cork-build-registry with your new tag
+- Build images with with deploy/cmds/build.sh <tag>
+
+On the production server (currently veers.library)
+
+- `cd /opt/ucdlib-intranet/deploy/compose/ucdlib-intranet-prod`
+- `git pull`
+- If you need the freshest data (backups are performed nightly), run `docker compose exec backup ./backup/backup.sh`
+- `docker compose pull` to download images from Google Cloud
+- `docker compose down` then `docker compose up -d`
+
+There will be a brief service outage as the containers start up, so try to schedule deployents accordingly. If something goes wrong, you can always revert to the previously tagged images.
 
 ## Local Development
 
