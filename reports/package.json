@@ -1,0 +1,15 @@
+{  
+  "name": "reports-cli",
+  "version": "1.0.0",
+  "type": "module",
+  "bin": {
+    "reports": "./reports.js",
+    "reports-old-links": "./old-intranet-links/reports-old-links.js"
+  },
+  "dependencies": {
+    "commander": "^14.0.1",
+    "dotenv": "^17.2.2",
+    "jsdom": "^27.0.0",
+    "json2csv": "^6.0.0-alpha.2"
+  }
+}
