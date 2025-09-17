@@ -67,7 +67,7 @@ Finally, go to `./deploy/compose/ucdlib-intranet-local-dev` and `docker compose 
 There are two JS bundles; one for public views, and one for the block editor. To start either of these watch processes, go to the respective directory in `src/plugins/ucdlib-intranet/assets` and run `npm run watch`
 
 ### Indexer
-By default, the index, which is only used by the main search, is not hydrated during the init script. So if you want the full index, you will have to manually poke it with `docker compose exec wordpress curl http://indexer:3000/reindex`. 
+By default, the index, which is only used by the main search, is not hydrated during the init script. So if you want the full index, you will have to manually poke it with `docker compose exec wordpress curl http://indexer:3000/reindex?rebuildSchema=true`. 
 
 Even if you don't trigger a full reindex, a post will still be indexed when you update it locally.
 
