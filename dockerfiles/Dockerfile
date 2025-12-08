@@ -1,12 +1,13 @@
 # Multistage build args
-ARG WP_CORE_VERSION="6.8.1"
+ARG WP_CORE_VERSION="6.8.3"
 ARG REDIRECTION_ZIP_FILE="redirection-5.5.2.zip"
-ARG SMTP_MAILER_ZIP_FILE="smtp-mailer-1.1.20.zip"
+ARG SMTP_MAILER_ZIP_FILE="smtp-mailer-1.1.22.zip"
 ARG OPENID_CONNECT_GENERIC_DIR="openid-connect-generic-3.10.0"
 ARG OPENID_CONNECT_GENERIC_ZIP_FILE="${OPENID_CONNECT_GENERIC_DIR}.zip"
-ARG DEFENDER_PRO_ZIP_FILE="defender-pro-5.2.zip"
-ARG FORMINATOR_PRO_ZIP_FILE="forminator-pro-1.44.zip"
+ARG DEFENDER_PRO_ZIP_FILE="defender-pro-5.6.zip"
+ARG FORMINATOR_PRO_ZIP_FILE="forminator-pro-1.48.1.zip"
 ARG WPMU_DEV_DASHBOARD_ZIP_FILE="wpmu-dev-dashboard-4.11.29.zip"
+ARG EDITORIA11Y_ZIP_FILE="editoria11y-accessibility-checker-2.1.4.zip"
 ARG UCDLIB_THEME_WP_NODE_IMAGE
 
 # Download plugins from Google Cloud Storage
@@ -21,6 +22,7 @@ ARG SMTP_MAILER_ZIP_FILE
 ARG DEFENDER_PRO_ZIP_FILE
 ARG FORMINATOR_PRO_ZIP_FILE
 ARG WPMU_DEV_DASHBOARD_ZIP_FILE
+ARG EDITORIA11Y_ZIP_FILE
 
 RUN --mount=type=secret,id=google_key gcloud auth activate-service-account --key-file=/run/secrets/google_key
 RUN gsutil cp gs://${GC_BUCKET_PLUGINS}/openid-connect-generic/${OPENID_CONNECT_GENERIC_ZIP_FILE} . \
@@ -28,7 +30,8 @@ RUN gsutil cp gs://${GC_BUCKET_PLUGINS}/openid-connect-generic/${OPENID_CONNECT_
 && gsutil cp gs://${GC_BUCKET_PLUGINS}/redirection/${REDIRECTION_ZIP_FILE} . \
 && gsutil cp gs://${GC_BUCKET_PLUGINS}/defender-pro/${DEFENDER_PRO_ZIP_FILE} . \
 && gsutil cp gs://${GC_BUCKET_PLUGINS}/forminator-pro/${FORMINATOR_PRO_ZIP_FILE} . \
-&& gsutil cp gs://${GC_BUCKET_PLUGINS}/wpmudev-updates/${WPMU_DEV_DASHBOARD_ZIP_FILE} .
+&& gsutil cp gs://${GC_BUCKET_PLUGINS}/wpmudev-updates/${WPMU_DEV_DASHBOARD_ZIP_FILE} . \
+&& gsutil cp gs://${GC_BUCKET_PLUGINS}/editoria11y/${EDITORIA11Y_ZIP_FILE} .
 
 # Main build
 FROM ${UCDLIB_THEME_WP_NODE_IMAGE} AS ucdlib-theme-wp
@@ -99,6 +102,7 @@ ARG SMTP_MAILER_ZIP_FILE
 ARG DEFENDER_PRO_ZIP_FILE
 ARG FORMINATOR_PRO_ZIP_FILE
 ARG WPMU_DEV_DASHBOARD_ZIP_FILE
+ARG EDITORIA11Y_ZIP_FILE
 WORKDIR $WP_PLUGIN_DIR
 RUN rm -rf */ && rm -f hello.php
 COPY --from=gcloud /cache/${OPENID_CONNECT_GENERIC_ZIP_FILE} .
@@ -113,6 +117,7 @@ RUN unzip ${OPENID_CONNECT_GENERIC_ZIP_FILE} && rm ${OPENID_CONNECT_GENERIC_ZIP_
 && unzip ${DEFENDER_PRO_ZIP_FILE} && rm ${DEFENDER_PRO_ZIP_FILE} \
 && unzip ${FORMINATOR_PRO_ZIP_FILE} && rm ${FORMINATOR_PRO_ZIP_FILE} \
 && unzip ${WPMU_DEV_DASHBOARD_ZIP_FILE} && rm ${WPMU_DEV_DASHBOARD_ZIP_FILE} \
+&& unzip ${EDITORIA11Y_ZIP_FILE} && rm ${EDITORIA11Y_ZIP_FILE} \
 && mv $OPENID_CONNECT_GENERIC_DIR openid-connect-generic
 
 # Get plugins from github
