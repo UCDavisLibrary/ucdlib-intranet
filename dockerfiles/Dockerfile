@@ -111,6 +111,7 @@ COPY --from=gcloud /cache/${SMTP_MAILER_ZIP_FILE} .
 COPY --from=gcloud /cache/${DEFENDER_PRO_ZIP_FILE} .
 COPY --from=gcloud /cache/${FORMINATOR_PRO_ZIP_FILE} .
 COPY --from=gcloud /cache/${WPMU_DEV_DASHBOARD_ZIP_FILE} .
+COPY --from=gcloud /cache/${EDITORIA11Y_ZIP_FILE} .
 RUN unzip ${OPENID_CONNECT_GENERIC_ZIP_FILE} && rm ${OPENID_CONNECT_GENERIC_ZIP_FILE} \
 && unzip ${SMTP_MAILER_ZIP_FILE} && rm ${SMTP_MAILER_ZIP_FILE} \
 && unzip ${REDIRECTION_ZIP_FILE} && rm ${REDIRECTION_ZIP_FILE} \
