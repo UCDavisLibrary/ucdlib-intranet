@@ -31,7 +31,7 @@ RUN gsutil cp gs://${GC_BUCKET_PLUGINS}/openid-connect-generic/${OPENID_CONNECT_
 && gsutil cp gs://${GC_BUCKET_PLUGINS}/defender-pro/${DEFENDER_PRO_ZIP_FILE} . \
 && gsutil cp gs://${GC_BUCKET_PLUGINS}/forminator-pro/${FORMINATOR_PRO_ZIP_FILE} . \
 && gsutil cp gs://${GC_BUCKET_PLUGINS}/wpmudev-updates/${WPMU_DEV_DASHBOARD_ZIP_FILE} . \
-&& gsutil cp gs://${GC_BUCKET_PLUGINS}/editoria11y/${EDITORIA11Y_ZIP_FILE} .
+&& gsutil cp gs://${GC_BUCKET_PLUGINS}/editoria11y-accessibility-checker/${EDITORIA11Y_ZIP_FILE} .
 
 # Main build
 FROM ${UCDLIB_THEME_WP_NODE_IMAGE} AS ucdlib-theme-wp
