@@ -1,5 +1,6 @@
 import "@ucd-lib/brand-theme";
 import './elements/favorites/ucdlib-intranet-favorite-toggle.js';
+import './utils/editoria11y-shims.js';
 
 class DynamicScriptLoader {
 
