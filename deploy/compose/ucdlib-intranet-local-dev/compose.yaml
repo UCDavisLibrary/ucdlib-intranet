@@ -55,7 +55,7 @@ services:
       - .env
     environment:
       RUN_INIT: "true"
-      INIT_DATA_ENV: ${INIT_DATA_ENV:-stage}
+      INIT_DATA_ENV: ${INIT_DATA_ENV:-prod}
       SERVER_URL: http://localhost:${HOST_PORT:-3000}
       GC_PROJECT: ${GC_PROJECT:-digital-ucdavis-edu}
       GC_BUCKET_BACKUPS: ${GC_BUCKET_BACKUPS:-itis-backups/ucdlib-intranet}
