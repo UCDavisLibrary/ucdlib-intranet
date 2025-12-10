@@ -41,7 +41,6 @@ On the production server (currently veers.library)
 
 - `cd /opt/ucdlib-intranet/deploy/compose/ucdlib-intranet-prod`
 - `git pull`
-- If you need the freshest data (backups are performed nightly), run `docker compose exec backup ./backup/backup.sh`
 - `docker compose pull` to download images from Google Cloud
 - `docker compose down` then `docker compose up -d`
 
