@@ -129,7 +129,7 @@ RUN git -c advice.detachedHead=false \
 # Get our rt forminator addon plugin
 RUN git -c advice.detachedHead=false \
 	clone https://github.com/UCDavisLibrary/forminator-addon-rt.git \
-	--branch v2.0.1 --single-branch --depth 1
+	--branch v2.0.2 --single-branch --depth 1
 
 # Copy our custom plugins
 COPY src/plugins/ucdlib-oidc ucdlib-oidc
