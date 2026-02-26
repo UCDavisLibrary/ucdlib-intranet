@@ -1,13 +1,13 @@
 # Multistage build args
-ARG WP_CORE_VERSION="6.8.3"
-ARG REDIRECTION_ZIP_FILE="redirection-5.5.2.zip"
-ARG SMTP_MAILER_ZIP_FILE="smtp-mailer-1.1.22.zip"
+ARG WP_CORE_VERSION="6.9.1"
+ARG REDIRECTION_ZIP_FILE="redirection-5.6.1.zip"
+ARG SMTP_MAILER_ZIP_FILE="smtp-mailer-1.1.24.zip"
 ARG OPENID_CONNECT_GENERIC_DIR="openid-connect-generic-3.10.0"
 ARG OPENID_CONNECT_GENERIC_ZIP_FILE="${OPENID_CONNECT_GENERIC_DIR}.zip"
-ARG DEFENDER_PRO_ZIP_FILE="defender-pro-5.6.zip"
-ARG FORMINATOR_PRO_ZIP_FILE="forminator-pro-1.48.1.zip"
+ARG DEFENDER_PRO_ZIP_FILE="defender-pro-5.9.zip"
+ARG FORMINATOR_PRO_ZIP_FILE="forminator-pro-1.50.1.zip"
 ARG WPMU_DEV_DASHBOARD_ZIP_FILE="wpmu-dev-dashboard-4.11.29.zip"
-ARG EDITORIA11Y_ZIP_FILE="editoria11y-accessibility-checker-2.1.4.zip"
+ARG EDITORIA11Y_ZIP_FILE="editoria11y-accessibility-checker-2.1.9.zip"
 ARG UCDLIB_THEME_WP_NODE_IMAGE
 
 # Download plugins from Google Cloud Storage
@@ -129,7 +129,7 @@ RUN git -c advice.detachedHead=false \
 # Get our rt forminator addon plugin
 RUN git -c advice.detachedHead=false \
 	clone https://github.com/UCDavisLibrary/forminator-addon-rt.git \
-	--branch v2.0.1 --single-branch --depth 1
+	--branch v2.0.2 --single-branch --depth 1
 
 # Copy our custom plugins
 COPY src/plugins/ucdlib-oidc ucdlib-oidc
