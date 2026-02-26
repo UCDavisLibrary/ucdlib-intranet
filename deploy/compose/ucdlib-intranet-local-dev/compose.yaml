@@ -35,6 +35,7 @@ services:
       OIDC_ENFORCE_PRIVACY: ${OIDC_ENFORCE_PRIVACY:-true}
       FORMINATOR_ADDON_RT_HOST: ${FORMINATOR_ADDON_RT_HOST:-https://rt.lib.ucdavis.edu}
       UCDLIB_PERSONNEL_API_URL: ${UCDLIB_PERSONNEL_API_URL:-https://iam.staff.library.ucdavis.edu/json}
+      FORMINATOR_ENCRYPTION_KEY: ${FORMINATOR_ENCRYPTION_KEY:-fake-key-for-local-dev}
     tmpfs:
       - /run
       - /tmp
