@@ -16,7 +16,8 @@
     }
   ],
   "require": {
-    "timber/timber": "2.3.3"
+    "timber/timber": "2.3.3",
+    "google/apiclient": "^2.0"
   },
   "config": {
     "allow-plugins": {
