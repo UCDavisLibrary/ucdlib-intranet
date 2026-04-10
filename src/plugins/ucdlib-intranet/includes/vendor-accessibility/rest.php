@@ -27,7 +27,7 @@ class UcdlibIntranetVendorAccessibilityRest {
   }
 
   public function getDataCallback( $request ){
-    $results = $this->main->google->getFileId();
+    $results = $this->main->google->downloadFile();
 
     return rest_ensure_response( ['files' => $results] );
   }
