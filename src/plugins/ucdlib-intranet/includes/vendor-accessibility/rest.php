@@ -18,17 +18,39 @@ class UcdlibIntranetVendorAccessibilityRest {
     register_rest_route($pluginNs, $ns . '/data', [
       'methods' => 'GET',
       'callback' => [$this, 'getDataCallback'],
+      'args' => [
+        'refresh' => [
+          'required' => false,
+          'validate_callback' => function($param, $request, $key){
+            if ( $param === 'true' ){
+              return true;
+            }
+            return is_bool($param);
+          }
+        ]
+      ],
       'permission_callback' => function() {
-        return true;
-        // todo: add permissions check when ready to add nonce
-        // return is_user_logged_in();
+        return is_user_logged_in();
       }
     ]);
   }
 
   public function getDataCallback( $request ){
-    $results = $this->main->google->downloadFile();
+    if ( $request->get_param('refresh') && current_user_can('manage_options') ) {
+      $this->main->google->run();
+    }
+    $results = $this->main->google->getJson();
 
-    return rest_ensure_response( ['files' => $results] );
+    if ( !$results ) {
+      return rest_ensure_response( [
+        'success' => false,
+        'message' => 'No data available'
+      ] );
+    }
+
+    return rest_ensure_response( [
+      'success' => true,
+      'data' => $results
+    ] );
   }
 }
