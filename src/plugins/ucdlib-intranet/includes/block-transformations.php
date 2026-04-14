@@ -4,6 +4,36 @@
 // See 'transform' property in $registry array in UCDThemeBlocks class.
 class UcdlibIntranetBlockTransformations {
 
+  public static function vendorAccessibility( $attrs=[] ){
+
+    $attrs['eleProps'] = [];
+
+    if ( !empty($attrs['contentProviderColumn']) ){
+      $attrs['eleProps']['contentProviderColumn'] = $attrs['contentProviderColumn'];
+    }
+
+    if ( !empty($attrs['interfaceNameColumn']) ){
+      $attrs['eleProps']['interfaceNameColumn'] = $attrs['interfaceNameColumn'];
+    }
+
+    if ( !empty($attrs['collectionPublicNameColumn']) ){
+      $attrs['eleProps']['collectionPublicNameColumn'] = $attrs['collectionPublicNameColumn'];
+    }
+
+    if ( !empty($attrs['displayFields']) ) {
+      $attrs['eleProps']['displayFields'] = preg_split('/\s*\n\s*/', trim($attrs['displayFields']), -1, PREG_SPLIT_NO_EMPTY);
+    }
+
+    return $attrs;
+  }
+
+  public static function getRestNonce($attrs=[]){
+    if ( empty($attrs['wpNonce']) ){
+      $attrs['wpNonce'] = wp_create_nonce( 'wp_rest' );
+    }
+    return $attrs;
+  }
+
   /**
    * Retrieves current post object and saves in "post" attribute
    */

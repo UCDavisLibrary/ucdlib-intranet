@@ -4,6 +4,7 @@ import groupDirectoryUrl from "./group-directory-url";
 import groupHierarchy from "./group-hierarchy";
 import groupQuery from "./group-query";
 import groupSubnav from "./group-subnav";
+import vendorAccessibility from "./vendor-accessibility";
 
 export default [
   favoritesList,
@@ -11,5 +12,6 @@ export default [
   groupDirectoryUrl,
   groupHierarchy,
   groupQuery,
-  groupSubnav
+  groupSubnav,
+  vendorAccessibility
 ];
