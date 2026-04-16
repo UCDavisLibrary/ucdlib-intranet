@@ -4,6 +4,21 @@ import WpRest from '../../controllers/wp-rest.js';
 import ElementStatus from '../../controllers/element-status.js';
 import { MutationObserverController } from "@ucd-lib/theme-elements/utils/controllers/index.js";
 
+/**
+ * @description Displays accessibility information for vendors from wordpress REST endpoint. Allows filtering by content provider, interface name, and collection name.
+ * @property {Array} data - The data to display from the REST endpoint
+ * @property {String} contentProviderColumn - The column name in the data that corresponds to the content provider (interface vendor)
+ * @property {String} interfaceNameColumn - The column name in the data that corresponds to the interface name
+ * @property {String} collectionPublicNameColumn - The column name in the data that corresponds to the collection public name
+ * @property {Array} contentProviderOptions - The unique options to display in the content provider select filter
+ * @property {Array} interfaceNameOptions - The unique options to display in the interface name select filter
+ * @property {Array} collectionPublicNameOptions - The unique options to display in the collection public name select filter, based on level one filters
+ * @property {Array} allCollectionPublicNameOptions - The unique options to display in the collection public name select filter without filtering based on level one filters. Used to reset collection public name options when level one filters are cleared.
+ * @property {Array} contentProviderSelectedOptions - The currently selected options in the content provider filter
+ * @property {Array} interfaceNameSelectedOptions - The currently selected options in the interface name filter
+ * @property {Array} collectionPublicNameSelectedOptions - The currently selected options in the collection public name filter
+ * @property {Array} displayFields - The fields to display in the results aside from the collection public name and vendor. Set in the block editor. Must match column names in the data source.
+ */
 export default class UcdlibIntranetVendorAccessibility extends LitElement {
 
   static get properties() {
@@ -74,6 +89,7 @@ export default class UcdlibIntranetVendorAccessibility extends LitElement {
     }
     this.status.loaded = true;
     this.data = r.data.data.map( item => {
+      item = Object.fromEntries(Object.entries(item).map(([key, value]) => [key.trim(), value]));
       const vendor = [item[this.contentProviderColumn], item[this.interfaceNameColumn]].filter( item => item ).join(' - ');
       return {
         data: item,
@@ -82,6 +98,10 @@ export default class UcdlibIntranetVendorAccessibility extends LitElement {
         levelOneMatch: false
       }
     });
+    const displayFieldsDontExist = this.displayFields.filter( field => this.data.length && !Object.keys(this.data[0].data).includes(field) );
+    if ( displayFieldsDontExist.length ){
+      console.warn('The following display fields do not exist in the data source and will not be displayed:', displayFieldsDontExist);
+    }
     this.contentProviderOptions = [...new Set(this.data.map( item => item.data[this.contentProviderColumn] ).filter( item => item ))].sort();
     this.interfaceNameOptions = [...new Set(this.data.map( item => item.data[this.interfaceNameColumn] ).filter( item => item ))].sort();
     this.allCollectionPublicNameOptions = [...new Set(this.data.map( item => item.data[this.collectionPublicNameColumn] ).filter( item => item ))].sort();

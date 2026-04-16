@@ -36,7 +36,25 @@ export function styles() {
     .vendor {
       font-size: .875rem;
       font-weight: 700;
+      color: var(--ucd-blue);
+    }
+    .fields {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: .5rem;
+      margin-top: .5rem;
+    }
+    .field {
+      display: flex;
+      flex-direction: column;
+      font-size: .875rem;
+    }
+    .field-name {
+      font-weight: 700;
       color: var(--ucd-black-70);
+    }
+    .field-value {
+      word-break: break-word;
     }
     @container (min-width: 500px) {
       .level-one-filters {
@@ -98,6 +116,14 @@ export function render() {
               <div>
                 <div class='collection-name'>${item.data[this.collectionPublicNameColumn]}</div>
                 <div class='vendor'>${item.vendor}</div>
+                <div class='fields' ?hidden=${!this.displayFields.length}>
+                  ${this.displayFields.map(field => html`
+                    <div class='field'>
+                      <div class='field-name'>${field}</div>
+                      <div class='field-value'>${item.data[field] || '--'}</div>
+                    </div>
+                  `)}
+                </div>
               </div>
             </div>
             `) }

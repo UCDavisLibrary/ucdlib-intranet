@@ -27,7 +27,7 @@ class UcdlibIntranetVendorAccessibility {
 
   public function scheduleCron( ){
     if ( !wp_next_scheduled( $this->cronSlug ) ) {
-      wp_schedule_event( time(), 'hourly', $this->cronSlug );
+      wp_schedule_event( time(), 'daily', $this->cronSlug );
     }
   }
 
