@@ -8,6 +8,7 @@ require_once( __DIR__ . '/indexer.php' );
 require_once( __DIR__ . '/log.php' );
 require_once( __DIR__ . '/favorites/main.php' );
 require_once( __DIR__ . '/groups/main.php' );
+require_once( __DIR__ . '/vendor-accessibility/main.php' );
 require_once( __DIR__ . '/robots.php' );
 require_once( __DIR__ . '/rt.php' );
 require_once( __DIR__ . '/settings.php' );
@@ -23,6 +24,7 @@ class UcdlibIntranet {
   public $google;
   public $indexer;
   public $groups;
+  public $va;
   public $log;
   public $favorites;
   public $robots;
@@ -43,6 +45,7 @@ class UcdlibIntranet {
     $this->groups = new UcdlibIntranetGroups( $this );
     $this->log = new UcdlibIntranetLog( $this );
     $this->favorites = new UcdlibIntranetFavorites( $this );
+    $this->va = new UcdlibIntranetVendorAccessibility( $this );
     $this->robots = new UcdlibIntranetRobots( $this );
     $this->rt = new UcdlibIntranetRt( $this );
     $this->settings = new UcdlibIntranetSettings( $this );

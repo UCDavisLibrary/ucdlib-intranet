@@ -39,6 +39,10 @@ class UcdlibIntranetBlocks extends UCDThemeBlockRenderer {
     ],
     'ucdlib-intranet/group-committee-meta' => [
       'twig' => '@ucdlib-intranet/blocks/group-committee-meta.twig'
+    ],
+    'ucdlib-intranet/vendor-accessibility' => [
+      'twig' => '@ucdlib-intranet/blocks/vendor-accessibility.twig',
+      'transform' => ['getRestNonce', 'vendorAccessibility']
     ]
   ];
 

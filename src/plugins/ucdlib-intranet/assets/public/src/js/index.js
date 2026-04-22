@@ -1,5 +1,6 @@
 import "@ucd-lib/brand-theme";
 import './elements/favorites/ucdlib-intranet-favorite-toggle.js';
+import './elements/vendor-accessiblity/ucdlib-intranet-vendor-accessibility.js';
 import './utils/editoria11y-shims.js';
 
 class DynamicScriptLoader {
@@ -39,7 +40,7 @@ class DynamicScriptLoader {
     if( this.loaded[bundleName] ) return this.loaded[bundleName];
 
     if ( bundleName == 'favorites-admin' ){
-      this.loaded[bundleName] = import(/* webpackChunkName: "jobs-board-admin" */ './elements/favorites/ucdlib-intranet-favorite-manage.js');
+      this.loaded[bundleName] = import(/* webpackChunkName: "favorites-admin" */ './elements/favorites/ucdlib-intranet-favorite-manage.js');
     } else if ( bundleName == 'search' ){
       this.loaded[bundleName] = import(/* webpackChunkName: "ucdlib-intranet-search" */ './elements/search/index.js');
     }
