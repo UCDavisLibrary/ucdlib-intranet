@@ -3,6 +3,7 @@ import ElementStatus from '../../controllers/element-status.js';
 import '@ucd-lib/theme-elements/brand/ucd-theme-slim-select/ucd-theme-slim-select.js';
 
 import formStyles from '@ucd-lib/theme-sass/1_base_html/_forms.css.js';
+import alertStyles from '@ucd-lib/theme-sass/4_component/_messaging-alert.css.js';
 
 export function styles() {
   const elementStyles = css`
@@ -56,6 +57,9 @@ export function styles() {
     .field-value {
       word-break: break-word;
     }
+    .no-filters-selected {
+      margin-top: 1.5rem;
+    }
     @container (min-width: 500px) {
       .level-one-filters {
         flex-direction: row;
@@ -65,6 +69,7 @@ export function styles() {
 
   return [
     formStyles,
+    alertStyles,
     ElementStatus.styles,
     elementStyles
   ];
@@ -129,7 +134,7 @@ export function render() {
             `) }
         </div>
         ` : html`
-          <div class='no-filters-selected'>
+          <div class='no-filters-selected alert'>
             <p>Use the filters above to find accessibility information for specific vendors or collections.</p>
           </div>
         `}
