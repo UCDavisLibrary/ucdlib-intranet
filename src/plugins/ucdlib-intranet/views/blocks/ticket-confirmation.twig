@@ -1,0 +1,12 @@
+{% set rtBaseUrl = 'https://rt.lib.ucdavis.edu' %}
+<section class="colored-section brand-textbox category-brand__background category-brand--farmers-market ">
+  <p>Good news! Your ticket was successfully created! </p>
+  {% if attributes.ticketId %}
+    {% set rtTicketUrl = rtBaseUrl ~ '/Ticket/Display.html?id=' ~ attributes.ticketId %}
+    <p>Your ticket number is: <strong>{{ attributes.ticketId }}</strong></p>
+    <p>You can check the status of your ticket using the <a href="{{ rtTicketUrl }}">RT ticket tracker</a>. An email confirmation will be sent to you shortly.</p>
+  {% else  %} 
+    <p>You will receive an email confirmation momentarily. If not, it's possible it was routed to your spam folder.</p>
+    <p>You can also check the status of all your submitted tickets using the <a href="{{ rtBaseUrl }}">RT ticket tracker</a></p>
+  {% endif %}
+</section>

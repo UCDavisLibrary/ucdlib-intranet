@@ -43,7 +43,11 @@ class UcdlibIntranetBlocks extends UCDThemeBlockRenderer {
     'ucdlib-intranet/vendor-accessibility' => [
       'twig' => '@ucdlib-intranet/blocks/vendor-accessibility.twig',
       'transform' => ['getRestNonce', 'vendorAccessibility']
-    ]
+    ],
+    'ucdlib-intranet/ticket-confirmation' => [
+      'twig' => '@ucdlib-intranet/blocks/ticket-confirmation.twig',
+      'transform' => ['mostRecentTicketId']
+    ],
   ];
 
   /**
