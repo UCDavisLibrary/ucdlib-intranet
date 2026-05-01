@@ -48,5 +48,49 @@ class UcdlibIntranetRt {
     return $ticketData;
   }
 
+  /**
+   * Fetches the most recent RT tickets submitted (from this site) by a user
+   */
+  public function getRecentTicketsByUser( $user, $limit=5 ) {
+    global $wpdb;
+
+    $entryIds = $wpdb->get_results(
+      $wpdb->prepare(
+        "SELECT m.entry_id
+          FROM {$wpdb->prefix}frmt_form_entry_meta m
+          WHERE m.meta_key = %s
+          AND m.meta_value = %s
+          ORDER BY m.date_created DESC
+          LIMIT %d",
+        'forminator_addon_rt_rt_requestor_id',
+        $user,
+        $limit
+      ),
+      ARRAY_A
+    );
+
+    if ( empty($entryIds) ) {
+      return [];
+    }
+    $entryIds = array_map( function($row) { return $row['entry_id']; }, $entryIds );
+
+    $ticketRows = $wpdb->get_results(
+      $wpdb->prepare(
+        "SELECT m.*
+          FROM {$wpdb->prefix}frmt_form_entry_meta m
+          WHERE m.meta_key = %s
+          AND m.entry_id IN (" . implode(',', array_fill(0, count($entryIds), '%d')) . ")
+          ORDER BY m.date_created DESC",
+        'forminator_addon_rt_rt_ticket', ...$entryIds ),
+      ARRAY_A
+    );
+
+    $tickets = [];
+    foreach ( $ticketRows as $row ) {
+      $tickets[] =  maybe_unserialize( $row['meta_value'] );
+    }
+    return $tickets;
+  }
+
 
 }

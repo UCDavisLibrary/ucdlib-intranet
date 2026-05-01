@@ -48,6 +48,10 @@ class UcdlibIntranetBlocks extends UCDThemeBlockRenderer {
       'twig' => '@ucdlib-intranet/blocks/ticket-confirmation.twig',
       'transform' => ['mostRecentTicketId']
     ],
+    'ucdlib-intranet/recent-tickets' => [
+      'twig' => '@ucdlib-intranet/blocks/recent-tickets.twig',
+      'transform' => ['recentTickets']
+    ]
   ];
 
   /**

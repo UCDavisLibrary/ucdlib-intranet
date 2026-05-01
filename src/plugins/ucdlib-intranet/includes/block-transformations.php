@@ -35,56 +35,23 @@ class UcdlibIntranetBlockTransformations {
    */
   public static function mostRecentTicketId( $attrs=[] ){
 
-    global $wpdb;
-
     $current_user = wp_get_current_user();
     if ( ! ( $current_user instanceof WP_User ) ) {
       return $attrs;
     }
-
-    try {
-      $rows = $wpdb->get_results(
-        $wpdb->prepare(
-          "SELECT m.*
-           FROM {$wpdb->prefix}frmt_form_entry_meta m
-           WHERE m.meta_key = %s
-           AND m.meta_value LIKE %s
-           ORDER BY m.date_created DESC
-           LIMIT 10",
-          'forminator_addon_rt_rt_ticket',
-          '%' . $wpdb->esc_like( $current_user->user_login ) . '%'
-        ),
-        ARRAY_A
-      );
-
-      if ( empty($rows) ){
-        return $attrs;
-      }
-
-      $ticket = null;
-      foreach ( $rows as $row ) {
-        $data = maybe_unserialize( $row['meta_value'] );
-        if ( empty($data['Requestor']) || !is_array($data['Requestor']) ){
-          continue;
-        }
-        foreach ( $data['Requestor'] as $requestor ) {
-          if ( !empty($requestor['id']) && $requestor['id'] === $current_user->user_login ){
-            $ticket = $data;
-            break 2;
-          }
-        }
-      }
-
-      if ( empty($ticket) ){
-        return $attrs;
-      }
-
-      $attrs['ticketId'] = $ticket['id'];
-
-    } catch ( Exception $e ) {
-      error_log('Error fetching RT ticket for user ' . $current_user->user_login . ': ' . $e->getMessage());
+    if ( empty($current_user->user_login) ) {
+      return $attrs;
     }
+    $tickets = $GLOBALS['ucdlibIntranet']->rt->getRecentTicketsByUser( $current_user->user_login, 1 );
+    if ( empty($tickets) || !is_array($tickets) ){
+      return $attrs;
+    }
+    $attrs['ticketId'] = $tickets[0]['id'];
 
+    return $attrs;
+  }
+
+  public static function recentTickets( $attrs=[] ){
     return $attrs;
   }
 
