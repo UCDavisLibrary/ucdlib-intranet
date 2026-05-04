@@ -35,6 +35,8 @@ class UcdlibIntranetBlockTransformations {
    */
   public static function mostRecentTicketId( $attrs=[] ){
 
+    $attrs['rtBaseUrl'] = $GLOBALS['ucdlibIntranet']->rt->publicUrl;
+
     $current_user = wp_get_current_user();
     if ( ! ( $current_user instanceof WP_User ) ) {
       return $attrs;
@@ -51,7 +53,23 @@ class UcdlibIntranetBlockTransformations {
     return $attrs;
   }
 
+  /**
+   * Fetches the most recent RT tickets submitted by a user and adds to attributes under "tickets" key.
+   */
   public static function recentTickets( $attrs=[] ){
+    $attrs['rtBaseUrl'] = $GLOBALS['ucdlibIntranet']->rt->publicUrl;
+    $attrs['icon'] = 'ucd-public:fa-ticket';
+    $attrs['icons'] = ['ucd-public:fa-ticket', 'ucd-public:fa-circle-chevron-right'];
+    $current_user = wp_get_current_user();
+    if ( ! ( $current_user instanceof WP_User ) ) {
+      return $attrs;
+    }
+    if ( empty($current_user->user_login) ) {
+      return $attrs;
+    }
+
+    $limit = !empty($attrs['limit']) ? intval($attrs['limit']) : 5;
+    $attrs['tickets'] = $GLOBALS['ucdlibIntranet']->rt->getRecentTicketsByUser( $current_user->user_login, $limit );
     return $attrs;
   }
 

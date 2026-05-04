@@ -6,9 +6,11 @@
 class UcdlibIntranetRt {
 
   public $plugin;
+  public $publicUrl;
 
   public function __construct( $plugin ){
     $this->plugin = $plugin;
+    $this->publicUrl = 'https://rt.lib.ucdavis.edu';
 
     add_filter( 'forminator_addon_rt_ticket_data', [$this, 'addDepartment'], 10, 3 );
   }
