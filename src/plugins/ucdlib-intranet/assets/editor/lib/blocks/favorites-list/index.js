@@ -3,7 +3,7 @@ import Edit from './edit';
 
 const name = 'ucdlib-intranet/favorites-list';
 const settings = {
-  api_version: 2,
+  apiVersion: 3,
 	title: "User favorites list",
 	description: "Displays a list of your favorite pages",
 	icon: UCDIcons.renderPublic('fa-star'),

@@ -1,0 +1,26 @@
+{% if attributes.tickets %}
+  <div class="panel panel--icon panel--icon-custom u-space-px">
+    <h2 class="panel__title">
+      <ucdlib-icon icon="{{ attributes.icon }}" class="panel__custom-icon {{ attributes.brandColor }}"></ucdlib-icon>Your Recently Submitted Tickets
+    </h2>
+    <div class='ucd-link-list'>
+      {% for ticket in attributes.tickets %}
+        <div class="ucd-link-list-item">
+          <span class="icon-ucdlib category-brand--{{ attributes.brandColor }}">
+            <ucdlib-icon icon="ucd-public:fa-circle-chevron-right"></ucdlib-icon>
+            <span>
+              <a class="ucd-link-list-item--title" href="{{ attributes.rtBaseUrl }}/Ticket/Display.html?id={{ ticket.id }}">{{ ticket.Subject }}</a>
+              </span>
+          </span>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% else %}
+  <a class="focal-link category-brand--{{ attributes.brandColor }}" href="{{ attributes.rtBaseUrl}}">
+    <div class="focal-link__figure focal-link__icon">
+      <ucdlib-icon icon="{{ attributes.icon }}"></ucdlib-icon>
+    </div>
+    <div class="focal-link__body"><strong>Check Your Pending Requests</strong></div>
+  </a>
+{% endif %}

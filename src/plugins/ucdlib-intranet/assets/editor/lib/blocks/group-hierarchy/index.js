@@ -3,7 +3,7 @@ import Edit from './edit';
 
 const name = 'ucdlib-intranet/group-hierarchy';
 const settings = {
-  api_version: 2,
+  apiVersion: 3,
   title: "Library Group Hierarchy",
   description: "Displays parent and subunits of a library group",
   icon: UCDIcons.renderPublic('fa-network-wired'),
