@@ -13,7 +13,8 @@ class UcdlibIntranetGroupsTimberModel extends UcdThemePost {
       return $this->children;
     }
     $mainClass = new UcdlibIntranetGroups(null, false);
-    $this->children = parent::children($mainClass->slugs['postType']);
+    $children = parent::children($mainClass->slugs['postType']);
+    $this->children = empty($children) ? [] : $children;
     return $this->children;
   }
 
