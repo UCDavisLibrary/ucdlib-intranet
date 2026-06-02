@@ -3,7 +3,7 @@ import Edit from './edit';
 
 const name = 'ucdlib-intranet/group-directory-url';
 const settings = {
-  api_version: 2,
+  apiVersion: 3,
   title: "Library Group Team Directory URL",
   description: "Displays link to a library group team directory page if available.",
   icon: UCDIcons.renderPublic('fa-users'),

@@ -3,7 +3,7 @@ import Edit from './edit';
 
 const name = 'ucdlib-intranet/group-query';
 const settings = {
-  api_version: 2,
+  apiVersion: 3,
   title: "Library Group Query",
   description: "Displays a list of library groups",
   icon: UCDIcons.renderPublic('fa-people-group'),

@@ -3,7 +3,7 @@ import Edit from './edit';
 
 const name = 'ucdlib-intranet/group-subnav';
 const settings = {
-  api_version: 2,
+  apiVersion: 3,
   title: "Library Group Subnav",
   description: "Displays a subnav for a hierarchical library group",
   icon: UCDIcons.renderPublic('fa-folder-tree'),

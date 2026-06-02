@@ -4,7 +4,7 @@ import Edit from './edit';
 
 const name = 'ucdlib-intranet/ticket-confirmation';
 const settings = {
-  api_version: 2,
+  apiVersion: 3,
   title: "Ticket Confirmation",
   description: "Displays confirmation information for a submitted RT ticket.",
   icon: html`<span>RT</span>`,

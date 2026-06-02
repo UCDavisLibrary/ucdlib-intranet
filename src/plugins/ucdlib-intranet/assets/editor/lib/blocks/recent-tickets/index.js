@@ -3,7 +3,7 @@ import Edit from './edit';
 
 const name = 'ucdlib-intranet/recent-tickets';
 const settings = {
-  api_version: 2,
+  apiVersion: 3,
   title: "Recent Tickets",
   description: "Displays a list of recent tickets submitted by the user.",
   icon: html`<span>RT</span>`,

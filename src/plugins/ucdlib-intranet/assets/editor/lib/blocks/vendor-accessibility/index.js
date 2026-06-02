@@ -3,7 +3,7 @@ import Edit from './edit';
 
 const name = 'ucdlib-intranet/vendor-accessibility';
 const settings = {
-  api_version: 2,
+  apiVersion: 3,
   title: "Vendor accessibility",
   description: "Displays accessibility information for vendors",
   icon: UCDIcons.renderPublic('fa-wheelchair'),
