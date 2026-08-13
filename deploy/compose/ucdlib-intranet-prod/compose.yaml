@@ -1,7 +1,7 @@
 x-variables:
-  main-image: &main-image us-west1-docker.pkg.dev/digital-ucdavis-edu/wordpress/ucdlib-intranet:v1.5.0
-  utils-image: &utils-image us-west1-docker.pkg.dev/digital-ucdavis-edu/wordpress/ucdlib-intranet-utils:v1.5.0
-  indexer-image: &indexer-image us-west1-docker.pkg.dev/digital-ucdavis-edu/wordpress/ucdlib-intranet-es-indexer:v1.5.0
+  main-image: &main-image us-west1-docker.pkg.dev/digital-ucdavis-edu/wordpress/ucdlib-intranet:v1.5.1
+  utils-image: &utils-image us-west1-docker.pkg.dev/digital-ucdavis-edu/wordpress/ucdlib-intranet-utils:v1.5.1
+  indexer-image: &indexer-image us-west1-docker.pkg.dev/digital-ucdavis-edu/wordpress/ucdlib-intranet-es-indexer:v1.5.1
   wp-gmail-image: &wp-gmail-image us-west1-docker.pkg.dev/digital-ucdavis-edu/pub/gmail-wp-pipeline:v1.0.0
 
 
@@ -47,7 +47,7 @@ services:
     volumes:
       - uploads-data:/usr/src/wordpress/wp-content/uploads
       - wp-logs-data:/var/log/wordpress
-      - ../../secrets:/secrets
+      - ../../secrets/gc-sa-staff-intranet.json:/secrets/gc-sa-staff-intranet.json
 
   init:
     image: *utils-image
