@@ -6,9 +6,9 @@ ARG OPENID_CONNECT_GENERIC_DIR="daggerhart-openid-connect-generic"
 ARG OPENID_CONNECT_GENERIC_VERSION="3.11.3"
 ARG OPENID_CONNECT_GENERIC_ZIP_FILE="${OPENID_CONNECT_GENERIC_DIR}-${OPENID_CONNECT_GENERIC_VERSION}.zip"
 ARG DEFENDER_PRO_ZIP_FILE="defender-pro-6.3.0.zip"
-ARG FORMINATOR_PRO_ZIP_FILE="forminator-pro-1.57.3.zip"
-ARG WPMU_DEV_DASHBOARD_ZIP_FILE="wpmu-dev-dashboard-5.0.2.zip"
-ARG EDITORIA11Y_ZIP_FILE="editoria11y-accessibility-checker-3.0.4.zip"
+ARG FORMINATOR_PRO_ZIP_FILE="forminator-pro-1.58.0.zip"
+ARG WPMU_DEV_DASHBOARD_ZIP_FILE="wpmu-dev-dashboard-5.0.3.zip"
+ARG EDITORIA11Y_ZIP_FILE="editoria11y-accessibility-checker-3.0.6.zip"
 ARG UCDLIB_THEME_WP_NODE_IMAGE
 
 # Download plugins from Google Cloud Storage
