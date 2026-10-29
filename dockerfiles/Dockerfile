@@ -1,8 +1,8 @@
 # Multistage build args
-ARG WP_CORE_VERSION="7.1.3"
-ARG DEFENDER_PRO_ZIP_FILE="defender-pro-6.3.0.zip"
-ARG EDITORIA11Y_ZIP_FILE="editoria11y-accessibility-checker-3.0.7.zip"
-ARG FORMINATOR_PRO_ZIP_FILE="forminator-pro-1.58.3.zip"
+ARG WP_CORE_VERSION="7.1.4"
+ARG DEFENDER_PRO_ZIP_FILE="defender-pro-6.4.0.zip"
+ARG EDITORIA11Y_ZIP_FILE="editoria11y-accessibility-checker-3.0.8.zip"
+ARG FORMINATOR_PRO_ZIP_FILE="forminator-pro-1.58.4.zip"
 ARG OPENID_CONNECT_GENERIC_DIR="daggerhart-openid-connect-generic"
 ARG OPENID_CONNECT_GENERIC_VERSION="3.11.3"
 ARG OPENID_CONNECT_GENERIC_ZIP_FILE="${OPENID_CONNECT_GENERIC_DIR}-${OPENID_CONNECT_GENERIC_VERSION}.zip"
